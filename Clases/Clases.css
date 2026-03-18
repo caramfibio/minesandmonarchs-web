@@ -1,0 +1,309 @@
+/* ============================================================
+   Clases.css  –  Mines & Monarch · Página de Clases
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+/* ---------- Grid de cards ---------- */
+.razas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+    .razas-container { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .razas-container { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px 10px; }
+}
+@media (max-width: 480px) {
+    .razas-container { grid-template-columns: 1fr; }
+}
+
+/* ---------- Clase Card ---------- */
+.raza-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.raza-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+}
+.raza-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+.raza-info {
+    padding: 15px;
+    text-align: center;
+}
+.raza-name {
+    color: #ffd700;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px 0;
+    font-family: "MedievalSharp", cursive;
+}
+.raza-btn {
+    background: var(--color-principal);
+    color: var(--color-texto);
+    border: 1px solid var(--color-texto);
+    padding: 8px 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+.raza-btn:hover {
+    background: var(--color-texto);
+    color: var(--color-principal);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+    height: 25vh !important;
+    min-height: 120px;
+}
+.hero h1 {
+    font-family: "MedievalSharp", cursive !important;
+    font-size: 3em !important;
+    margin: 0;
+}
+
+/* ---------- Título de sección ---------- */
+.razas-title {
+    text-align: center;
+    margin: 0 !important;
+    padding: 12px 20px !important;
+    color: var(--color-texto);
+}
+.razas-title h2 {
+    color: #ffd700;
+    font-family: "MedievalSharp", cursive !important;
+    font-size: 1.3em;
+    margin: 0 0 4px 0;
+}
+.razas-title p {
+    font-family: "MedievalSharp", cursive !important;
+    font-size: 0.85em;
+    margin: 0;
+    color: var(--color-texto);
+}
+
+
+/* ============================================================
+   MODAL  –  color tokens por clase
+   ============================================================ */
+
+/* Valores por defecto (gris genérico) */
+.modal-overlay {
+    --cc:             #a0a0a0;
+    --cc-dim:         rgba(160,160,160,0.18);
+    --cc-border:      rgba(160,160,160,0.45);
+    --cc-glow:        rgba(160,160,160,0.20);
+    --cc-raza-bg:     rgba(160,160,160,0.12);
+    --cc-raza-border: rgba(160,160,160,0.35);
+    --cc-raza-text:   #d4d4d4;
+}
+
+/* Cazador – Verde bosque */
+.modal-overlay[data-clase="cazador"]        { --cc:#5a9e4c; --cc-dim:rgba(90,158,76,.18); --cc-border:rgba(90,158,76,.5); --cc-glow:rgba(90,158,76,.22); --cc-raza-bg:rgba(90,158,76,.12); --cc-raza-border:rgba(90,158,76,.4); --cc-raza-text:#90c882; }
+/* Guardabosques – Verde oscuro */
+.modal-overlay[data-clase="guardabosques"]  { --cc:#2e7d32; --cc-dim:rgba(46,125,50,.18); --cc-border:rgba(46,125,50,.5); --cc-glow:rgba(46,125,50,.22); --cc-raza-bg:rgba(46,125,50,.12); --cc-raza-border:rgba(46,125,50,.4); --cc-raza-text:#70b874; }
+/* Curador – Dorado suave */
+.modal-overlay[data-clase="curador"]        { --cc:#c8a951; --cc-dim:rgba(200,169,81,.18); --cc-border:rgba(200,169,81,.5); --cc-glow:rgba(200,169,81,.22); --cc-raza-bg:rgba(200,169,81,.12); --cc-raza-border:rgba(200,169,81,.4); --cc-raza-text:#dfc882; }
+/* Mago del Ender – Morado */
+.modal-overlay[data-clase="magoender"]      { --cc:#8e44ad; --cc-dim:rgba(142,68,173,.18); --cc-border:rgba(142,68,173,.5); --cc-glow:rgba(142,68,173,.28); --cc-raza-bg:rgba(142,68,173,.12); --cc-raza-border:rgba(142,68,173,.4); --cc-raza-text:#c080e0; }
+/* Mago Eléctrico – Amarillo */
+.modal-overlay[data-clase="magoelectrico"]  { --cc:#e8d44d; --cc-dim:rgba(232,212,77,.18); --cc-border:rgba(232,212,77,.5); --cc-glow:rgba(232,212,77,.28); --cc-raza-bg:rgba(232,212,77,.12); --cc-raza-border:rgba(232,212,77,.4); --cc-raza-text:#ede08a; }
+/* Mago de Sangre – Rojo oscuro */
+.modal-overlay[data-clase="magosangre"]     { --cc:#a93226; --cc-dim:rgba(169,50,38,.18); --cc-border:rgba(169,50,38,.5); --cc-glow:rgba(169,50,38,.28); --cc-raza-bg:rgba(169,50,38,.12); --cc-raza-border:rgba(169,50,38,.4); --cc-raza-text:#d87870; }
+/* Mago Helado – Celeste */
+.modal-overlay[data-clase="magohelado"]     { --cc:#6dd5ed; --cc-dim:rgba(109,213,237,.18); --cc-border:rgba(109,213,237,.5); --cc-glow:rgba(109,213,237,.22); --cc-raza-bg:rgba(109,213,237,.12); --cc-raza-border:rgba(109,213,237,.4); --cc-raza-text:#a2e6f4; }
+/* Mago Invocador – Violeta */
+.modal-overlay[data-clase="magoinvocador"]  { --cc:#6c3483; --cc-dim:rgba(108,52,131,.18); --cc-border:rgba(108,52,131,.5); --cc-glow:rgba(108,52,131,.28); --cc-raza-bg:rgba(108,52,131,.12); --cc-raza-border:rgba(108,52,131,.4); --cc-raza-text:#b07ad0; }
+/* Mago de Fuego – Naranja */
+.modal-overlay[data-clase="magofuego"]      { --cc:#e07820; --cc-dim:rgba(224,120,32,.18); --cc-border:rgba(224,120,32,.5); --cc-glow:rgba(224,120,32,.28); --cc-raza-bg:rgba(224,120,32,.12); --cc-raza-border:rgba(224,120,32,.4); --cc-raza-text:#f0aa68; }
+/* Gran Mago – Azul real */
+.modal-overlay[data-clase="granmago"]       { --cc:#1a5fa8; --cc-dim:rgba(26,95,168,.18); --cc-border:rgba(26,95,168,.5); --cc-glow:rgba(26,95,168,.28); --cc-raza-bg:rgba(26,95,168,.12); --cc-raza-border:rgba(26,95,168,.4); --cc-raza-text:#7aaede; }
+/* Gran Mago Oscuro – Negro azulado */
+.modal-overlay[data-clase="granmagooscuro"] { --cc:#4a235a; --cc-dim:rgba(74,35,90,.35); --cc-border:rgba(120,60,140,.55); --cc-glow:rgba(74,35,90,.35); --cc-raza-bg:rgba(74,35,90,.28); --cc-raza-border:rgba(120,60,140,.5); --cc-raza-text:#9a70b0; }
+/* Guerrero Bendito – Blanco dorado */
+.modal-overlay[data-clase="guerrerobendito"]{ --cc:#f0d060; --cc-dim:rgba(240,208,96,.18); --cc-border:rgba(240,208,96,.5); --cc-glow:rgba(240,208,96,.28); --cc-raza-bg:rgba(240,208,96,.12); --cc-raza-border:rgba(240,208,96,.4); --cc-raza-text:#f4dc88; }
+/* Hiedra Venenosa – Verde tóxico */
+.modal-overlay[data-clase="hiedravenenosa"] { --cc:#76b041; --cc-dim:rgba(118,176,65,.18); --cc-border:rgba(118,176,65,.5); --cc-glow:rgba(118,176,65,.22); --cc-raza-bg:rgba(118,176,65,.12); --cc-raza-border:rgba(118,176,65,.4); --cc-raza-text:#a8d070; }
+/* Pícaro – Gris oscuro */
+.modal-overlay[data-clase="picaro"]         { --cc:#7a8694; --cc-dim:rgba(122,134,148,.18); --cc-border:rgba(122,134,148,.5); --cc-glow:rgba(122,134,148,.22); --cc-raza-bg:rgba(122,134,148,.12); --cc-raza-border:rgba(122,134,148,.4); --cc-raza-text:#aab4be; }
+/* Tanque – Marrón hierro */
+.modal-overlay[data-clase="tanque"]         { --cc:#8b6914; --cc-dim:rgba(139,105,20,.18); --cc-border:rgba(139,105,20,.5); --cc-glow:rgba(139,105,20,.22); --cc-raza-bg:rgba(139,105,20,.12); --cc-raza-border:rgba(139,105,20,.4); --cc-raza-text:#c8a050; }
+/* Berserker – Rojo vivo */
+.modal-overlay[data-clase="berserker"]      { --cc:#c0392b; --cc-dim:rgba(192,57,43,.18); --cc-border:rgba(192,57,43,.5); --cc-glow:rgba(192,57,43,.28); --cc-raza-bg:rgba(192,57,43,.12); --cc-raza-border:rgba(192,57,43,.4); --cc-raza-text:#e88078; }
+/* Guerrero – Gris acero */
+.modal-overlay[data-clase="guerrero"]       { --cc:#b0b8c1; --cc-dim:rgba(176,184,193,.18); --cc-border:rgba(176,184,193,.5); --cc-glow:rgba(176,184,193,.22); --cc-raza-bg:rgba(176,184,193,.12); --cc-raza-border:rgba(176,184,193,.4); --cc-raza-text:#cdd2d7; }
+/* Bardo – Rosa */
+.modal-overlay[data-clase="bardo"]          { --cc:#c0369e; --cc-dim:rgba(192,54,158,.18); --cc-border:rgba(192,54,158,.5); --cc-glow:rgba(192,54,158,.22); --cc-raza-bg:rgba(192,54,158,.12); --cc-raza-border:rgba(192,54,158,.4); --cc-raza-text:#e080cc; }
+/* Guerrero del Mar – Azul marino */
+.modal-overlay[data-clase="guerrerodelmar"] { --cc:#1e6896; --cc-dim:rgba(30,104,150,.18); --cc-border:rgba(30,104,150,.5); --cc-glow:rgba(30,104,150,.25); --cc-raza-bg:rgba(30,104,150,.12); --cc-raza-border:rgba(30,104,150,.4); --cc-raza-text:#6aacda; }
+/* Carterista – Marrón */
+.modal-overlay[data-clase="carterista"]     { --cc:#8b5e3c; --cc-dim:rgba(139,94,60,.18); --cc-border:rgba(139,94,60,.5); --cc-glow:rgba(139,94,60,.22); --cc-raza-bg:rgba(139,94,60,.12); --cc-raza-border:rgba(139,94,60,.4); --cc-raza-text:#c49a72; }
+/* Paladín – Blanco celestial */
+.modal-overlay[data-clase="paladin"]        { --cc:#e8e8f0; --cc-dim:rgba(232,232,240,.14); --cc-border:rgba(232,232,240,.55); --cc-glow:rgba(232,232,240,.22); --cc-raza-bg:rgba(232,232,240,.10); --cc-raza-border:rgba(232,232,240,.45); --cc-raza-text:#e0e0ec; }
+/* Ingeniero – Naranja bronce */
+.modal-overlay[data-clase="ingeniero"]      { --cc:#cd853f; --cc-dim:rgba(205,133,63,.18); --cc-border:rgba(205,133,63,.5); --cc-glow:rgba(205,133,63,.22); --cc-raza-bg:rgba(205,133,63,.12); --cc-raza-border:rgba(205,133,63,.4); --cc-raza-text:#e0b080; }
+/* Bestia Salvaje – Verde selva */
+.modal-overlay[data-clase="bestiasalvaje"]  { --cc:#3dba3d; --cc-dim:rgba(61,186,61,.18); --cc-border:rgba(61,186,61,.5); --cc-glow:rgba(61,186,61,.22); --cc-raza-bg:rgba(61,186,61,.12); --cc-raza-border:rgba(61,186,61,.4); --cc-raza-text:#80d880; }
+/* Pescador – Azul agua */
+.modal-overlay[data-clase="pescador"]       { --cc:#4a9aba; --cc-dim:rgba(74,154,186,.18); --cc-border:rgba(74,154,186,.5); --cc-glow:rgba(74,154,186,.22); --cc-raza-bg:rgba(74,154,186,.12); --cc-raza-border:rgba(74,154,186,.4); --cc-raza-text:#88c8de; }
+
+
+/* ---------- Modal – estructura ---------- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+    background: #1a1208;
+    border: 2px solid var(--cc-border);
+    border-radius: 10px;
+    max-width: 720px;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 40px var(--cc-glow), 0 0 0 1px var(--cc-border);
+    animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(-30px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    background: none;
+    border: none;
+    color: var(--cc);
+    font-size: 1.8em;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 10;
+    transition: color 0.2s;
+}
+.modal-close:hover { color: #fff; }
+
+.modal-img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+}
+
+/* ---------- Modal – cuerpo ---------- */
+.modal-body {
+    padding: 24px 28px 32px;
+    color: #d4c4a0;
+    font-family: Georgia, serif;
+    line-height: 1.65;
+}
+
+.modal-clase-title {
+    font-family: "MedievalSharp", cursive;
+    color: var(--cc);
+    font-size: 1.8em;
+    margin: 0 0 14px 0;
+    text-shadow: 0 0 12px var(--cc-glow);
+}
+
+.modal-description {
+    font-size: 0.97em;
+    color: #c8b88a;
+    margin-bottom: 0;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid var(--cc-border);
+    margin: 20px 0;
+    opacity: 0.7;
+}
+
+/* ---------- Modal – títulos de sección ---------- */
+.modal-section-title {
+    font-family: "MedievalSharp", cursive;
+    color: var(--cc);
+    font-size: 1.05em;
+    margin: 0 0 10px 0;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.modal-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 14px;
+    background: var(--cc);
+    border-radius: 2px;
+}
+
+.modal-section { margin-bottom: 18px; }
+
+/* ---------- Modal – lista de habilidades ---------- */
+.modal-abilities-list {
+    margin: 0;
+    padding-left: 18px;
+    list-style: disc;
+}
+.modal-abilities-list li {
+    font-size: 0.93em;
+    color: #ddd0a0;
+    margin-bottom: 5px;
+}
+
+/* ---------- Modal – pills de razas ---------- */
+.modal-razas-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0; padding: 0;
+    list-style: none;
+}
+.modal-razas-list li {
+    background: var(--cc-raza-bg);
+    border: 1px solid var(--cc-raza-border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.88em;
+    color: var(--cc-raza-text);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+    .modal-img { height: 200px; }
+    .modal-body { padding: 16px 18px 24px; }
+}

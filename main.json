@@ -1,0 +1,28 @@
+{
+  "ayuda": {
+    "title": "¿Eres nuevo o necesitas ayuda? Revisa la guía básica.",
+    "text": "Aquí va el texto de ayuda detallado.",
+    "button": "Ir a la guía",
+    "link": "#"
+  },
+  "explicacion": {
+    "title": "¿Estás dentro del Discord y quieres verificarte? Entra en Crea tu personaje",
+    "text": "Aquí va la explicación detallada."
+  },
+  "bienvenida": {
+    "title": "¡Bienvenido a la enciclopedia de Mines & Monarchs!",
+    "text": "¡Bienvenido, viajero, a la enciclopedia de Mines & Monarchs! Aquí podrás acceder a todo el conocimiento que necesitas para adentrarte por primera vez en nuestro vasto mundo medieval."
+  },
+  "ranking": [
+    {"pos": 1, "name": "Jugador1", "points": 1000},
+    {"pos": 2, "name": "Jugador2", "points": 900}
+  ],
+  "unirse": {
+    "title": "¿Cómo me uno?",
+    "text": "Para unirte al servidor de Minecraft primero tendrás que pasar por el servidor de Discord y completar la guía para poder verificarte."
+  },
+  "historia": {
+    "title": "Historia del servidor",
+    "text": "Mines & Monarchs comenzó como una idea en 2024. Esta versión temprana fue un rotundo fracaso. Un año más tarde se revivió el servidor con temática medieval."
+  }
+}

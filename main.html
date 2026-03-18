@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mines & Monarch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <!-- Fallback inline styles in case external CSS is not loaded -->
+    <style>
+        body {
+            background: rgb(85,7,29) !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h2>Mines & Monarch</h2>
+        </div>
+        <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
+        <nav class="header-right">
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Creación personaje</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Razas\raza.html">Raza</a></li>
+                        <li><a href="Clases\Clases.html">Clase</a></li>
+                        <li><a href="#">Trabajo</a></li>
+                        <li><a href="#">Cartilla</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Territorios</a></li>
+                <li><a href="#">Lore Oficial</a></li>
+                <li><a href="#">Ayuda</a></li>
+                <li><a href="#">Mapa</a></li>
+                <li><a href="#">Donar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Enciclopedia de Mines & Monarchs ⚜</h1>
+        </section>
+
+        <section id="ayuda" class="ayuda-rapida">
+            <h3>¿Necesitas ayuda?</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec varius.</p>
+            <button onclick="location.href='#'">Ir a la guía</button>
+        </section>
+
+        <section id="explicacion" class="explicacion">
+            <h3>Explicación rápida</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.</p>
+        </section>
+
+        <section id="bienvenida" class="ranking-bienvenida">
+            <div class="bienvenido">
+                <h3>Bienvenido</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+            <div class="ranking">
+                <h3>Ranking</h3>
+                <table>
+                    <tr><th>Posición</th><th>Nombre</th><th>Puntos</th></tr>
+                    <tr><td>1</td><td>Jugador1</td><td>1000</td></tr>
+                    <tr><td>2</td><td>Jugador2</td><td>900</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="unirse" class="unirse">
+            <h3>Únete</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </section>
+
+        <section id="historia" class="historia">
+            <h3>Historia</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </section>
+
+        <!-- script externo para cargar datos desde JSON -->
+        <script src="main.js"></script>
+    </main>
+
+    <footer>
+        <div class="socials">
+            <a href="#" class="discord" title="Discord"></a>
+            <a href="#" class="instagram" title="Instagram"></a>
+            <a href="#" class="tiktok" title="TikTok"></a>
+            <a href="#" class="x" title="X"></a>
+        </div>
+        <button class="apoyar">Apoyar servidor</button>
+        <div class="footer-text">
+            <small>© 2026 Mines & Monarch. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+</body>
+</html>

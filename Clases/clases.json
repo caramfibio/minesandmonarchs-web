@@ -1,0 +1,404 @@
+{
+  "cazador": {
+    "id": "cazador",
+    "nombre": "Cazador",
+    "img": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop",
+    "desc": "Utiliza el poder de tu arco y tus flechas para derrotar a tus enemigos.",
+    "habilidades": [
+      "Comienzas con una armadura de cuero, un arco y flechas.",
+      "Tienes una maestría de +25%.",
+      "Inflinges +50% de daño con arcos.",
+      "Puedes saltar más alto.",
+      "Puedes camuflarte en las hojas.",
+      "Armas que no tengan maestría harán menos daño.",
+      "Tu poder de magia se reducirá un 50%."
+    ],
+    "razas": [
+      "Elfos del Bosque",
+      "Goblins",
+      "Humanos",
+      "Alfiqs"
+    ]
+  },
+  "guardabosques": {
+    "id": "guardabosques",
+    "nombre": "Guardabosques",
+    "img": "https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&h=400&fit=crop",
+    "desc": "La naturaleza te da las fuerzas suficientes como para otorgarte hechizos útiles y poderosos.",
+    "habilidades": [
+      "Comienzas con un libro de 3 hechizos de naturaleza.",
+      "Tienes más del 50% máximo de maná.",
+      "Tus armas de melee hacen un 50% menos de daño.",
+      "Tus flechas tendrán un 50% menos de efectividad."
+],
+    "razas": [
+      "Elfo del Bosque",
+      "Gran Elfo",
+      "Hada Pìxie",
+      "Hada Fae"
+    ]
+  },
+  "curador": {
+    "id": "curador",
+    "nombre": "Curador",
+    "img": "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=600&h=400&fit=crop",
+    "desc": "Los curadores aprendieron la parte más importante de la magia bendita y se convirtieron en sanadores natos. Utilizan la magia para ayudar a sus aliados en batalla. ",
+    "habilidades": [
+      
+    "Comienzas con un libro de hechizos curativos y tu poder de magia aumenta un 50%.",
+    "Tus armas con melee tienen el daño reducido un 50%.",
+    "Tu daño con las flechas se reduce a un 50%."
+],
+    "razas": [
+      "Elfo Lunar",
+      "Banshee",
+      "Revenant"
+    ]
+  },
+  "magoender": {
+    "id": "magoender",
+    "nombre": "Mago del Ender",
+    "img": "https://images.unsplash.com/photo-1534796636912-3b952d0e392a?w=600&h=400&fit=crop",
+    "desc": "Los magos del Ender utilizan una de las magias oscuras para defenderse a ellos mismos.",
+    "habilidades": [
+      "Comienzas con un libro de hechizos del ender y ganas un 50% de poder en ese campo.",
+      "Tienes +50% máximo de maná.",
+      "El daño melee de tu arma se reduce un 50%",
+      "El daño de tu flecha se reduce un 50%"
+],
+    "razas": [
+      "Elfo Lunar",
+      "Banshee",
+      "Revenant"
+    ]
+  },
+  "magoelectrico": {
+    "id": "magoelectrico",
+    "nombre": "Mago Eléctrico",
+    "img": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=600&h=400&fit=crop",
+    "desc": "Utiliza el poder otorgado por los dioses y controla los rayos a tu antojo.",
+    "habilidades": [
+
+      "Tienes +50% máximo de maná.",
+      "Comienzas con un libro de hechizos de electricidad y ganas 50% de poder en ese campo.",
+      "El daño melee de tu arma se reduce un 50%",
+      "El daño de tu flecha se reduce un 50%"
+    ],
+    "razas": [
+      "Gran Elfo"
+    ]
+  },
+  "magosangre": {
+    "id": "magosangre",
+    "nombre": "Mago de Sangre",
+    "img": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&h=400&fit=crop",
+    "desc": "El poder de los no-muertos aparece en forma de sangre. Utiliza esa ventaja para sobrevivir en Belmaria.",
+    "habilidades": [
+      "Comienzas con un libro de hechizos de sangre y gana +50% de poder en ese campo.",
+      "Tienes +50% máximo de maná.",
+      "El daño melee de tu arma se reduce un 50%",
+      "El daño de tu flecha se reduce un 50%"
+    ],
+    "razas": [
+      "Victima de la peste",
+      "Revenant"
+    ]
+  },
+  "magohelado": {
+    "id": "magohelado",
+    "nombre": "Mago Helado",
+    "img": "https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=600&h=400&fit=crop",
+    "desc": "Los Yetis controlan de manera increible la magia que la nieve les otorga.",
+    "habilidades": [
+      "Tienes +50% máximo de maná. ",
+      "Comienzas con un libro de hechizos de hielo y ganas un 50% de poder en ese campo. ",
+      "El daño melee de tu arma se reduce un 50%. ",
+      "El daño de tu flecha se reduce un 50%"
+    ],
+    "razas": [
+      "Yeti"
+    ]
+  },
+  "magoinvocador": {
+    "id": "magoinvocador",
+    "nombre": "Mago Invocador",
+    "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=600&h=400&fit=crop",
+    "desc": "Si un Revenant con ambición y ganas de tener subditos llega a Belmaria, lo más probable es que use su poder de invocación para atraer aliados.",
+    "habilidades": [
+      "Comienzas con un libro de hechizos de invocación y ganas un 50% de poder en ese campo.",
+      "Tienes +50% máximo de maná.",
+      "El daño melee de tu arma se reduce un 50%",
+      "El daño de tu flecha se reduce un 50%"
+    ],
+    "razas": [
+      "Revenant"
+    ]
+  },
+  "magofuego": {
+    "id": "magofuego",
+    "nombre": "Mago de Fuego",
+    "img": "https://images.unsplash.com/photo-1545128485-c400e7702796?w=600&h=400&fit=crop",
+    "desc": "Los demonios controlan el arte del fuego desde que nacieron en el Nether. Desde que aprendieron a canalizar sus llamas en hechizos sobre el OverWorld, nadie les ha podido parar.",
+    "habilidades": [
+      "Tienes +50% máximo de maná.",
+      "Comienzas con un libro de hechizos de fuego y ganas un 50% de poder en ese campo.",
+      "El daño melee de tu arma se reduce un 50%",
+      "El daño de tu flecha se reduce un 50%"
+    ],
+    "razas": [
+      "Demonio"
+    ]
+  },
+  "granmago": {
+    "id": "granmago",
+    "nombre": "Gran Mago",
+    "img": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop",
+    "desc": "Los Grandes Elfos son ambiciosos y les encanta el hecho de dominar varias artes mágicas. Después de controlar cada una de los elementos que poseen, se pueden volver formidables..",
+    "habilidades": [
+      "Tienes +50% máximo de maná.",
+      "Maestro de múltiples escuelas de magia. Tienes 4 hechizos, uno de cada tipo de magia que puedas utilizar."
+    ],
+    "razas": [
+      "Gran Elfo"
+    ]
+  },
+  "granmagooscuro": {
+    "id": "granmagooscuro",
+    "nombre": "Gran Mago Oscuro",
+    "img": "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?w=600&h=400&fit=crop",
+    "desc": "Los Revenants, tanto como los grandes Elfos, son capaces de poseer varios tipos de magia. En este caso, solamente tienen acceso a la oscura, por lo que sus hechizos son un tanto terroríficos.",
+    "habilidades": [
+      "Comienzas con un libro de 4 hechizos de tu especialidad.",
+      "Tienes +50% máximo de maná.",
+      "Las armas melee son inútiles en tus manos.",
+      "Arcos y armas a distancia son inútiles en tus manos."
+    ],
+    "razas": [
+      "Revenant"
+    ]
+  },
+  "guerrerobendito": {
+    "id": "guerrerobendito",
+    "nombre": "Guerrero Bendito",
+    "img": "https://images.unsplash.com/photo-1473163928189-364b2c4e1135?w=600&h=400&fit=crop",
+    "desc": "Las Valquirias decidieron traspasar los hechizos benditos otorgados por los dioses a un libro útil y poderoso.",
+    "habilidades": [
+      "Aunque sepas utilizar magia, te especializas más en armas melee.",
+      "Comienzas con una armadura de cota de malla, un libro de hechizos benditos y una alabarda cóncava plateada bendecida.",
+      "El daño de tu flecha se reduce un 50%",
+      "Inflige +50% más de daño crítico"
+    ],
+    "razas": [
+      "Valquiria"
+    ]
+  },
+  "hiedravenenosa": {
+    "id": "hiedravenenosa",
+    "nombre": "Hiedra Venenosa",
+    "img": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=600&h=400&fit=crop",
+    "desc": "El veneno es algo que tanto a los arácnidos y a las gorgonas les parece un manjar. \"Envenenar a tu oponente siempre será la mejor opción\".",
+    "habilidades": [
+      "Comienzas con un libro de hechizos venenosos.",
+      "Tienes +50% máximo de maná.",
+      "Te especializas en hechizos tóxicos y desventajas basadas en la naturaleza.",
+      "El daño melee de tu arma se reduce un 50%",
+      "El daño de tu flecha se reduce un 50%"
+    ],
+    "razas": [
+      "Gorgona",
+      "Arácnido"
+    ]
+  },
+  "picaro": {
+    "id": "picaro",
+    "nombre": "Rogue",
+    "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=600&h=400&fit=crop",
+    "desc": "El sigilo ayuda a estas criaturas a fomentar su caos y a conseguir todo lo que buscan en las noches oscuras de Belmaria.",
+    "habilidades": [
+      "Comienzas con 2 dagas, una armadura de cuero y un poco de comida.",
+      "Lidia con más de 50% de daño con estas armas: Chakram, Scythe, Warglaive, Twinblade, Dagger, Rapier y Sai. ",
+      "Cuando toda el área esta oscura, te vuelves invisible. Solo la luz puede revelarte. ",
+      "Tus pasos no hacen ruido. ",
+      "Las armas fuera de tu maestría hacen 50% menos de daño. ",
+      "Tu poder de magia esta reducido un 50% "
+],
+    "razas": [
+      "Elfo Lunar",
+      "Goblin",
+      "Alfiq",
+      "Hada Pixie",
+      "Arácnido"
+    ]
+  },
+  "tanque": {
+    "id": "tanque",
+    "nombre": "Tanque",
+    "img": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop",
+    "desc": "Ser tanque es un gran esfuerzo y una gran responsabilidad. Solamente las razas con más salud y resistencia podrán asumir ese rol.",
+    "habilidades": [
+      "Comienzas con una espada, un escudo y una armadura de cota de malla.",
+      "Ignora el dolor: cuando lidias con daño, ganas vida de mitigación, lo que hace que sobrevivas más tiempo en batalla. ",
+      "Tienes 50% más de tu salud. ",
+      "Cuando utilizas escudo, tu armadura vale x2. ",
+      "Tu poder de magia es reducido por un 50% ",
+      "El daño que puedes hacer con flechas se ve reducido por un 50%. "
+    ],
+    "razas": [
+      "Ogro",
+      "Enano",
+      "Humano"
+    ]
+  },
+  "berserker": {
+    "id": "berserker",
+    "nombre": "Berserker",
+    "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop",
+    "desc": "Las  hachas de los berserkers son sorprendemente fuertes y poderosas si se usan bien.",
+    "habilidades": [
+    "Comienzas con un hacha de batalla, armadura de cota de malla y comida. ",
+    "Tienes maestria con las armas: Claymore, greataxe, halberd, longsword, warglaive y hachas. La maestria de armas incrementa el daño infligido por estas armas en un 50%. ",
+    "Tu sed de sangre en la batalla te otorga +10% de vida en todos los ataques. ",
+    "Tienes +30% de probabilidad de golpe critico. ",
+    "Las armas las cuales no dominas, hacen un 50% menos de daño. ",
+    "Tu poder de hechizo se reduce en un 50%",
+    "El daño de tu flecha se reduce un 50% "
+    ],
+    "razas": [
+      "Ogro",
+      "Yeti",
+      "Demonio",
+      "Enano"
+    ]
+  },
+  "guerrero": {
+    "id": "guerrero",
+    "nombre": "Guerrero",
+    "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop",
+    "desc": "La clase más básica y tipica, pero no por eso la menos útil.",
+    "habilidades": [
+    "Comienzas con una espada, una armadura de cota de malla y carne. ",
+    "Tienes maestría en todas las armas melee. Haces un 25% más de daño con ellas. ",
+    "Haces un 50% más de daño critico. ",
+    "Tu poder de magia se reduce a un 50%. "
+    ],
+    "razas": [
+      "Humano",
+      "Valquiria",
+      "Gorgona"
+    ]
+  },
+  "bardo": {
+    "id": "bardo",
+    "nombre": "Bardo",
+    "img": "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=400&fit=crop",
+    "desc": "Las melodias que se crean en Belmaria, obtienen un poder inigualable. Cada nota es una habilidad que otorga fuerza y poder.",
+    "habilidades": [
+    "Comienzas con un cuerno",
+    "Con ese mismo cuerno, obtendrás habilidades al tocarlo.",
+    "Cuando tienes poca salud corres más rápido.",
+    "Te da hambre más rápido. ",
+    "Obtienes menos experiencia." 
+    ],
+    "razas": [
+      "Sirena",
+      "Hada Fae",
+      "Elfo Lunar",
+      "Banshee"
+    ]
+  },
+  "guerrerodelmar": {
+    "id": "guerrerodelmar",
+    "nombre": "Guerrero del Mar",
+    "img": "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&h=400&fit=crop",
+    "desc": "Las Sirenas nacieron para proteger el mar, por lo tanto, pueden escoger el lado correcto de la marea o desviarse a las playas...",
+    "habilidades": [
+      "Tienes dominio sobre todas las armas melee, infringiendo un 25% más de daño con todas ellas. ",
+      "Infliges un 50% más de daño crítico. ",
+      "Tu poder de hechizo se reduce en un 50% "
+    ],
+    "razas": [
+      "Sirena"
+    ]
+  },
+  "carterista": {
+    "id": "carterista",
+    "nombre": "Carterista",
+    "img": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
+    "desc": "Los Carteristas son odiados en todos los planetas, incluido Belmaria. Son unos ladrones impolutos que no dejan verse en sus crímenes.",
+    "habilidades": [
+    "Eres más suertudo por la noche. ",
+    "Los villagers no quieren ser vistos mientras tradean contigo, pero tienen un trato para que no les robes  "
+    ],
+    "razas": [
+       "Goblin",
+       "Alfiq"
+    ]
+  },
+  "paladin": {
+    "id": "paladin",
+    "nombre": "Paladín",
+    "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=600&h=400&fit=crop",
+    "desc": "Las Valquirias es de las razas más poderosas junto con esta clase. Se podria decir que son invencibles con un buen equipamiento.",
+    "habilidades": [
+      "Comienzas con una armadura de cota de malla, un escudo, una espada y un libro de hechizos de bendición.",
+      "Gana un 25% más de poder bendito.",
+      "Tiene un 50% más de salud.",
+      "Cuando sujetes un escudo en la mano izquierda, tu armadura aumentará su protección un 50%.",
+      "Tu daño con flechas se reduce a un 50%."
+    ],
+    "razas": [
+      "Valquiria"
+    ]
+  },
+  "ingeniero": {
+    "id": "ingeniero",
+    "nombre": "Ingeniero",
+    "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=600&h=400&fit=crop",
+    "desc": "Los ingenieros son criaturas sabias que dominan el arte de la redstone. ¡Prepárate para montarte en esos railes a velocidad máxima!",
+    "habilidades": [
+      "Tienes más probabilidad de obtener más redstone cuando la mines. ",
+      "Cuando craftees algo con redstone te dará el doble de cantidad del item creado. ",
+      "Resistencia a explosivos ",
+      "haces TNT más fácilmente y la puedes explotar de manera instantanea.   "
+    ],
+    "razas": [
+      "Goblin",
+      "Enano"
+    ]
+  },
+  "bestiasalvaje": {
+    "id": "bestiasalvaje",
+    "nombre": "Bestia Salvaje",
+    "img": "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&h=400&fit=crop",
+    "desc": "Una bestia dedicada a proteger la entrada a una antigua civilicación, ahora caida.",
+    "habilidades": [
+      "Tienes dos corazones adicionales",
+      "Comienzas con un escudo",
+      "Tu poder de hechizo se reduce un 50%",
+      "El daño de tu flecha se reduce un 50%",
+      "Debido a tu furia incontrolable, tienes +30% de probabilidad de golpe critico.",
+      "Cuando infliges daño, ganas vida de mitigación para sobrevivir más tiempo en batalla.  "
+    ],
+    "razas": [
+      "Arácnido",
+      "Ogro",
+      "Yeti",
+      "Demonio"
+    ]
+  },
+  "pescador": {
+    "id": "pescador",
+    "nombre": "Angler",
+    "img": "https://images.unsplash.com/photo-1516788875874-c5912cae7b43?w=600&h=400&fit=crop",
+    "desc": "Un humilde pescador,  contento por pescar peces raros y tesoros.",
+    "habilidades": [
+      
+    "Comienzas con una caña de pescar, un tridente y una pequeña racion de alimento."
+    ],
+    "razas": [
+      "Sirena",
+      "Alfiq",
+      "Víctima de la peste"
+    ]
+  }
+}

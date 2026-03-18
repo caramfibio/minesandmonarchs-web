@@ -1,0 +1,83 @@
+{
+  "entradas": [
+    {
+      "id": "carne",
+      "titulo": "¿Como consigo carne/cuero?",
+      "img": "https://images.unsplash.com/photo-1548438294-1ad5d5f4f063?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1548438294-1ad5d5f4f063?w=720&h=360&fit=crop",
+        "titulo": "¿Como consigo carne/cuero?",
+        "secciones": [
+          { "titulo": "Si soy Grajero", "texto": "Tendrás que seguir la guía del Butchery para poder obtener carne y cuero.", "lista": [] },
+          { "titulo": "Si soy Alquimista", "texto": "Mira la guia del Botania en su léxico. (Libro guia del juego)", "lista": [] },
+          { "titulo": "Soy Otro", "texto": "Tendras que conseguirlo a traves del comercio.", "lista": [] }
+        ]
+      }
+    },
+    {
+      "id": "territorio",
+      "titulo": "¿Como me uno a un territorio?",
+      "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=720&h=360&fit=crop",
+        "titulo": "¿Como me uno a un territorio?",
+        "secciones": [
+          { "titulo": "¿Que es lo primero que debo hacer?", "texto": "Mira primero todos y cada uno de los territorios en el canal de Territorios y observa sus normas, sus estructuras y sus preferencias, ya que en varios reinos, no pueden acceder todas las razas o las formas de gobierno son incompatibles con el pensamiento de algunos personajes.", "lista": [] },
+          { "titulo": "Contacta con el líder", "texto": "Una vez hayas escogido tu territorio, habla con alguno de sus fundadores y solicita unirte. En cuanto tengas un pasaporte de ese territorio, serás oficialmente ciudadano. ", "lista": [] },
+          { "titulo": "IMPORTANTE:", "texto": "¡No puedes unirte al territorio de alguien porque sí! Tendréis que rolear un mínimo para que sea justificable.", "lista": [] }
+        ]
+      }
+    },
+    {
+      "id": "Cartas",
+      "titulo": "¿Como puedo enviar/recibir cartas? y...  ¿Dónde las envio?",
+      "img": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=720&h=360&fit=crop",
+        "titulo": "¿Como puedo enviar/recibir cartas? y...  ¿Dónde las envio?",
+        "secciones": [
+          { "titulo": "SnailBox", "texto": "Con el mod de SnailBox se pueden enviar tanto cartas como paquetes de grandes cantidades. Es preferible que veáis la guía corta de este mod en el apartado de guías.", "lista": [] },
+          { "titulo": "¿Como Funciona?", "texto": "Las cartas las puedes enviar a distintos territorios, pero cartas especiales como lo puede ser una solicitud de documentación (pasaportes, documento oficial de territorio, documento diplomatico) lo tendrás que enviar al ayuntamiento. ", "lista": [] },
+          { "titulo": "Y :", "texto": "Por otro caso, las denuncias se envian a los juzgados.", "lista": [] }
+        ]
+
+      }
+    },
+    {
+      "id": "recursos",
+      "titulo": "Obtención de recursos",
+      "img": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=720&h=360&fit=crop",
+        "titulo": "Obtención de recursos",
+        "secciones": [
+          { "titulo": "Recursos básicos", "texto": "Los recursos son esenciales para progresar en el servidor.", "lista": ["Madera: tala árboles en los bosques.", "Piedra y minerales: explora las cuevas.", "Comida: cultiva o caza animales.", "Oro: recurso especial para comercio."] }
+        ]
+      }
+    },
+    {
+      "id": "comercio",
+      "titulo": "Sistema de comercio",
+      "img": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=720&h=360&fit=crop",
+        "titulo": "Sistema de comercio",
+        "secciones": [
+          { "titulo": "¿Cómo funciona el comercio?", "texto": "El comercio es la base de la economía. Puedes comprar y vender con aldeanos o jugadores.", "lista": ["Usa monedas de oro para comprar en tiendas NPC.", "El mercado de jugadores permite intercambios directos.", "Algunas razas tienen ventajas en el comercio.", "Los Carteristas pueden obtener mejores precios."] }
+        ]
+      }
+    },
+    {
+      "id": "construccion",
+      "titulo": "Construcción y territorios",
+      "img": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=720&h=360&fit=crop",
+        "titulo": "Construcción y territorios",
+        "secciones": [
+          { "titulo": "Reclamar territorio", "texto": "Puedes reclamar tierra para construir tu base o ciudad.", "lista": ["Necesitas permiso del staff para grandes territorios.", "Las construcciones deben seguir la estética medieval.", "Puedes crear alianzas para territorios compartidos."] }
+        ]
+      }
+    }
+  ]
+}

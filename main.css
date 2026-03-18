@@ -1,0 +1,361 @@
+/* Estilos básicos para prototipo */
+
+:root {
+    --color-principal: rgb(85, 7, 29);
+    --color-texto: #fff;
+    --color-fondo: var(--color-principal);
+}
+
+.medievalsharp-regular {
+  font-family: "MedievalSharp", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+    font-family: "MedievalSharp", "Cinzel", serif;
+}
+
+h1 {
+    font-size: 4em;
+    text-align: center;
+    margin: 20px 0;
+    color: yellow;
+}
+
+body {
+    margin: 0;
+            background: var(--color-fondo);
+    color: var(--color-texto);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-principal);
+    color: var(--color-texto);
+    padding: 10px 20px;
+    position: relative;
+}
+
+/* menu toggle button for small screens */
+#menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--color-texto);
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.header-right ul li a:hover {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left img {
+    margin-right: 10px;
+}
+
+.header-right ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.header-right li {
+    margin-left: 0;
+}
+
+.header-right a,
+.dropbtn {
+    color: var(--color-texto);
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.dropbtn::after {
+    content: ' ▼';
+    font-size: 0.7em;
+    margin-left: 5px;
+}
+
+.dropbtn:hover {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+}
+
+/* Dropdown menu styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none !important;
+    position: absolute;
+    background-color: var(--color-principal);
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+    top: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-content.show {
+    display: block !important;
+}
+
+.dropdown-content li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-content a {
+    color: var(--color-texto);
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dropdown-content a:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left img {
+    margin-right: 10px;
+}
+
+.header-right ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.header-right li {
+    margin-left: 0;
+}
+
+.header-right a,
+.dropbtn {
+    color: var(--color-texto);
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+}
+
+.dropbtn::after {
+    content: ' ▼';
+    font-size: 0.7em;
+    margin-left: 5px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.dropbtn {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.dropdown-content {
+    display: none !important;
+    position: absolute;
+    background-color: var(--color-principal);
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+    top: 100%;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+.dropdown-content.show {
+    display: block !important;
+}
+
+.dropdown-content li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-content a {
+    color: var(--color-texto);
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dropdown-content a:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.hero {
+    height: 50vh;
+    background-color: var(--color-principal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-texto);
+}
+
+.hero h2 {
+    font-size: 3rem;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+}
+
+main section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* alternating tonalities so sections are distinguishable */
+main section:nth-of-type(odd) {
+    background: rgba(0,0,0,0.2);
+}
+main section:nth-of-type(even) {
+    background: rgba(255,255,255,0.1); /* slightly lighter */
+}
+
+/* section text lilac for contrast */
+main section,
+main section h3,
+main section p,
+main section table,
+main section button {
+    color: #c8a2c8; /* lilac color */
+}
+
+.ranking-bienvenida {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.ranking-bienvenida .bienvenido,
+.ranking-bienvenida .ranking {
+    flex: 1 1 300px;
+    margin: 10px;
+}
+
+.ranking table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ranking th,
+.ranking td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+footer {
+    background: var(--color-principal);
+    color: var(--color-texto);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    flex-wrap: wrap;
+}
+
+footer .socials a {
+    margin-right: 10px;
+    color: var(--color-texto);
+    text-decoration: none;
+}
+
+footer .apoyar {
+    background: #fff;
+    color: var(--color-principal);
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+footer .footer-text {
+    flex: 1 1 100%;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* responsive navigation */
+@media (max-width: 600px) {
+    #menu-toggle {
+        display: block;
+    }
+    .header-right ul {
+        display: none;
+        flex-direction: column;
+        background: var(--color-principal);
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 200px;
+    }
+    .header-right ul.show {
+        display: flex;
+    }
+}
+
+/* social icons in footer */
+footer .socials a {
+    margin-right: 10px;
+    color: var(--color-texto);
+    text-decoration: none;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+footer .socials a.discord { background-image: url('images/discord.png'); }
+footer .socials a.instagram { background-image: url('images/instagram.png'); }
+footer .socials a.tiktok { background-image: url('images/tiktok.png'); }
+footer .socials a.x { background-image: url('images/x.png'); }

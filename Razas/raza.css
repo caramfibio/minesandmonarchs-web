@@ -1,0 +1,325 @@
+/* ============================================================
+   raza.css  –  Mines & Monarch · Página de Razas
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+/* ---------- Grid de cards ---------- */
+.razas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+    .razas-container { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .razas-container { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px 10px; }
+}
+@media (max-width: 480px) {
+    .razas-container { grid-template-columns: 1fr; }
+}
+
+/* ---------- Raza Card ---------- */
+.raza-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.raza-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+}
+.raza-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+.raza-info {
+    padding: 15px;
+    text-align: center;
+}
+.raza-name {
+    color: #ffd700;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px 0;
+    font-family: "MedievalSharp", cursive;
+}
+.raza-btn {
+    background: var(--color-principal);
+    color: var(--color-texto);
+    border: 1px solid var(--color-texto);
+    padding: 8px 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+.raza-btn:hover {
+    background: var(--color-texto);
+    color: var(--color-principal);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+    height: 25vh !important;
+    min-height: 120px;
+}
+.hero h1 {
+    font-family: "MedievalSharp", cursive !important;
+    font-size: 3em !important;
+    margin: 0;
+}
+
+/* ---------- Título de sección ---------- */
+.razas-title {
+    text-align: center;
+    margin: 0 !important;
+    padding: 12px 20px !important;
+    color: var(--color-texto);
+}
+.razas-title h2 {
+    color: #ffd700;
+    font-family: "MedievalSharp", cursive !important;
+    font-size: 1.3em;
+    margin: 0 0 4px 0;
+}
+.razas-title p {
+    font-family: "MedievalSharp", cursive !important;
+    font-size: 0.85em;
+    margin: 0;
+    color: var(--color-texto);
+}
+
+
+/* ============================================================
+   MODAL  –  color tokens por raza
+   ============================================================ */
+
+/* Valores por defecto (gris genérico) */
+.modal-overlay {
+    --rc:            #a0a0a0;
+    --rc-dim:        rgba(160,160,160,0.18);
+    --rc-border:     rgba(160,160,160,0.45);
+    --rc-glow:       rgba(160,160,160,0.20);
+    --rc-tag-bg:     rgba(160,160,160,0.14);
+    --rc-tag-border: rgba(160,160,160,0.35);
+    --rc-clase-bg:   rgba(160,160,160,0.12);
+    --rc-clase-border:rgba(160,160,160,0.35);
+    --rc-clase-text: #d4d4d4;
+}
+
+/* Humano – Gris claro */
+.modal-overlay[data-raza="humano"]       { --rc:#b0b8c1; --rc-dim:rgba(176,184,193,.18); --rc-border:rgba(176,184,193,.5); --rc-glow:rgba(176,184,193,.22); --rc-tag-bg:rgba(176,184,193,.14); --rc-tag-border:rgba(176,184,193,.4); --rc-clase-bg:rgba(176,184,193,.12); --rc-clase-border:rgba(176,184,193,.4); --rc-clase-text:#cdd2d7; }
+/* Elfo del Bosque – Verde claro */
+.modal-overlay[data-raza="elfobosque"]   { --rc:#7ecb7e; --rc-dim:rgba(126,203,126,.18); --rc-border:rgba(126,203,126,.5); --rc-glow:rgba(126,203,126,.22); --rc-tag-bg:rgba(126,203,126,.14); --rc-tag-border:rgba(126,203,126,.4); --rc-clase-bg:rgba(126,203,126,.12); --rc-clase-border:rgba(126,203,126,.4); --rc-clase-text:#a8dca8; }
+/* Alfiq – Peru */
+.modal-overlay[data-raza="alfiq"]        { --rc:#cd853f; --rc-dim:rgba(205,133,63,.18); --rc-border:rgba(205,133,63,.5); --rc-glow:rgba(205,133,63,.22); --rc-tag-bg:rgba(205,133,63,.14); --rc-tag-border:rgba(205,133,63,.4); --rc-clase-bg:rgba(205,133,63,.12); --rc-clase-border:rgba(205,133,63,.4); --rc-clase-text:#e0b080; }
+/* Goblin – Amarillo */
+.modal-overlay[data-raza="goblin"]       { --rc:#e8d44d; --rc-dim:rgba(232,212,77,.18); --rc-border:rgba(232,212,77,.5); --rc-glow:rgba(232,212,77,.22); --rc-tag-bg:rgba(232,212,77,.14); --rc-tag-border:rgba(232,212,77,.4); --rc-clase-bg:rgba(232,212,77,.12); --rc-clase-border:rgba(232,212,77,.4); --rc-clase-text:#ede08a; }
+/* Enano – Marrón */
+.modal-overlay[data-raza="enano"]        { --rc:#8b5e3c; --rc-dim:rgba(139,94,60,.18); --rc-border:rgba(139,94,60,.5); --rc-glow:rgba(139,94,60,.22); --rc-tag-bg:rgba(139,94,60,.14); --rc-tag-border:rgba(139,94,60,.4); --rc-clase-bg:rgba(139,94,60,.12); --rc-clase-border:rgba(139,94,60,.4); --rc-clase-text:#c49a72; }
+/* Arácnido – Verde */
+.modal-overlay[data-raza="aracnido"]     { --rc:#3dba3d; --rc-dim:rgba(61,186,61,.18); --rc-border:rgba(61,186,61,.5); --rc-glow:rgba(61,186,61,.22); --rc-tag-bg:rgba(61,186,61,.14); --rc-tag-border:rgba(61,186,61,.4); --rc-clase-bg:rgba(61,186,61,.12); --rc-clase-border:rgba(61,186,61,.4); --rc-clase-text:#80d880; }
+/* Yeti – Celeste */
+.modal-overlay[data-raza="yeti"]         { --rc:#6dd5ed; --rc-dim:rgba(109,213,237,.18); --rc-border:rgba(109,213,237,.5); --rc-glow:rgba(109,213,237,.22); --rc-tag-bg:rgba(109,213,237,.14); --rc-tag-border:rgba(109,213,237,.4); --rc-clase-bg:rgba(109,213,237,.12); --rc-clase-border:rgba(109,213,237,.4); --rc-clase-text:#a2e6f4; }
+/* Demonio – Rojo */
+.modal-overlay[data-raza="demonio"]      { --rc:#c0392b; --rc-dim:rgba(192,57,43,.18); --rc-border:rgba(192,57,43,.5); --rc-glow:rgba(192,57,43,.25); --rc-tag-bg:rgba(192,57,43,.14); --rc-tag-border:rgba(192,57,43,.4); --rc-clase-bg:rgba(192,57,43,.12); --rc-clase-border:rgba(192,57,43,.4); --rc-clase-text:#e88078; }
+/* Sirena – Azul oscuro */
+.modal-overlay[data-raza="sirena"]       { --rc:#1a5fa8; --rc-dim:rgba(26,95,168,.18); --rc-border:rgba(26,95,168,.5); --rc-glow:rgba(26,95,168,.25); --rc-tag-bg:rgba(26,95,168,.14); --rc-tag-border:rgba(26,95,168,.4); --rc-clase-bg:rgba(26,95,168,.12); --rc-clase-border:rgba(26,95,168,.4); --rc-clase-text:#7aaede; }
+/* Valquiria – Magenta */
+.modal-overlay[data-raza="valquiria"]    { --rc:#c0369e; --rc-dim:rgba(192,54,158,.18); --rc-border:rgba(192,54,158,.5); --rc-glow:rgba(192,54,158,.22); --rc-tag-bg:rgba(192,54,158,.14); --rc-tag-border:rgba(192,54,158,.4); --rc-clase-bg:rgba(192,54,158,.12); --rc-clase-border:rgba(192,54,158,.4); --rc-clase-text:#e080cc; }
+/* Hada Pixie – Lila */
+.modal-overlay[data-raza="hadapixie"]    { --rc:#b388e8; --rc-dim:rgba(179,136,232,.18); --rc-border:rgba(179,136,232,.5); --rc-glow:rgba(179,136,232,.22); --rc-tag-bg:rgba(179,136,232,.14); --rc-tag-border:rgba(179,136,232,.4); --rc-clase-bg:rgba(179,136,232,.12); --rc-clase-border:rgba(179,136,232,.4); --rc-clase-text:#cdb0f0; }
+/* Hada Fae – Rosa */
+.modal-overlay[data-raza="hadafae"]      { --rc:#f06fa0; --rc-dim:rgba(240,111,160,.18); --rc-border:rgba(240,111,160,.5); --rc-glow:rgba(240,111,160,.22); --rc-tag-bg:rgba(240,111,160,.14); --rc-tag-border:rgba(240,111,160,.4); --rc-clase-bg:rgba(240,111,160,.12); --rc-clase-border:rgba(240,111,160,.4); --rc-clase-text:#f4a0c0; }
+/* Gran Elfo – Verde medio */
+.modal-overlay[data-raza="granelfo"]     { --rc:#2e9e4f; --rc-dim:rgba(46,158,79,.18); --rc-border:rgba(46,158,79,.5); --rc-glow:rgba(46,158,79,.22); --rc-tag-bg:rgba(46,158,79,.14); --rc-tag-border:rgba(46,158,79,.4); --rc-clase-bg:rgba(46,158,79,.12); --rc-clase-border:rgba(46,158,79,.4); --rc-clase-text:#78cc90; }
+/* Gorgona – Naranja */
+.modal-overlay[data-raza="gorgona"]      { --rc:#e07820; --rc-dim:rgba(224,120,32,.18); --rc-border:rgba(224,120,32,.5); --rc-glow:rgba(224,120,32,.22); --rc-tag-bg:rgba(224,120,32,.14); --rc-tag-border:rgba(224,120,32,.4); --rc-clase-bg:rgba(224,120,32,.12); --rc-clase-border:rgba(224,120,32,.4); --rc-clase-text:#f0aa68; }
+/* Víctima de la Peste – Negro */
+.modal-overlay[data-raza="victimapeste"] { --rc:#444444; --rc-dim:rgba(68,68,68,.35); --rc-border:rgba(100,100,100,.55); --rc-glow:rgba(68,68,68,.30); --rc-tag-bg:rgba(68,68,68,.30); --rc-tag-border:rgba(100,100,100,.5); --rc-clase-bg:rgba(68,68,68,.28); --rc-clase-border:rgba(100,100,100,.5); --rc-clase-text:#a0a0a0; }
+/* Banshee – Blanco */
+.modal-overlay[data-raza="banshee"]      { --rc:#e8e8f0; --rc-dim:rgba(232,232,240,.14); --rc-border:rgba(232,232,240,.55); --rc-glow:rgba(232,232,240,.22); --rc-tag-bg:rgba(232,232,240,.12); --rc-tag-border:rgba(232,232,240,.45); --rc-clase-bg:rgba(232,232,240,.10); --rc-clase-border:rgba(232,232,240,.45); --rc-clase-text:#e0e0ec; }
+/* Elfo Lunar – Morado */
+.modal-overlay[data-raza="elfolunar"]    { --rc:#8e44ad; --rc-dim:rgba(142,68,173,.18); --rc-border:rgba(142,68,173,.5); --rc-glow:rgba(142,68,173,.25); --rc-tag-bg:rgba(142,68,173,.14); --rc-tag-border:rgba(142,68,173,.4); --rc-clase-bg:rgba(142,68,173,.12); --rc-clase-border:rgba(142,68,173,.4); --rc-clase-text:#c080e0; }
+/* Ogro – Verde oscuro */
+.modal-overlay[data-raza="ogro"]         { --rc:#2d6a2d; --rc-dim:rgba(45,106,45,.18); --rc-border:rgba(45,106,45,.5); --rc-glow:rgba(45,106,45,.22); --rc-tag-bg:rgba(45,106,45,.14); --rc-tag-border:rgba(45,106,45,.4); --rc-clase-bg:rgba(45,106,45,.12); --rc-clase-border:rgba(45,106,45,.4); --rc-clase-text:#68a868; }
+/* Revenant – Gris */
+.modal-overlay[data-raza="revenant"]     { --rc:#7a8694; --rc-dim:rgba(122,134,148,.18); --rc-border:rgba(122,134,148,.5); --rc-glow:rgba(122,134,148,.22); --rc-tag-bg:rgba(122,134,148,.14); --rc-tag-border:rgba(122,134,148,.4); --rc-clase-bg:rgba(122,134,148,.12); --rc-clase-border:rgba(122,134,148,.4); --rc-clase-text:#aab4be; }
+
+
+/* ---------- Modal – estructura ---------- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+    background: #1a1208;
+    border: 2px solid var(--rc-border);
+    border-radius: 10px;
+    max-width: 720px;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 40px var(--rc-glow), 0 0 0 1px var(--rc-border);
+    animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(-30px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    background: none;
+    border: none;
+    color: var(--rc);
+    font-size: 1.8em;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 10;
+    transition: color 0.2s;
+}
+.modal-close:hover { color: #fff; }
+
+.modal-img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+}
+
+/* ---------- Modal – cuerpo ---------- */
+.modal-body {
+    padding: 24px 28px 32px;
+    color: #d4c4a0;
+    font-family: Georgia, serif;
+    line-height: 1.65;
+}
+
+.modal-race-title {
+    font-family: "MedievalSharp", cursive;
+    color: var(--rc);
+    font-size: 1.8em;
+    margin: 0 0 14px 0;
+    text-shadow: 0 0 12px var(--rc-glow);
+}
+
+.modal-description {
+    font-size: 0.97em;
+    color: #c8b88a;
+    margin-bottom: 0;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid var(--rc-border);
+    margin: 20px 0;
+    opacity: 0.7;
+}
+
+/* ---------- Modal – títulos de sección ---------- */
+.modal-section-title {
+    font-family: "MedievalSharp", cursive;
+    color: var(--rc);
+    font-size: 1.05em;
+    margin: 0 0 10px 0;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.modal-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 14px;
+    background: var(--rc);
+    border-radius: 2px;
+}
+
+.modal-section { margin-bottom: 18px; }
+
+/* ---------- Modal – lista de cambios físicos ---------- */
+.modal-tag-list {
+    margin: 0;
+    padding-left: 18px;
+    list-style: disc;
+}
+.modal-tag-list li {
+    font-size: 0.93em;
+    color: #ddd0a0;
+    margin-bottom: 5px;
+}
+
+/* ---------- Modal – lista de detalles ---------- */
+.modal-detail-grid {
+    margin: 0;
+    padding-left: 18px;
+    list-style: disc;
+}
+.modal-detail-grid li {
+    font-size: 0.93em;
+    color: #ddd0a0;
+    margin-bottom: 5px;
+}
+
+/* ---------- Modal – lista de habilidades ---------- */
+.modal-abilities-list {
+    margin: 0;
+    padding-left: 18px;
+}
+.modal-abilities-list li {
+    margin-bottom: 6px;
+    font-size: 0.93em;
+}
+.modal-abilities-list li strong { color: var(--rc); }
+
+/* ---------- Modal – pills de clases ---------- */
+.modal-clases-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0; padding: 0;
+    list-style: none;
+}
+.modal-clases-list li {
+    background: var(--rc-clase-bg);
+    border: 1px solid var(--rc-clase-border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.88em;
+    color: var(--rc-clase-text);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+    .modal-img { height: 200px; }
+    .modal-body { padding: 16px 18px 24px; }
+
+}

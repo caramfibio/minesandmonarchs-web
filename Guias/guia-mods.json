@@ -1,0 +1,76 @@
+{
+  "entradas": [
+    {
+      "id": "lista-mods",
+      "titulo": "Lista de mods requeridos",
+      "img": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=720&h=360&fit=crop",
+        "titulo": "Lista de mods requeridos",
+        "secciones": [
+          { "titulo": "Mods obligatorios", "texto": "Para conectarte necesitas instalar los siguientes mods. Sin ellos no podrás acceder.", "lista": ["Forge / Fabric (versión del servidor).", "Iron's Spells & Spellbooks – sistema de magia.", "Botania – alquimia y magia natural.", "Tinkers' Construct – herrería avanzada.", "Alex's Mobs – criaturas del mundo.", "Pehkui – cambios de tamaño por raza."] }
+        ]
+      }
+    },
+    {
+      "id": "instalacion",
+      "titulo": "Cómo instalar los mods",
+      "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=720&h=360&fit=crop",
+        "titulo": "Cómo instalar los mods",
+        "secciones": [
+          { "titulo": "Pasos de instalación", "texto": "Sigue estos pasos en orden para instalar correctamente el modpack.", "lista": ["Descarga el launcher CurseForge o Modrinth.", "Instala la versión de Forge/Fabric indicada en el Discord.", "Descarga el modpack completo desde el enlace oficial.", "Coloca los archivos .jar en la carpeta /mods de tu perfil.", "Lanza el juego y verifica que no haya errores.", "Conéctate al servidor con la IP oficial."] }
+        ]
+      }
+    },
+    {
+      "id": "configuracion",
+      "titulo": "Configuración recomendada",
+      "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=720&h=360&fit=crop",
+        "titulo": "Configuración recomendada",
+        "secciones": [
+          { "titulo": "Ajustes de rendimiento", "texto": "Con tantos mods el rendimiento puede verse afectado. Estos ajustes te ayudarán.", "lista": ["Asigna al menos 4GB de RAM al perfil de Minecraft.", "Instala OptiFine o Sodium para mejorar los FPS.", "Reduce la distancia de renderizado a 8-12 chunks.", "Desactiva las partículas innecesarias en opciones de vídeo."] }
+        ]
+      }
+    },
+    {
+      "id": "magia",
+      "titulo": "Iron's Spells – Magia",
+      "img": "https://images.unsplash.com/photo-1534796636912-3b952d0e392a?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1534796636912-3b952d0e392a?w=720&h=360&fit=crop",
+        "titulo": "Iron's Spells – Magia",
+        "secciones": [
+          { "titulo": "¿Cómo funciona la magia?", "texto": "Iron's Spells añade un sistema de hechizos que varía según tu raza y clase.", "lista": ["Los hechizos se aprenden con libros de hechizos.", "Necesitas un foco o bastón para lanzarlos.", "El maná se recarga con el tiempo o con objetos especiales.", "Cada tipo de magia tiene sus propios hechizos.", "Las razas sin acceso a la magia no pueden equipar hechizos."] }
+        ]
+      }
+    },
+    {
+      "id": "alquimia",
+      "titulo": "Botania – Alquimia",
+      "img": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=720&h=360&fit=crop",
+        "titulo": "Botania – Alquimia",
+        "secciones": [
+          { "titulo": "Sistema de alquimia", "texto": "Botania permite crear pociones y objetos mágicos usando flores y recursos naturales. Solo ciertas razas tienen acceso.", "lista": ["El Pétalo de Botania es el recurso base.", "El Caldero Alquimista crea pociones avanzadas.", "El Yunque Arcano sirve para encantamientos.", "La Botica es exclusiva de Elfos del Bosque.", "Combina flores para descubrir recetas."] }
+        ]
+      }
+    },
+    {
+      "id": "tinkers",
+      "titulo": "Tinkers' Construct – Herrería",
+      "img": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&h=160&fit=crop",
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=720&h=360&fit=crop",
+        "titulo": "Tinkers' Construct – Herrería",
+        "secciones": [
+          { "titulo": "¿Qué es Tinkers?", "texto": "Permite crear armas y herramientas personalizadas combinando materiales. Solo Humanos y Enanos pueden usarlo.", "lista": ["Construye una Mesa de Patrones para empezar.", "Combina materiales en la Fundición para obtener piezas.", "Cada material aporta propiedades distintas.", "Las armas se pueden modificar con modificadores especiales.", "Son las armas más poderosas del servidor."] }
+        ]
+      }
+    }
+  ]
+}
