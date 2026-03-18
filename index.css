@@ -248,25 +248,25 @@ header {
     padding: 20px;
 }
 
-main section {
+index section {
     padding: 40px 20px;
     text-align: center;
 }
 
 /* alternating tonalities so sections are distinguishable */
-main section:nth-of-type(odd) {
+index section:nth-of-type(odd) {
     background: rgba(0,0,0,0.2);
 }
-main section:nth-of-type(even) {
+index section:nth-of-type(even) {
     background: rgba(255,255,255,0.1); /* slightly lighter */
 }
 
 /* section text lilac for contrast */
-main section,
-main section h3,
-main section p,
-main section table,
-main section button {
+index section,
+index section h3,
+index section p,
+index section table,
+index section button {
     color: #c8a2c8; /* lilac color */
 }
 
