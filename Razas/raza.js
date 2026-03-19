@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-    const RAZAS_JSON = '/Razas/razas.json';
+    const RAZAS_JSON = 'Razas/razas.json';
 
     const grid    = document.getElementById('razasGrid');
     const overlay = document.getElementById('modalOverlay');
