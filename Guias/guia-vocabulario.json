@@ -1,67 +1,71 @@
 {
   "entradas": [
     {
-      "id": "entrada-1",
-      "titulo": "Título placeholder 1",
+      "id": "Ban",
+      "titulo": "Baneo = Muerte Verdadera",
       "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=200&h=160&fit=crop",
       "parrafos": [
-        "Párrafo placeholder 1 de la entrada 1.",
-        "Párrafo placeholder 2 de la entrada 1.",
-        "Párrafo placeholder 3 de la entrada 1."
+        "La Muerte Verdadera se da cuando un jugador no vuelve a jugar en el servidor, ya sea porque ha sido baneado o porque se ha retirado de la comunidad. Nunca se podrá decir que una persona aún activa en el server ha sufrido Muerte Verdadera."
       ]
     },
     {
-      "id": "entrada-2",
-      "titulo": "Título placeholder 2",
+      "id": "Bug",
+      "titulo": "Bug = Distorsión",
       "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=200&h=160&fit=crop",
       "parrafos": [
-        "Párrafo placeholder 1 de la entrada 2.",
-        "Párrafo placeholder 2 de la entrada 2."
+        "Una distorsión es un bug, error o problema de diseño que no se puede explicar dentro del rol.",
+        "Ejemplo: Si tienes un lagazo y te caes en una cueva, sería una distorsión; si te desaparece un objeto, también lo es, etc."
       ]
     },
     {
-      "id": "entrada-3",
-      "titulo": "Título placeholder 3",
+      "id": "Admin",
+      "titulo": "Admins = Dioses",
       "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=160&fit=crop",
       "parrafos": [
-        "Párrafo placeholder 1 de la entrada 3.",
-        "Párrafo placeholder 2 de la entrada 3."
+        "Dioses es la manera de denominar al staff del servidor en conjunto, pero en ninguna circunstancia se deberá mencionar a un miembro del Staff como Dios.",
+        "Ejemplo:",
+        "(Si un admin te ha ayudado a solucionar un bug con comandos) ¡Los dioses me han ayudado!✅",
+        "(Si Jucsel te regala un objeto) ¡Los dioses me han regalado esto! 🚫"
       ]
     },
     {
-      "id": "entrada-4",
-      "titulo": "Título placeholder 4",
-      "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=200&h=160&fit=crop",
-      "parrafos": [
-        "Párrafo placeholder 1 de la entrada 4.",
-        "Párrafo placeholder 2 de la entrada 4."
-      ]
-    },
-    {
-      "id": "entrada-5",
-      "titulo": "Título placeholder 5",
-      "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=200&h=160&fit=crop",
-      "parrafos": [
-        "Párrafo placeholder 1 de la entrada 5.",
-        "Párrafo placeholder 2 de la entrada 5."
-      ]
-    },
-    {
-      "id": "entrada-6",
-      "titulo": "Título placeholder 6",
+      "id": "Respawn",
+      "titulo": "Respawn = Reaparición",
       "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=160&fit=crop",
       "parrafos": [
-        "Párrafo placeholder 1 de la entrada 6.",
-        "Párrafo placeholder 2 de la entrada 6."
+        "El nombre es bastante explicativo, es la mecánica de Respawn o Reaparición de Minecraft. Es canon dentro del server que los jugadores pueden revivir, así que no dudéis en usar este término cuando queráis."
       ]
     },
     {
-      "id": "entrada-7",
-      "titulo": "Título placeholder 7",
+      "id": "Mensaje-privado",
+      "titulo": "Mensaje privado = Susurro",
+      "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=200&h=160&fit=crop",
+      "parrafos": [
+        "Cuando le quieres enviar un mensaje privado a un jugador, ya sea desde Discord o desde Minecraft.",
+        "Ej: Te lo mando por MD -> Te lo voy a susurrar"
+      ]
+    },
+    {
+      "id": "Discord",
+      "titulo": "Discord = Tablón",
       "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=200&h=160&fit=crop",
       "parrafos": [
-        "Párrafo placeholder 1 de la entrada 7.",
-        "Párrafo placeholder 2 de la entrada 7."
+        "Se hablará del Discord como si fuera una ubicación real de Belmaria.",
+        "Ejemplos:",
+        "Te lo he dicho en Discord -> Te he dejado un mensaje en el Salón.",
+        "Lo tienes en Discord -> Lo tienes en el Salón.",
+        "",
+        "Míralo en Discord -> Miralo en el Salón."
+      ]
+    },
+    {
+      "id": "Desconectarse",
+      "titulo": "Desconectarse = Dormir/Descansar",
+      "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=200&h=160&fit=crop",
+      "parrafos": [
+        "En términos cortos y simples, el sueño profundo es cuando un jugador está fuera del juego. Dos ejemplos de como se podría usar es:",
+        "Voy a dormir profundamente (Me desconecto)",
+        "No, está en sueño profundo (Está desconectado)"
       ]
     }
   ]
