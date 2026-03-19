@@ -38,44 +38,55 @@
         "secciones": [
           { "titulo": "SnailBox", "texto": "Con el mod de SnailBox se pueden enviar tanto cartas como paquetes de grandes cantidades. Es preferible que veáis la guía corta de este mod en el apartado de guías.", "lista": [] },
           { "titulo": "¿Como Funciona?", "texto": "Las cartas las puedes enviar a distintos territorios, pero cartas especiales como lo puede ser una solicitud de documentación (pasaportes, documento oficial de territorio, documento diplomatico) lo tendrás que enviar al ayuntamiento. ", "lista": [] },
-          { "titulo": "Y :", "texto": "Por otro caso, las denuncias se envian a los juzgados.", "lista": [] }
+          { "titulo": "IMPORTANTE:", "texto": "Por otro caso, las denuncias se envian a los juzgados.", "lista": [] }
         ]
 
       }
     },
     {
-      "id": "recursos",
-      "titulo": "Obtención de recursos",
+      "id": "cambio",
+      "titulo": "¿Que hago si quiero cambiar de raza/trabajo/clase?",
       "img": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=160&fit=crop",
       "modal": {
         "img": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=720&h=360&fit=crop",
-        "titulo": "Obtención de recursos",
+        "titulo": "¿Que hago si quiero cambiar de raza/trabajo/clase?",
         "secciones": [
-          { "titulo": "Recursos básicos", "texto": "Los recursos son esenciales para progresar en el servidor.", "lista": ["Madera: tala árboles en los bosques.", "Piedra y minerales: explora las cuevas.", "Comida: cultiva o caza animales.", "Oro: recurso especial para comercio."] }
+          { "titulo": "¿Si quiero hacer cambios?", 
+          "texto": "", 
+          "lista": [
+            "Si ya has entrado en el server y tu raza/trabajo/clase no te gusta o has tenido una equivocación, no hay problema. Habla con tu miembro de staff de preferencia y él te ayudará a cambiar lo necesario.",
+            "No hay que abusar de cambios, ya que hay un registro de cuántas personas se han cambiado de raza/trabajo/clase.",
+            "Solamente se permite el cambio por:",
+            "1. Lore bien elaborado.",
+            "2. Desconformidad en menos de dos semanas de tener esa raza/trabajo/clase.",
+            "En caso de cambio, tendréis que devolver lo que esa raza/trabajo/clase os ha dado como kit inicial."
+          ]
+        }
         ]
       }
     },
     {
-      "id": "comercio",
-      "titulo": "Sistema de comercio",
+      "id": "Temperatura",
+      "titulo": "¿Como evito el frio/calor?  ",
       "img": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200&h=160&fit=crop",
       "modal": {
         "img": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=720&h=360&fit=crop",
-        "titulo": "Sistema de comercio",
+        "titulo": "¿Como evito el frio/calor?  ",
         "secciones": [
-          { "titulo": "¿Cómo funciona el comercio?", "texto": "El comercio es la base de la economía. Puedes comprar y vender con aldeanos o jugadores.", "lista": ["Usa monedas de oro para comprar en tiendas NPC.", "El mercado de jugadores permite intercambios directos.", "Algunas razas tienen ventajas en el comercio.", "Los Carteristas pueden obtener mejores precios."] }
+          { "titulo": "Evitar el Frio", "texto": "Escóndete en lugares cerrados, preferiblemente rodeados de madera y cerca de un horno. También puedes hacerte abrigos y estufas específicamente para poder mantener el calor. ",
+          "lista": [] }
         ]
       }
     },
     {
-      "id": "construccion",
-      "titulo": "Construcción y territorios",
+      "id": "awa",
+      "titulo": "¿Como consigo agua potable?  ",
       "img": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=200&h=160&fit=crop",
       "modal": {
         "img": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=720&h=360&fit=crop",
-        "titulo": "Construcción y territorios",
+        "titulo": "¿Como consigo agua potable?  ",
         "secciones": [
-          { "titulo": "Reclamar territorio", "texto": "Puedes reclamar tierra para construir tu base o ciudad.", "lista": ["Necesitas permiso del staff para grandes territorios.", "Las construcciones deben seguir la estética medieval.", "Puedes crear alianzas para territorios compartidos."] }
+          { "titulo": "", "texto": "Conseguir agua potable no es mucho trabajo, es rellenar potes de cristal con agua y calentarlos en hornos. O una manera más fácil de llevar gran cantidad de agua potable encima, es haciéndote una cantimplora, llenarla de agua y calentarla en el horno.", "lista": []}
         ]
       }
     }
