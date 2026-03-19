@@ -33,7 +33,7 @@
   "elfobosque": {
     "id": "elfobosque",
     "nombre": "Elfo del Bosque",
-    "img": "/images/Razas/ElfoBosque.jpg",
+    "img": "images/Razas/ElfoBosque.jpg",
     "desc": "Los Elfos del Bosque, también conocidos como Elfos Silvanos, son unos amantes de la naturaleza y de los animales. Viven rodeados de plantas y siguen una dieta estricta. Aun así, disfrutan enormemente de la comida.",
     "cambios": [
       "Reciben bonificaciones a distancia.",

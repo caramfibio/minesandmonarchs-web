@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // cargar contenido desde JSON de ejemplo
-    fetch('/index.json')
+    fetch('index.json')
         .then(r => r.json())
         .then(data => {
             document.querySelector('#ayuda h3').textContent = data.ayuda.title;
