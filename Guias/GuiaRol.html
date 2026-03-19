@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="Guias/guias.css">
+    <link rel="stylesheet" href="Guias/guia-vocabulario.css">
 </head>
 <body>
 
@@ -40,21 +41,29 @@
         </nav>
     </header>
 
-    <!-- ══════════════ index ══════════════ -->
+    <!-- ══════════════ CONTENIDO ══════════════ -->
     <index>
         <section class="hero">
             <h1>Guía de Rol</h1>
         </section>
 
+        <!-- Sección 1 -->
         <div class="guia-intro">
-            <h2>El Arte del Roleplay en Belmaria</h2>
-            <p>El rol es el corazón de Mines & Monarchs. Esta guía te enseñará desde los conceptos más básicos hasta las técnicas avanzadas para que tu personaje cobre vida dentro del mundo de Belmaria. Tanto si eres nuevo en el rol como si ya tienes experiencia, aquí encontrarás algo útil.</p>
+            <h2>¡Bienvenido a Belmaria, viajero!</h2>
+            <p>Mines and Monarchs es un servidor de rol medieval, y como tal tiene unas normas para asegurar que el roleo tenga coherencia entre los jugadores. En esta guía os enseñaremos todo lo que tenéis que saber para poder comunicaros dentro de rol. Si hay algo que no entendéis, podéis preguntarlo a cualquier administrador.</p>
         </div>
-
         <div id="guiasContainer"></div>
+
+        <!-- Sección 2 -->
+        <div class="guia-intro">
+            <h2>Título de la segunda sección</h2>
+            <p>Párrafo introductorio de la segunda sección. Aquí va una descripción breve del contenido que encontrarás a continuación.</p>
+        </div>
+        <div id="guiasContainer2"></div>
+
     </index>
 
-    <!-- ══════════════ MODAL ══════════════ -->
+    <!-- Modal sección 1 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-box">
             <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
@@ -63,6 +72,18 @@
                 <h2 class="modal-title" id="modalTitle"></h2>
                 <hr class="modal-divider">
                 <div id="modalCuerpo"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal sección 2 (sin imagen) -->
+    <div class="modal-overlay" id="modalOverlay2">
+        <div class="modal-box">
+            <button class="modal-close" aria-label="Cerrar">✕</button>
+            <div class="modal-body" style="padding-top: 40px;">
+                <h2 class="modal-title"></h2>
+                <hr class="modal-divider">
+                <div class="modal-cuerpo-simple"></div>
             </div>
         </div>
     </div>
@@ -83,9 +104,11 @@
 
     <script src="index.js"></script>
     <script src="Guias/guias.js"></script>
+    <script src="Guias/guia-vocabulario.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             initGuia('Guias/guia-rol.json');
+            initGuiaSimple('Guias/guia-vocabulario.json');
         });
     </script>
 </body>

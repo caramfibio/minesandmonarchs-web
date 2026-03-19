@@ -2,7 +2,7 @@
   "humano": {
     "id": "humano",
     "nombre": "Humano",
-    "img": "/images/Razas/Humano.jpg",
+    "img": "images/Razas/Humano.jpg",
     "desc": "Los humanos llegaron a Belmaria pensándose que eran los únicos que habitaban esas tierras, pero al descubrir que no, decidieron no entrar en guerra y colaborar con el resto de razas que existían. \nLos humanos no son realmente buenos en nada de este mundo. Su manera de vivir es un tanto... Aburrida. ",
     "cambios": [
       "Ninguno"

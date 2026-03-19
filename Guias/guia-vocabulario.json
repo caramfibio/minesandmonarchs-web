@@ -1,0 +1,68 @@
+{
+  "entradas": [
+    {
+      "id": "entrada-1",
+      "titulo": "Título placeholder 1",
+      "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=200&h=160&fit=crop",
+      "parrafos": [
+        "Párrafo placeholder 1 de la entrada 1.",
+        "Párrafo placeholder 2 de la entrada 1.",
+        "Párrafo placeholder 3 de la entrada 1."
+      ]
+    },
+    {
+      "id": "entrada-2",
+      "titulo": "Título placeholder 2",
+      "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=200&h=160&fit=crop",
+      "parrafos": [
+        "Párrafo placeholder 1 de la entrada 2.",
+        "Párrafo placeholder 2 de la entrada 2."
+      ]
+    },
+    {
+      "id": "entrada-3",
+      "titulo": "Título placeholder 3",
+      "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=160&fit=crop",
+      "parrafos": [
+        "Párrafo placeholder 1 de la entrada 3.",
+        "Párrafo placeholder 2 de la entrada 3."
+      ]
+    },
+    {
+      "id": "entrada-4",
+      "titulo": "Título placeholder 4",
+      "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=200&h=160&fit=crop",
+      "parrafos": [
+        "Párrafo placeholder 1 de la entrada 4.",
+        "Párrafo placeholder 2 de la entrada 4."
+      ]
+    },
+    {
+      "id": "entrada-5",
+      "titulo": "Título placeholder 5",
+      "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=200&h=160&fit=crop",
+      "parrafos": [
+        "Párrafo placeholder 1 de la entrada 5.",
+        "Párrafo placeholder 2 de la entrada 5."
+      ]
+    },
+    {
+      "id": "entrada-6",
+      "titulo": "Título placeholder 6",
+      "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=160&fit=crop",
+      "parrafos": [
+        "Párrafo placeholder 1 de la entrada 6.",
+        "Párrafo placeholder 2 de la entrada 6."
+      ]
+    },
+    {
+      "id": "entrada-7",
+      "titulo": "Título placeholder 7",
+      "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=200&h=160&fit=crop",
+      "parrafos": [
+        "Párrafo placeholder 1 de la entrada 7.",
+        "Párrafo placeholder 2 de la entrada 7."
+      ]
+    }
+  ]
+}

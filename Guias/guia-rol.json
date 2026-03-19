@@ -1,77 +1,86 @@
 {
   "entradas": [
     {
-      "id": "que-es-rol",
-      "titulo": "¿Qué es el roleplay?",
+      "id": "Cartilla",
+      "titulo": "☣Importancia de la cartilla☣",
       "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=200&h=160&fit=crop",
       "modal": {
         "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=720&h=360&fit=crop",
-        "titulo": "¿Qué es el roleplay?",
+        "titulo": "☣Importancia de la cartilla☣",
         "secciones": [
-          { "titulo": "Definición", "texto": "El roleplay consiste en interpretar a tu personaje como si fuera real dentro del mundo de Belmaria. Tus decisiones, palabras y acciones deben ser coherentes con su personalidad.", "lista": [] },
-          { "titulo": "Conceptos clave", "texto": "", "lista": ["IC (In Character): todo lo que ocurre dentro del rol.", "OOC (Out of Character): comunicación entre jugadores reales.", "Metagaming: usar información OOC dentro del IC. Prohibido.", "Powergaming: forzar acciones sobre otros sin darles opción. Prohibido."] }
-        ]
+          { "titulo": "¿Que son las cartillas?", "texto": "", "lista": [
+        "Cuando un usuario envia un formulario de personaje para verificarse, se crea una cartilla de personaje que contiene toda la información básica del jugador in rol.",
+        "Importante saber que los datos que hay se pueden modificar, es decir, si tu historia en formularios esta incompleta o la has cambiado, puedes pedir un cambio. ,",
+        "La cartilla de personaje es tu guía narrativa dentro del servidor, es lo que define como será y como se comportará tu personaje durante el resto de la partida. Para mantener un roleo consistente y de calidad es muy importante ponerte en personaje.",
+        "Si en tu cartilla se especifica que tu personaje es pacífico y amable, ¿Tendría sentido que destruya una aldea sin razón aparente? Seguramente no.  Esto no significa que no puedas variar el comportamiento de tu personaje, pero que tenga un motivo y no se salga de personaje."
+          ] }
+          ]
       }
     },
     {
-      "id": "trasfondo",
-      "titulo": "Crea tu trasfondo",
+      "id": "Rol",
+      "titulo": "✆En Rol y Fuera de Rol🗣",
       "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=200&h=160&fit=crop",
       "modal": {
         "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=720&h=360&fit=crop",
         "titulo": "Crea tu trasfondo",
         "secciones": [
-          { "titulo": "Elementos del trasfondo", "texto": "Un buen trasfondo da profundidad a tu personaje y enriquece las interacciones.", "lista": ["Nombre y origen de tu personaje.", "Historia personal: ¿de dónde viene? ¿qué lo motiva?", "Personalidad: rasgos positivos y negativos.", "Relaciones: familia, aliados, enemigos.", "Secretos que tu personaje esconde al mundo."] }
+          { "titulo": "", "texto": "El concepto de En Rol y Fuera de Rol es una etiqueta que usa Mines and Monarchs para expresar la forma en la que los jugadores se tienen que comunicar en cada canal especifico. En términos simples, los canales Fuera de Rol son en los que os podéis comportar como vosotros mismos como jugadores, en estos casos las normas de esta guía no se aplican y solo tenéis que seguir las normas generales del servidor. En contraste, los canales En Rol son en los que representáis a vuestro personaje, no a vosotros y todas las normas de esta guía se aplican y puedes ser sancionado en caso de incumplirlas. A continuación os explicaremos que canales tienen cada etiqueta.", 
+          "lista": [] },
+          { "titulo": "En Rol", "texto": "Canal de texto y voz de Minecraft, todos los documentos oficiales escritos en Minecraft, todos los canales en la categoría \"Rol\" de Discord y el canal de \"En Rol\" de Discord..", 
+          "lista": [] },
+          { "titulo": "Fuera de Rol", "texto": "El resto de canales de Discord no mencionados anteriormente, todas las conversaciones privadas de Discord, todos los susurros dentro de Minecraft y los mensajes escritos entre paréntesis dentro de Minecraft. (Más información más adelante en la guía).", 
+          "lista": [] }
         ]
       }
     },
     {
-      "id": "normas-rol",
-      "titulo": "Normas de rol",
+      "id": "actuacion",
+      "titulo": "☝¿Como actuar En Rol?☝ ",
       "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=160&fit=crop",
       "modal": {
         "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=720&h=360&fit=crop",
-        "titulo": "Normas de rol",
+        "titulo": "☝¿Como actuar En Rol?☝ ",
         "secciones": [
-          { "titulo": "Reglas básicas", "texto": "Para que todos disfruten, es necesario seguir unas normas básicas de rol.", "lista": ["Siempre respetar el rol del otro jugador.", "No abandonar una escena de rol sin avisar.", "El daño físico debe describirse y negociarse.", "La muerte permanente requiere consentimiento mutuo.", "El OOC debe marcarse con (( dobles paréntesis ))."] }
-        ]
+          { "titulo": "¿Que tengo que hacer?", "texto": "Como se ha dicho en el anterior punto, cuando estás en una conversación \"En Rol\" no estás hablando como tú, un jugador de Mines and Monarchs, estás hablando como tu personaje, un habitante de Belmaria. Aquí dejo unas pocas instrucciones de como hacer esto:", 
+          "lista": [
+            "No puedes hablar de cosas que tu personaje no tendría forma de saber dentro del rol ni actuar de una forma que tu personaje nunca actuaria.",
+            "Es muy importante recordar que el rol es rol y no se debe tomar las relaciones de tu personaje como las tuyas propias, si hay un elfo que odia a los enanos con toda su alma, recuerda que es rol y no pienses que el jugador detrás de ese elfo tiene algo en contra tuyo personalmente.",
+            "Para saber como llamar a mecánicas de Minecraft de forma adecuada, revisa el vocabulario de rol.",
+            "Si tienes que aclarar alguna cosa y no puedes decirlo En Rol, siempre pon el mensaje entre paréntesis. No está permitido tener conservaciones enteras con paréntesis En Rol." 
+          ]
+        }]
       }
     },
     {
-      "id": "conflicto",
-      "titulo": "Conflicto y combate en rol",
+      "id": "COMO-ROLEAR",
+      "titulo": "⛏¿Cómo roleo una acción?⛏",
       "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=200&h=160&fit=crop",
       "modal": {
         "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=720&h=360&fit=crop",
-        "titulo": "Conflicto y combate en rol",
+        "titulo": "⛏¿Cómo roleo una acción?⛏",
         "secciones": [
-          { "titulo": "¿Cómo resolver conflictos?", "texto": "El conflicto es parte natural del rol, pero debe gestionarse para enriquecer la historia.", "lista": ["Intenta resolver el conflicto narrativamente antes del combate.", "Describe las acciones en /me antes de atacar.", "Respeta el resultado del combate aunque no sea favorable.", "Un personaje derrotado no muere automáticamente, salvo acuerdo."] }
+          { "titulo": "", "texto": "", 
+          "lista": [
+            "Hay muchas veces que es necesario aclarar que se está haciendo. Un ejemplo muy funcional dentro del servidor, es el /me <acción>.",
+            "Es decir, imaginemos que eres un Enano y te llamas Hermes, y te gustaría comunicar dentro de rol que estás observando una estatua. Tendrías que poner: /me mira atentamente la estatua. Y aparecería así: ",
+            "\"[Enano] Hermes mira atentamente la estatua.]\""
+          ] }
         ]
       }
     },
     {
-      "id": "eventos",
-      "titulo": "Eventos de rol",
+      "id": "si",
+      "titulo": "¿Como hablar por chat de minecraft en rol o fuera de rol?",
       "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=200&h=160&fit=crop",
       "modal": {
         "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=720&h=360&fit=crop",
-        "titulo": "Eventos de rol",
+        "titulo": "¿Como hablar por chat de minecraft en rol o fuera de rol?",
         "secciones": [
-          { "titulo": "¿Qué son los eventos?", "texto": "Situaciones organizadas por el staff que afectan al mundo de Belmaria.", "lista": ["Guerras entre facciones.", "Investigaciones de crímenes o misterios.", "Expediciones a zonas peligrosas.", "Ferias, mercados y celebraciones.", "Juicios y asambleas políticas."] }
-        ]
-      }
-    },
-    {
-      "id": "facciones",
-      "titulo": "Facciones y política",
-      "img": "https://images.unsplash.com/photo-1473163928189-364b2c4e1135?w=200&h=160&fit=crop",
-      "modal": {
-        "img": "https://images.unsplash.com/photo-1473163928189-364b2c4e1135?w=720&h=360&fit=crop",
-        "titulo": "Facciones y política",
-        "secciones": [
-          { "titulo": "Las facciones de Belmaria", "texto": "El mundo está dividido en facciones con sus propios intereses, alianzas y conflictos.", "lista": ["Cada facción tiene un líder elegido o asignado.", "Puedes cambiar de facción bajo condiciones narrativas.", "Las traiciones tienen consecuencias en el rol.", "Las facciones pueden declarar guerra o firmar alianzas."] }
-        ]
-      }
+          { "titulo": "", "texto": "Dentro de Minecraft es muy fácil diferenciar si alguien está roleando o no.","lista": [] },
+          { "titulo": "EN ROL", "texto": "Aparte de comportarte como tu personaje y tener un vocabulario de rol (no mencionar discord por ejemplo y decir \"Salón\" en vez de eso) se habla sin paréntesis.","lista": [] },
+          { "titulo": "FUERA DE ROL", "texto": "En fuera de rol, ya que te sales del personaje, tendrás que escribir entre paréntesis. Cuando hablas entre paréntesis, quiere decir que no estás roleando, por lo cual puedes decir cualquier palabra que no esté permitida dentro de rol.","lista": [] }
+      ]}
     }
   ]
 }

@@ -1,0 +1,17 @@
+/* ============================================================
+   guia-simple.css  –  Mines & Monarch · Modal simple (sección 2)
+   ============================================================ */
+
+/* Modal sin imagen */
+#modalOverlay2 .modal-box {
+    background: #1a1208;
+    border: 2px solid rgba(255,215,0,0.4);
+    border-radius: 10px;
+    max-width: 720px;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 40px rgba(255,215,0,0.12);
+    animation: modalIn 0.3s ease;
+}
