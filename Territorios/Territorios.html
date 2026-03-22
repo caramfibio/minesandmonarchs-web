@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="/minesandmonarchs-web/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Territorios - Mines & Monarch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Territorios/territorios.css">
+</head>
+<body>
+
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header>
+        <div class="header-left">
+            <h2>Mines & Monarch</h2>
+        </div>
+        <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
+        <nav class="header-right">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Creación personaje</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Razas/raza.html">Raza</a></li>
+                        <li><a href="Clases/Clases.html">Clase</a></li>
+                        <li><a href="#">Trabajo</a></li>
+                        <li><a href="#">Cartilla</a></li>
+                    </ul>
+                </li>
+                <li><a href="Territorios/Territorios.html">Territorios</a></li>
+                <li><a href="index.html#lore">Lore Oficial</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Ayuda</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Guias/GuiaBasica.html">Guía Básica</a></li>
+                        <li><a href="Guias/GuiaMods.html">Guía de Mods</a></li>
+                        <li><a href="Guias/GuiaRol.html">Guía de Rol</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Mapa</a></li>
+                <li><a href="#">Donar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ══════════════ CARRUSEL HERO ══════════════ -->
+    <section class="territorios-carousel" id="carouselHero">
+        <div class="carousel-track" id="carouselTrack"></div>
+        <div class="carousel-overlay">
+            <h1 class="carousel-title">Territorios de Belmaria</h1>
+            <p class="carousel-subtitle">Explora los reinos que dan forma al mundo</p>
+        </div>
+        <button class="carousel-btn prev" id="carouselPrev" aria-label="Anterior">‹</button>
+        <button class="carousel-btn next" id="carouselNext" aria-label="Siguiente">›</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+    </section>
+
+    <!-- ══════════════ DESCRIPCIÓN ══════════════ -->
+    <section class="territorios-intro">
+        <div class="intro-inner">
+            <h2>Los Reinos de Belmaria</h2>
+            <p>
+                Belmaria es un mundo vasto y plural, dividido en territorios con sus propias leyes, culturas y formas de gobierno. 
+                Cada reino tiene una historia única que lo define, y ningún viajero sale igual de cualquiera de ellos.
+                Antes de unirte a uno, <strong>estudia bien sus normas</strong> y asegúrate de que sean compatibles con tu personaje.
+            </p>
+            <a href="#territorios-grid" class="intro-cta">Ver todos los territorios ↓</a>
+        </div>
+    </section>
+
+    <!-- ══════════════ GRID DE TERRITORIOS ══════════════ -->
+    <section class="territorios-grid-section" id="territorios-grid">
+        <h2 class="grid-title">Todos los Territorios</h2>
+        <div class="territorios-grid" id="territoriosGrid"></div>
+    </section>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer>
+        <div class="socials">
+            <a href="#" class="discord"   title="Discord"></a>
+            <a href="#" class="instagram" title="Instagram"></a>
+            <a href="#" class="tiktok"    title="TikTok"></a>
+            <a href="#" class="x"         title="X"></a>
+        </div>
+        <button class="apoyar">Apoyar servidor</button>
+        <div class="footer-text">
+            <small>© 2026 Mines & Monarch. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <script src="../index.js"></script>
+    <script src="Territorios/territorios.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initTerritorios('Territorios/territorios.json');
+        });
+    </script>
+</body>
+</html>

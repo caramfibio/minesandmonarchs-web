@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="/minesandmonarchs-web/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Territorio - Mines & Monarch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Territorios/territorios.css">
+    <link rel="stylesheet" href="Territorios/territorio-detalle.css">
+</head>
+<body>
+
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header>
+        <div class="header-left">
+            <h2>Mines & Monarch</h2>
+        </div>
+        <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
+        <nav class="header-right">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Creación personaje</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Razas/raza.html">Raza</a></li>
+                        <li><a href="Clases/Clases.html">Clase</a></li>
+                        <li><a href="#">Trabajo</a></li>
+                        <li><a href="#">Cartilla</a></li>
+                    </ul>
+                </li>
+                <li><a href="Territorios/Territorios.html">Territorios</a></li>
+                <li><a href="index.html#lore">Lore Oficial</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Ayuda</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Guias/GuiaBasica.html">Guía Básica</a></li>
+                        <li><a href="Guias/GuiaMods.html">Guía de Mods</a></li>
+                        <li><a href="Guias/GuiaRol.html">Guía de Rol</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Mapa</a></li>
+                <li><a href="#">Donar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ══════════════ CONTENIDO DETALLE ══════════════ -->
+    <main id="territorioDetalle">
+        <!-- Renderizado por JS -->
+        <div class="detalle-loading">Cargando territorio…</div>
+    </main>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer>
+        <div class="socials">
+            <a href="#" class="discord"   title="Discord"></a>
+            <a href="#" class="instagram" title="Instagram"></a>
+            <a href="#" class="tiktok"    title="TikTok"></a>
+            <a href="#" class="x"         title="X"></a>
+        </div>
+        <button class="apoyar">Apoyar servidor</button>
+        <div class="footer-text">
+            <small>© 2026 Mines & Monarch. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <script src="../index.js"></script>
+    <script src="Territorios/territorios.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initTerritorioDetalle('Territorios/territorios.json');
+        });
+    </script>
+</body>
+</html>

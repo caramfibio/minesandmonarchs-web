@@ -1,0 +1,242 @@
+/* ============================================================
+   territorio-detalle.css – Mines & Monarch · Página de detalle
+   ============================================================ */
+
+/* ── Banner superior ── */
+.detalle-banner {
+    width: 100%;
+    height: 42vh;
+    min-height: 240px;
+    position: relative;
+    overflow: hidden;
+    background: #0d0805;
+}
+.detalle-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.6);
+}
+.detalle-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(10,5,2,0.95) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px 40px;
+}
+.detalle-back {
+    position: absolute;
+    top: 18px; left: 24px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,215,0,0.4);
+    color: #ffd700;
+    font-family: Georgia, serif;
+    font-size: 0.88em;
+    padding: 6px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 5;
+}
+.detalle-back:hover { background: rgba(255,215,0,0.15); }
+
+.detalle-nombre {
+    font-family: "MedievalSharp", cursive;
+    font-size: clamp(1.8em, 5vw, 3em);
+    color: #ffd700;
+    margin: 0 0 6px;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.8);
+}
+.detalle-subtitulo {
+    font-family: Georgia, serif;
+    color: #c8b88a;
+    font-size: clamp(0.85em, 2vw, 1em);
+    font-style: italic;
+    margin: 0;
+}
+
+/* ── Layout principal ── */
+.detalle-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 0 60px;
+}
+
+/* ── Sidebar ── */
+.detalle-sidebar {
+    background: rgba(0,0,0,0.45);
+    border-right: 1px solid rgba(255,215,0,0.12);
+    padding: 28px 22px;
+    min-height: 500px;
+}
+
+.sidebar-block {
+    margin-bottom: 28px;
+}
+.sidebar-block:last-child { margin-bottom: 0; }
+
+.sidebar-label {
+    font-family: "MedievalSharp", cursive;
+    color: #ffd700;
+    font-size: 0.82em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.sidebar-label::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 12px;
+    background: #ffd700;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.sidebar-value {
+    font-family: Georgia, serif;
+    color: #c8b88a;
+    font-size: 0.88em;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.sidebar-list li {
+    font-family: Georgia, serif;
+    color: #c8b88a;
+    font-size: 0.85em;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+.sidebar-list li::before {
+    content: '⚔';
+    color: #ffd700;
+    opacity: 0.6;
+    font-size: 0.7em;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+.sidebar-list li:last-child { border-bottom: none; }
+
+.sidebar-divider {
+    border: none;
+    border-top: 1px solid rgba(255,215,0,0.15);
+    margin: 20px 0;
+}
+
+/* ── Contenido principal (derecha) ── */
+.detalle-content {
+    padding: 36px 40px;
+}
+
+.detalle-section-title {
+    font-family: "MedievalSharp", cursive;
+    color: #ffd700;
+    font-size: 1.1em;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.detalle-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,215,0,0.2);
+}
+
+.detalle-descripcion p {
+    font-family: Georgia, serif;
+    color: #c8b88a;
+    font-size: 0.95em;
+    line-height: 1.85;
+    margin: 0 0 16px;
+}
+.detalle-descripcion p:last-child { margin-bottom: 0; }
+
+.detalle-divider {
+    border: none;
+    border-top: 1px solid rgba(255,215,0,0.12);
+    margin: 32px 0;
+}
+
+/* ── Leyes ── */
+.leyes-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: ley-counter;
+}
+.leyes-lista li {
+    counter-increment: ley-counter;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-family: Georgia, serif;
+    color: #c8b88a;
+    font-size: 0.9em;
+    line-height: 1.65;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.leyes-lista li:last-child { border-bottom: none; }
+.leyes-lista li::before {
+    content: counter(ley-counter);
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.3);
+    color: #ffd700;
+    font-family: "MedievalSharp", cursive;
+    font-size: 0.8em;
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ── Loading ── */
+.detalle-loading {
+    text-align: center;
+    padding: 80px 24px;
+    font-family: Georgia, serif;
+    color: #a89060;
+    font-style: italic;
+}
+
+/* ── Responsive ── */
+@media (max-width: 800px) {
+    .detalle-layout {
+        grid-template-columns: 1fr;
+    }
+    .detalle-sidebar {
+        border-right: none;
+        border-bottom: 1px solid rgba(255,215,0,0.12);
+    }
+    .detalle-content {
+        padding: 24px 20px;
+    }
+    .detalle-banner-overlay {
+        padding: 18px 20px;
+    }
+}
