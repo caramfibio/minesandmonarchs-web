@@ -4,69 +4,91 @@
       "id": "Ban",
       "titulo": "Baneo = Muerte Verdadera",
       "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=200&h=160&fit=crop",
-      "parrafos": [
-        "La Muerte Verdadera se da cuando un jugador no vuelve a jugar en el servidor, ya sea porque ha sido baneado o porque se ha retirado de la comunidad. Nunca se podrá decir que una persona aún activa en el server ha sufrido Muerte Verdadera."
-      ]
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=720&h=360&fit=crop",
+        "titulo": "Baneo = Muerte Verdadera",
+        "secciones": [
+          { "titulo": "¿Qué es la Muerte Verdadera?", "texto": "La Muerte Verdadera se da cuando un jugador no vuelve a jugar en el servidor, ya sea porque ha sido baneado o porque se ha retirado de la comunidad. Nunca se podrá decir que una persona aún activa en el server ha sufrido Muerte Verdadera.", "lista": [] }
+        ]
+      }
     },
     {
       "id": "Bug",
       "titulo": "Bug = Distorsión",
       "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=200&h=160&fit=crop",
-      "parrafos": [
-        "Una distorsión es un bug, error o problema de diseño que no se puede explicar dentro del rol.",
-        "Ejemplo: Si tienes un lagazo y te caes en una cueva, sería una distorsión; si te desaparece un objeto, también lo es, etc."
-      ]
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=720&h=360&fit=crop",
+        "titulo": "Bug = Distorsión",
+        "secciones": [
+          { "titulo": "¿Qué es una Distorsión?", "texto": "Una distorsión es un bug, error o problema de diseño que no se puede explicar dentro del rol.", "lista": [] },
+          { "titulo": "Ejemplos", "texto": "", "lista": ["Si tienes un lagazo y te caes en una cueva, sería una distorsión", "Si te desaparece un objeto, también lo es", "Cualquier error del servidor sin explicación roleplay"] }
+        ]
+      }
     },
     {
       "id": "Admin",
       "titulo": "Admins = Dioses",
       "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=160&fit=crop",
-      "parrafos": [
-        "Dioses es la manera de denominar al staff del servidor en conjunto, pero en ninguna circunstancia se deberá mencionar a un miembro del Staff como Dios.",
-        "Ejemplo:",
-        "(Si un admin te ha ayudado a solucionar un bug con comandos) ¡Los dioses me han ayudado!✅",
-        "(Si Jucsel te regala un objeto) ¡Los dioses me han regalado esto! 🚫"
-      ]
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=720&h=360&fit=crop",
+        "titulo": "Admins = Dioses",
+        "secciones": [
+          { "titulo": "Forma correcta de referirse", "texto": "Dioses es la manera de denominar al staff del servidor en conjunto, pero en ninguna circunstancia se deberá mencionar a un miembro del Staff como Dios.", "lista": [] },
+          { "titulo": "Ejemplos correctos", "texto": "", "lista": ["Si un admin te ha ayudado a solucionar un bug con comandos: ¡Los dioses me han ayudado! ✅"] },
+          { "titulo": "Ejemplos incorrectos", "texto": "", "lista": ["Si Jucsel te regala un objeto: ¡Los dioses me han regalado esto! 🚫"] }
+        ]
+      }
     },
     {
       "id": "Respawn",
       "titulo": "Respawn = Reaparición",
       "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=160&fit=crop",
-      "parrafos": [
-        "El nombre es bastante explicativo, es la mecánica de Respawn o Reaparición de Minecraft. Es canon dentro del server que los jugadores pueden revivir, así que no dudéis en usar este término cuando queráis."
-      ]
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=720&h=360&fit=crop",
+        "titulo": "Respawn = Reaparición",
+        "secciones": [
+          { "titulo": "Mecánica de Respawn", "texto": "El nombre es bastante explicativo, es la mecánica de Respawn o Reaparición de Minecraft. Es canon dentro del server que los jugadores pueden revivir, así que no dudéis en usar este término cuando queráis.", "lista": [] }
+        ]
+      }
     },
     {
       "id": "Mensaje-privado",
       "titulo": "Mensaje privado = Susurro",
       "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=200&h=160&fit=crop",
-      "parrafos": [
-        "Cuando le quieres enviar un mensaje privado a un jugador, ya sea desde Discord o desde Minecraft.",
-        "Ej: Te lo mando por MD -> Te lo voy a susurrar"
-      ]
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=720&h=360&fit=crop",
+        "titulo": "Mensaje privado = Susurro",
+        "secciones": [
+          { "titulo": "¿Qué es un Susurro?", "texto": "Cuando le quieres enviar un mensaje privado a un jugador, ya sea desde Discord o desde Minecraft.", "lista": [] },
+          { "titulo": "Ejemplo de uso", "texto": "", "lista": ["Te lo mando por MD → Te lo voy a susurrar"] }
+        ]
+      }
     },
     {
       "id": "Discord",
       "titulo": "Discord = Tablón",
       "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=200&h=160&fit=crop",
-      "parrafos": [
-        "Se hablará del Discord como si fuera una ubicación real de Belmaria.",
-        "Ejemplos:",
-        "Te lo he dicho en Discord -> Te he dejado un mensaje en el Salón.",
-        "Lo tienes en Discord -> Lo tienes en el Salón.",
-        "",
-        "Míralo en Discord -> Miralo en el Salón."
-      ]
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=720&h=360&fit=crop",
+        "titulo": "Discord = Tablón",
+        "secciones": [
+          { "titulo": "Referencia Roleplay", "texto": "Se hablará del Discord como si fuera una ubicación real de Belmaria.", "lista": [] },
+          { "titulo": "Ejemplos de uso", "texto": "", "lista": ["Te lo he dicho en Discord → Te he dejado un mensaje en el Salón", "Lo tienes en Discord → Lo tienes en el Salón", "Míralo en Discord → Miralo en el Salón"] }
+        ]
+      }
     },
     {
       "id": "Desconectarse",
       "titulo": "Desconectarse = Dormir/Descansar",
       "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=200&h=160&fit=crop",
-      "parrafos": [
-        "En términos cortos y simples, el sueño profundo es cuando un jugador está fuera del juego. Dos ejemplos de como se podría usar es:",
-        "Voy a dormir profundamente (Me desconecto)",
-        "No, está en sueño profundo (Está desconectado)"
-      ]
+      "modal": {
+        "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=720&h=360&fit=crop",
+        "titulo": "Desconectarse = Dormir/Descansar",
+        "secciones": [
+          { "titulo": "El Sueño Profundo", "texto": "En términos cortos y simples, el sueño profundo es cuando un jugador está fuera del juego.", "lista": [] },
+          { "titulo": "Ejemplos de uso", "texto": "", "lista": ["Voy a dormir profundamente (Me desconecto)", "No, está en sueño profundo (Está desconectado)"] }
+        ]
+      }
     }
   ]
 }

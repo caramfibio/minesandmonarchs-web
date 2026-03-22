@@ -30,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-async function initGuia(jsonPath) {
-    const container = document.getElementById('guiasContainer');
-    const overlay   = document.getElementById('modalOverlay');
+async function initGuia(jsonPath, containerId = 'guiasContainer', overlayId = 'modalOverlay') {
+    const container = document.getElementById(containerId);
+    const overlay   = document.getElementById(overlayId);
 
     /* ── Carga de datos ── */
     let data;
@@ -66,31 +66,37 @@ async function initGuia(jsonPath) {
 
     /* ── Abre el modal ── */
     function openModal(modal) {
-        document.getElementById('modalImg').src           = modal.img;
-        document.getElementById('modalImg').alt           = modal.titulo;
-        document.getElementById('modalTitle').textContent = modal.titulo;
+        // Buscar elementos dentro del overlay específico
+        const img = overlay.querySelector('.modal-img');
+        const title = overlay.querySelector('.modal-title');
+        const cuerpo = overlay.querySelector('[id^="modal"]') || overlay.querySelector('.modal-cuerpo-simple');
+        
+        if (img) img.src = modal.img;
+        if (img) img.alt = modal.titulo;
+        if (title) title.textContent = modal.titulo;
 
-        const cuerpo = document.getElementById('modalCuerpo');
-        cuerpo.innerHTML = '';
+        if (cuerpo) {
+            cuerpo.innerHTML = '';
 
-        modal.secciones.forEach((sec, i) => {
-            if (i > 0) {
-                const hr = document.createElement('hr');
-                hr.className = 'modal-divider';
-                cuerpo.appendChild(hr);
-            }
-            const div = document.createElement('div');
-            div.className = 'modal-section';
-            let html = `<h3 class="modal-section-title">${sec.titulo}</h3>`;
-            if (sec.texto) html += `<p class="modal-text">${sec.texto}</p>`;
-            if (sec.lista && sec.lista.length > 0) {
-                html += '<ul class="modal-list">' +
-                    sec.lista.map(item => `<li>${item}</li>`).join('') +
-                    '</ul>';
-            }
-            div.innerHTML = html;
-            cuerpo.appendChild(div);
-        });
+            modal.secciones.forEach((sec, i) => {
+                if (i > 0) {
+                    const hr = document.createElement('hr');
+                    hr.className = 'modal-divider';
+                    cuerpo.appendChild(hr);
+                }
+                const div = document.createElement('div');
+                div.className = 'modal-section';
+                let html = `<h3 class="modal-section-title">${sec.titulo}</h3>`;
+                if (sec.texto) html += `<p class="modal-text">${sec.texto}</p>`;
+                if (sec.lista && sec.lista.length > 0) {
+                    html += '<ul class="modal-list">' +
+                        sec.lista.map(item => `<li>${item}</li>`).join('') +
+                        '</ul>';
+                }
+                div.innerHTML = html;
+                cuerpo.appendChild(div);
+            });
+        }
 
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -103,7 +109,8 @@ async function initGuia(jsonPath) {
     }
 
     /* ── Eventos del modal ── */
-    document.getElementById('modalClose').addEventListener('click', closeModal);
+    const closeBtn = overlay.querySelector('.modal-close');
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 }
