@@ -8,22 +8,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // dropdown toggle for Creación personaje
-    const dropbtn = document.querySelector('.dropbtn');
-    const dropdownContent = document.querySelector('.dropdown-content');
-
-    if (dropbtn) {
-        dropbtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            dropdownContent.classList.toggle('show');
-        });
-    }
+    // dropdown toggle for all dropdowns
+    const dropdowns = document.querySelectorAll('.dropdown');
+    
+    dropdowns.forEach(dropdown => {
+        const dropbtn = dropdown.querySelector('.dropbtn');
+        const dropdownContent = dropdown.querySelector('.dropdown-content');
+        
+        if (dropbtn) {
+            dropbtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                dropdownContent.classList.toggle('show');
+            });
+        }
+    });
 
     // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.dropdown')) {
-            dropdownContent.classList.remove('show');
-        }
+        dropdowns.forEach(dropdown => {
+            if (!dropdown.contains(e.target)) {
+                dropdown.querySelector('.dropdown-content').classList.remove('show');
+            }
+        });
     });
 
     // cargar contenido desde JSON de ejemplo
