@@ -69,7 +69,7 @@ async function initGuia(jsonPath, containerId = 'guiasContainer', overlayId = 'm
         // Buscar elementos dentro del overlay específico
         const img = overlay.querySelector('.modal-img');
         const title = overlay.querySelector('.modal-title');
-        const cuerpo = overlay.querySelector('[id^="modal"]') || overlay.querySelector('.modal-cuerpo-simple');
+        const cuerpo = overlay.querySelector('#modalCuerpo') || overlay.querySelector('.modal-cuerpo-simple');
         
         if (img) img.src = modal.img;
         if (img) img.alt = modal.titulo;
