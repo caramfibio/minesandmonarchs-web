@@ -34,6 +34,11 @@ async function initGuia(jsonPath, containerId = 'guiasContainer', overlayId = 'm
     const container = document.getElementById(containerId);
     const overlay   = document.getElementById(overlayId);
 
+    if (!container || !overlay) {
+        console.error(`[Guias] No se encontró #${containerId} o #${overlayId}`);
+        return;
+    }
+
     /* ── Carga de datos ── */
     let data;
     try {
@@ -46,7 +51,7 @@ async function initGuia(jsonPath, containerId = 'guiasContainer', overlayId = 'm
         return;
     }
 
-    /* ── Renderiza grid directo ── */
+    /* ── Renderiza grid ── */
     const grid = document.createElement('div');
     grid.className = 'guia-grid';
 
@@ -66,19 +71,25 @@ async function initGuia(jsonPath, containerId = 'guiasContainer', overlayId = 'm
 
     /* ── Abre el modal ── */
     function openModal(modal) {
-        // Buscar elementos dentro del overlay específico
-        const img = overlay.querySelector('.modal-img');
-        const title = overlay.querySelector('.modal-title');
-        const cuerpo = overlay.querySelector('#modalCuerpo') || overlay.querySelector('.modal-cuerpo-simple');
-        
-        if (img) img.src = modal.img;
-        if (img) img.alt = modal.titulo;
-        if (title) title.textContent = modal.titulo;
+        // Buscar elementos DENTRO del overlay específico, usando clases (no IDs globales)
+        const img    = overlay.querySelector('.modal-img');
+        const title  = overlay.querySelector('.modal-title');
+        // Acepta tanto #modalCuerpo como .modal-cuerpo-simple dentro de este overlay
+        const cuerpo = overlay.querySelector('[id="modalCuerpo"], .modal-cuerpo-simple');
+
+        if (img) {
+            img.src = modal.img || '';
+            img.alt = modal.titulo || '';
+            // Ocultar la imagen si no hay src
+            img.style.display = modal.img ? 'block' : 'none';
+        }
+
+        if (title) title.textContent = modal.titulo || '';
 
         if (cuerpo) {
             cuerpo.innerHTML = '';
 
-            modal.secciones.forEach((sec, i) => {
+            (modal.secciones || []).forEach((sec, i) => {
                 if (i > 0) {
                     const hr = document.createElement('hr');
                     hr.className = 'modal-divider';
@@ -86,13 +97,20 @@ async function initGuia(jsonPath, containerId = 'guiasContainer', overlayId = 'm
                 }
                 const div = document.createElement('div');
                 div.className = 'modal-section';
-                let html = `<h3 class="modal-section-title">${sec.titulo}</h3>`;
-                if (sec.texto) html += `<p class="modal-text">${sec.texto}</p>`;
+
+                let html = '';
+                if (sec.titulo) {
+                    html += `<h3 class="modal-section-title">${sec.titulo}</h3>`;
+                }
+                if (sec.texto) {
+                    html += `<p class="modal-text">${sec.texto}</p>`;
+                }
                 if (sec.lista && sec.lista.length > 0) {
                     html += '<ul class="modal-list">' +
                         sec.lista.map(item => `<li>${item}</li>`).join('') +
                         '</ul>';
                 }
+
                 div.innerHTML = html;
                 cuerpo.appendChild(div);
             });
@@ -109,8 +127,24 @@ async function initGuia(jsonPath, containerId = 'guiasContainer', overlayId = 'm
     }
 
     /* ── Eventos del modal ── */
+    // Usar clase en vez de ID para evitar conflictos cuando hay varios modales
     const closeBtn = overlay.querySelector('.modal-close');
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    if (closeBtn) {
+        // Evitar duplicar listeners si initGuia se llama varias veces
+        closeBtn.replaceWith(closeBtn.cloneNode(true));
+        overlay.querySelector('.modal-close').addEventListener('click', closeModal);
+    }
+
+    // Click en el fondo oscuro
+    overlay.addEventListener('click', e => {
+        if (e.target === overlay) closeModal();
+    });
+
+    // Tecla Escape — solo registrar una vez por overlay
+    if (!overlay._escListener) {
+        overlay._escListener = (e) => {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+        };
+        document.addEventListener('keydown', overlay._escListener);
+    }
 }
