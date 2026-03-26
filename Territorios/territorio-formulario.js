@@ -19,7 +19,6 @@
             </label>`).join('');
 
         const html = `
-        <!-- ══ MODAL FORMULARIO TERRITORIO ══ -->
         <div class="form-overlay" id="formOverlay">
             <div class="form-box" id="formBox">
                 <div class="form-header">
@@ -31,7 +30,7 @@
 
                 <div class="form-body" id="formBody">
 
-                    <!-- ── Discord ── -->
+                    <!-- Discord -->
                     <p class="form-section-label">Identificación</p>
                     <div class="form-row full">
                         <div class="form-group discord-field">
@@ -44,7 +43,7 @@
                         </div>
                     </div>
 
-                    <!-- ── Información básica ── -->
+                    <!-- Información básica -->
                     <p class="form-section-label">Información del Territorio</p>
 
                     <div class="form-row">
@@ -94,61 +93,35 @@
                         </div>
                     </div>
 
-                    <!-- ── Descripciones largas ── -->
+                    <!-- Descripción larga — UN solo textarea -->
                     <p class="form-section-label">Historia & Lore</p>
 
                     <div class="form-row full">
                         <div class="form-group">
-                            <label class="form-label">Descripción (párrafo 1) <span>*</span></label>
-                            <textarea class="form-textarea" id="f_desc1"
-                                placeholder="Describe el origen y paisaje de tu territorio…" required></textarea>
-                        </div>
-                    </div>
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label class="form-label">Descripción (párrafo 2)</label>
-                            <textarea class="form-textarea" id="f_desc2"
-                                placeholder="Cultura, costumbres o forma de gobierno en detalle…"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label class="form-label">Descripción (párrafo 3)</label>
-                            <textarea class="form-textarea" id="f_desc3"
-                                placeholder="Detalles adicionales, ejércitos, alianzas…"></textarea>
+                            <label class="form-label">Descripción completa <span>*</span></label>
+                            <textarea class="form-textarea" id="f_descripcion" style="min-height:160px"
+                                placeholder="Escribe el lore de tu territorio. Pulsa Enter para separar párrafos." required></textarea>
+                            <span class="form-note" style="margin-top:5px;display:block">
+                                Cada salto de línea se convertirá en un párrafo separado.
+                            </span>
                         </div>
                     </div>
 
-                    <!-- ── Fundadores ── -->
+                    <!-- Fundadores expandibles -->
                     <p class="form-section-label">Fundadores & Religión</p>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Fundador/a principal <span>*</span></label>
-                            <input class="form-input" type="text" id="f_fundador1"
-                                placeholder="Nombre del personaje" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Co-fundador/a (opcional)</label>
-                            <input class="form-input" type="text" id="f_fundador2"
-                                placeholder="Nombre del personaje">
-                        </div>
-                    </div>
+                    <div class="leyes-dynamic" id="fundadoresDynamic"></div>
+                    <button class="ley-add" id="fundadorAddBtn" type="button">+ Añadir fundador</button>
 
-                    <div class="form-row">
+                    <div class="form-row full" style="margin-top:14px">
                         <div class="form-group">
-                            <label class="form-label">Religión / Creencia principal</label>
-                            <input class="form-input" type="text" id="f_religion1"
+                            <label class="form-label">Religión / Creencia</label>
+                            <input class="form-input" type="text" id="f_religion"
                                 placeholder="Ej: Culto a las Ancestras">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Religión secundaria (opcional)</label>
-                            <input class="form-input" type="text" id="f_religion2"
-                                placeholder="Ej: El Eterno Invierno">
-                        </div>
                     </div>
 
-                    <!-- ── Razas permitidas ── -->
+                    <!-- Razas permitidas -->
                     <p class="form-section-label">Razas Permitidas</p>
 
                     <div class="razas-check-grid" id="razasCheckGrid">
@@ -161,13 +134,13 @@
                     </div>
                     <div class="razas-pills" id="razasPills"></div>
 
-                    <!-- ── Leyes ── -->
+                    <!-- Leyes -->
                     <p class="form-section-label">Leyes del Territorio</p>
 
                     <div class="leyes-dynamic" id="leyesDynamic"></div>
                     <button class="ley-add" id="leyAddBtn" type="button">+ Añadir ley</button>
 
-                    <!-- ── Enviar ── -->
+                    <!-- Enviar -->
                     <div class="form-submit-row">
                         <span class="form-note">Los campos con <span style="color:#c0392b">*</span> son obligatorios</span>
                         <button class="form-cancel" id="formCancel" type="button">Cancelar</button>
@@ -175,7 +148,7 @@
                     </div>
                 </div>
 
-                <!-- ── Pantalla de éxito ── -->
+                <!-- Pantalla de éxito -->
                 <div class="form-success" id="formSuccess">
                     <div class="form-success-icon">⚜</div>
                     <h3>¡Solicitud Enviada!</h3>
@@ -188,30 +161,33 @@
         document.body.insertAdjacentHTML('beforeend', html);
     }
 
-    /* ── Gestión de leyes dinámicas ── */
-    function addLey(text = '') {
-        const container = document.getElementById('leyesDynamic');
+    /* ════════════════════════════════════════
+       Lista dinámica genérica — leyes Y fundadores
+       ════════════════════════════════════════ */
+    function addItem(containerId, label, text = '') {
+        const container = document.getElementById(containerId);
         const i = container.children.length + 1;
         const div = document.createElement('div');
         div.className = 'ley-item';
         div.innerHTML = `
-            <input class="form-input" type="text" placeholder="Ley ${i}…" value="${text}">
+            <input class="form-input" type="text" placeholder="${label} ${i}…" value="${text}">
             <button class="ley-remove" type="button" title="Eliminar">✕</button>`;
         div.querySelector('.ley-remove').addEventListener('click', () => {
             div.remove();
-            renumberLeyes();
+            renumberItems(containerId, label);
         });
         container.appendChild(div);
     }
 
-    function renumberLeyes() {
-        document.querySelectorAll('#leyesDynamic .form-input').forEach((inp, i) => {
-            inp.placeholder = `Ley ${i + 1}…`;
+    function renumberItems(containerId, label) {
+        document.querySelectorAll(`#${containerId} .form-input`).forEach((inp, i) => {
+            inp.placeholder = `${label} ${i + 1}…`;
         });
     }
 
-    /* ── Gestión de razas personalizadas ── */
+    /* ── Razas personalizadas ── */
     let customRazas = [];
+
     function addCustomRaza(name) {
         name = name.trim();
         if (!name || customRazas.includes(name)) return;
@@ -234,77 +210,80 @@
         });
     }
 
-    /* ── Recoge los datos del formulario ── */
+    /* ── Recoger datos ── */
     function collectData() {
         const val = id => document.getElementById(id)?.value?.trim() || '';
+
+        // Descripción: cada línea no vacía → párrafo
+        const descripcion = val('f_descripcion')
+            .split('\n')
+            .map(l => l.trim())
+            .filter(Boolean);
+
+        const fundadores = Array.from(document.querySelectorAll('#fundadoresDynamic .form-input'))
+            .map(i => i.value.trim()).filter(Boolean);
+
+        const leyes = Array.from(document.querySelectorAll('#leyesDynamic .form-input'))
+            .map(i => i.value.trim()).filter(Boolean);
 
         const razasSeleccionadas = [
             ...Array.from(document.querySelectorAll('input[name="raza_permitida"]:checked')).map(c => c.value),
             ...customRazas
         ];
 
-        const leyes = Array.from(document.querySelectorAll('#leyesDynamic .form-input'))
-            .map(i => i.value.trim()).filter(Boolean);
-
-        const descripciones = [val('f_desc1'), val('f_desc2'), val('f_desc3')].filter(Boolean);
-
-        const fundadores = [val('f_fundador1'), val('f_fundador2')].filter(Boolean);
-        const religiones = [val('f_religion1'), val('f_religion2')].filter(Boolean);
+        const religion = val('f_religion');
 
         return {
-            discord:          val('f_discord'),
-            nombre:           val('f_nombre'),
-            subtitulo:        val('f_subtitulo'),
-            forma_gobierno:   val('f_gobierno'),
-            img_banner:       val('f_img_banner'),
+            discord:           val('f_discord'),
+            nombre:            val('f_nombre'),
+            subtitulo:         val('f_subtitulo'),
+            forma_gobierno:    val('f_gobierno'),
+            img_banner:        val('f_img_banner'),
             descripcion_corta: val('f_desc_corta'),
-            descripcion:      descripciones,
+            descripcion,
             fundadores,
-            religiones,
-            razas_permitidas: razasSeleccionadas,
+            religiones:        religion ? [religion] : [],
+            razas_permitidas:  razasSeleccionadas,
             leyes
         };
     }
 
-    /* ── Validación básica ── */
+    /* ── Validación ── */
     function validate(data) {
-        if (!data.discord)          return 'El nombre de Discord es obligatorio.';
-        if (!data.nombre)           return 'El nombre del territorio es obligatorio.';
-        if (!data.forma_gobierno)   return 'Selecciona una forma de gobierno.';
-        if (!data.descripcion_corta)return 'La descripción corta es obligatoria.';
-        if (!data.descripcion[0])   return 'El primer párrafo de descripción es obligatorio.';
-        if (!data.fundadores[0])    return 'Indica al menos un fundador.';
+        if (!data.discord)            return 'El nombre de Discord es obligatorio.';
+        if (!data.nombre)             return 'El nombre del territorio es obligatorio.';
+        if (!data.forma_gobierno)     return 'Selecciona una forma de gobierno.';
+        if (!data.descripcion_corta)  return 'La descripción corta es obligatoria.';
+        if (!data.descripcion.length) return 'La descripción del territorio es obligatoria.';
+        if (!data.fundadores.length)  return 'Indica al menos un fundador.';
         return null;
     }
 
-    /* ── Muestra la pantalla de éxito ── */
+    /* ── Pantalla de éxito ── */
     function showSuccess() {
         document.getElementById('formBody').style.display = 'none';
-        const s = document.getElementById('formSuccess');
-        s.classList.add('visible');
+        document.getElementById('formSuccess').classList.add('visible');
     }
 
     /* ── Init ── */
     function init() {
         injectFormModal();
 
-        const overlay  = document.getElementById('formOverlay');
-        const closeBtn = document.getElementById('formClose');
-        const cancelBtn= document.getElementById('formCancel');
-        const submitBtn= document.getElementById('formSubmit');
-        const leyAddBtn= document.getElementById('leyAddBtn');
-        const razaAddBtn = document.getElementById('razaAddBtn');
-        const razaInput  = document.getElementById('razaCustomInput');
+        const overlay        = document.getElementById('formOverlay');
+        const closeBtn       = document.getElementById('formClose');
+        const cancelBtn      = document.getElementById('formCancel');
+        const submitBtn      = document.getElementById('formSubmit');
+        const leyAddBtn      = document.getElementById('leyAddBtn');
+        const fundadorAddBtn = document.getElementById('fundadorAddBtn');
+        const razaAddBtn     = document.getElementById('razaAddBtn');
+        const razaInput      = document.getElementById('razaCustomInput');
 
-        /* Botón de apertura — enlazado al .intro-cta de Territorios.html */
+        /* Enlazar botón CTA */
         const cta = document.querySelector('.intro-cta');
         if (cta) {
             cta.textContent = '⚔ Solicitar territorio';
             cta.href = '#';
-            cta.addEventListener('click', e => {
-                e.preventDefault();
-                openForm();
-            });
+            cta.addEventListener('click', e => { e.preventDefault(); openForm(); });
         }
 
         function openForm() {
@@ -323,27 +302,32 @@
             if (e.key === 'Escape' && overlay.classList.contains('active')) closeForm();
         });
 
-        /* Leyes */
-        addLey(); // empezar con una vacía
-        leyAddBtn.addEventListener('click', () => addLey());
+        /* Fundadores — empezar con uno */
+        addItem('fundadoresDynamic', 'Fundador');
+        fundadorAddBtn.addEventListener('click', () => addItem('fundadoresDynamic', 'Fundador'));
 
-        /* Razas custom */
+        /* Leyes — empezar con una */
+        addItem('leyesDynamic', 'Ley');
+        leyAddBtn.addEventListener('click', () => addItem('leyesDynamic', 'Ley'));
+
+        /* Razas personalizadas */
         razaAddBtn.addEventListener('click', () => {
             addCustomRaza(razaInput.value);
             razaInput.value = '';
         });
         razaInput.addEventListener('keydown', e => {
-            if (e.key === 'Enter') { e.preventDefault(); addCustomRaza(razaInput.value); razaInput.value = ''; }
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addCustomRaza(razaInput.value);
+                razaInput.value = '';
+            }
         });
 
         /* Envío */
         submitBtn.addEventListener('click', () => {
             const data = collectData();
             const error = validate(data);
-            if (error) {
-                alert('⚠ ' + error);
-                return;
-            }
+            if (error) { alert('⚠ ' + error); return; }
             console.log('[Territorio Solicitud]', JSON.stringify(data, null, 2));
             showSuccess();
         });
