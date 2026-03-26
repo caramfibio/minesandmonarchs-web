@@ -7,7 +7,7 @@
      3. Al clicar una card se abre el modal con los datos de esa clase
    ============================================================ */
 
-const CLASES_JSON = 'clases.json';   // ajusta la ruta si es necesario
+const CLASES_JSON = 'Clases/clases.json';
 
 /* ── Elementos del DOM ── */
 const grid    = document.getElementById('clasesGrid');
