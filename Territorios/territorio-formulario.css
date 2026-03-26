@@ -1,0 +1,413 @@
+/* ============================================================
+   territorio-formulario.css – Mines & Monarch · Formulario de Territorio
+   ============================================================ */
+
+/* ── Overlay ── */
+.form-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 9999;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.form-overlay.active { display: flex; }
+
+/* ── Caja del formulario ── */
+.form-box {
+    background: #110c05;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    max-width: 700px;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.08), 0 24px 80px rgba(0,0,0,0.7);
+    animation: formIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes formIn {
+    from { opacity: 0; transform: translateY(-32px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Cabecera del formulario ── */
+.form-header {
+    padding: 32px 36px 24px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.12);
+    position: relative;
+}
+
+.form-header-deco {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+    opacity: 0.6;
+}
+
+.form-title {
+    font-family: "MedievalSharp", cursive;
+    color: #ffd700;
+    font-size: 1.7em;
+    margin: 0 0 6px;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.25);
+}
+.form-subtitle {
+    font-family: Georgia, serif;
+    color: #8a7850;
+    font-size: 0.88em;
+    margin: 0;
+    font-style: italic;
+}
+
+.form-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: none;
+    border: none;
+    color: rgba(255, 215, 0, 0.5);
+    font-size: 1.6em;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+    padding: 4px;
+}
+.form-close:hover { color: #ffd700; }
+
+/* ── Cuerpo ── */
+.form-body {
+    padding: 28px 36px 36px;
+}
+
+/* ── Separadores de sección ── */
+.form-section-label {
+    font-family: "MedievalSharp", cursive;
+    color: #ffd700;
+    font-size: 0.8em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 28px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.85;
+}
+.form-section-label:first-child { margin-top: 0; }
+.form-section-label::before,
+.form-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 215, 0, 0.18);
+}
+
+/* ── Grupos de campo ── */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+.form-row.full { grid-template-columns: 1fr; }
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-family: Georgia, serif;
+    color: #a89060;
+    font-size: 0.82em;
+    letter-spacing: 0.03em;
+}
+.form-label span {
+    color: #c0392b;
+    margin-left: 2px;
+}
+
+/* ── Inputs, selects, textareas ── */
+.form-input,
+.form-select,
+.form-textarea {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 215, 0, 0.18);
+    border-radius: 6px;
+    color: #e0d0a8;
+    font-family: Georgia, serif;
+    font-size: 0.92em;
+    padding: 10px 14px;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+.form-input::placeholder,
+.form-textarea::placeholder { color: rgba(168, 144, 96, 0.45); }
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: rgba(255, 215, 0, 0.55);
+    background: rgba(255, 215, 0, 0.04);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.07);
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a89060' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px;
+    cursor: pointer;
+}
+.form-select option {
+    background: #1a1208;
+    color: #e0d0a8;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+}
+
+/* ── Campo Discord especial ── */
+.discord-field .form-input {
+    border-color: rgba(88, 101, 242, 0.4);
+}
+.discord-field .form-input:focus {
+    border-color: rgba(88, 101, 242, 0.75);
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+}
+.discord-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(88, 101, 242, 0.12);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.75em;
+    color: #8b9cf4;
+    margin-left: 6px;
+    font-family: Georgia, serif;
+}
+
+/* ── Lista dinámica de leyes ── */
+.leyes-dynamic {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.ley-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.ley-item .form-input { flex: 1; }
+.ley-remove {
+    background: rgba(192, 57, 43, 0.15);
+    border: 1px solid rgba(192, 57, 43, 0.3);
+    color: #c0392b;
+    border-radius: 4px;
+    width: 32px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 1em;
+    flex-shrink: 0;
+    transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+}
+.ley-remove:hover { background: rgba(192, 57, 43, 0.3); }
+
+.ley-add {
+    background: none;
+    border: 1px dashed rgba(255, 215, 0, 0.25);
+    border-radius: 6px;
+    color: rgba(255, 215, 0, 0.5);
+    font-family: Georgia, serif;
+    font-size: 0.85em;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: border-color 0.2s, color 0.2s;
+}
+.ley-add:hover {
+    border-color: rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+}
+
+/* ── Lista dinámica de razas ── */
+.razas-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.raza-pill {
+    background: rgba(255, 215, 0, 0.08);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-radius: 20px;
+    color: #c8b060;
+    font-family: Georgia, serif;
+    font-size: 0.82em;
+    padding: 5px 12px 5px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: default;
+}
+.raza-pill-remove {
+    background: none;
+    border: none;
+    color: rgba(255, 215, 0, 0.4);
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.raza-pill-remove:hover { color: #ffd700; }
+
+.raza-add-row {
+    display: flex;
+    gap: 8px;
+}
+.raza-add-row .form-input { flex: 1; }
+.raza-add-btn {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 6px;
+    color: #ffd700;
+    font-size: 1.2em;
+    width: 40px;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+.raza-add-btn:hover { background: rgba(255, 215, 0, 0.2); }
+
+/* ── Checkbox razas predefinidas ── */
+.razas-check-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.raza-check-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,215,0,0.15);
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: Georgia, serif;
+    font-size: 0.83em;
+    color: #b0a080;
+    transition: border-color 0.2s, background 0.2s;
+}
+.raza-check-label:hover { border-color: rgba(255,215,0,0.35); background: rgba(255,215,0,0.05); }
+.raza-check-label input { accent-color: #ffd700; }
+.raza-check-label input:checked + span { color: #ffd700; }
+
+/* ── Botón enviar ── */
+.form-submit-row {
+    margin-top: 28px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    align-items: center;
+}
+.form-cancel {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: #7a6a50;
+    font-family: Georgia, serif;
+    font-size: 0.88em;
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+.form-cancel:hover { border-color: rgba(255,255,255,0.25); color: #b0a080; }
+
+.form-submit {
+    background: linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,215,0,0.08) 100%);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    border-radius: 6px;
+    color: #ffd700;
+    font-family: "MedievalSharp", cursive;
+    font-size: 0.95em;
+    padding: 11px 30px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+}
+.form-submit:hover {
+    background: linear-gradient(135deg, rgba(255,215,0,0.25) 0%, rgba(255,215,0,0.15) 100%);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    transform: translateY(-1px);
+}
+.form-submit:active { transform: translateY(0); }
+
+/* ── Estado enviado ── */
+.form-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    text-align: center;
+    gap: 16px;
+}
+.form-success.visible { display: flex; }
+.form-success-icon {
+    font-size: 3em;
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+.form-success h3 {
+    font-family: "MedievalSharp", cursive;
+    color: #ffd700;
+    font-size: 1.4em;
+    margin: 0;
+}
+.form-success p {
+    font-family: Georgia, serif;
+    color: #a89060;
+    font-size: 0.92em;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ── Nota al pie ── */
+.form-note {
+    font-family: Georgia, serif;
+    font-size: 0.78em;
+    color: rgba(168, 144, 96, 0.5);
+    margin-top: 12px;
+    font-style: italic;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .form-header, .form-body { padding-left: 20px; padding-right: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-title { font-size: 1.3em; }
+}
