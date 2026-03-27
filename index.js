@@ -1,64 +1,81 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // mobile menu toggle
+
+    /* ── Mobile menu toggle ── */
     const menuToggle = document.getElementById('menu-toggle');
-    const navList = document.querySelector('.header-right ul');
+    const navList    = document.querySelector('.header-right ul');
     if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            navList.classList.toggle('show');
+        menuToggle.addEventListener('click', () => navList.classList.toggle('show'));
+    }
+
+    /* ── Dropdowns ── */
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const btn     = dropdown.querySelector('.dropbtn');
+        const content = dropdown.querySelector('.dropdown-content');
+        if (btn) btn.addEventListener('click', e => { e.preventDefault(); content.classList.toggle('show'); });
+    });
+    document.addEventListener('click', e => {
+        dropdowns.forEach(d => {
+            if (!d.contains(e.target)) d.querySelector('.dropdown-content').classList.remove('show');
+        });
+    });
+
+    /* ── Botón de cuenta en el nav ── */
+    const navUl = document.querySelector('.header-right ul');
+    if (navUl) {
+        const li = document.createElement('li');
+        li.id = 'nav-cuenta-li';
+        li.innerHTML = `<a href="#" id="nav-cuenta-btn" style="font-weight:bold">Entrar</a>`;
+        navUl.appendChild(li);
+
+        /* Actualizar texto si ya hay sesión guardada */
+        const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
+        const btnNav = document.getElementById('nav-cuenta-btn');
+        if (sesion) btnNav.textContent = sesion.nombreUsuario;
+
+        btnNav.addEventListener('click', e => {
+            e.preventDefault();
+            const s = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
+            if (s) {
+                window.location.href = 'Cuenta/Cuenta.html';
+            } else {
+                if (typeof window.abrirModalCuenta === 'function') window.abrirModalCuenta();
+            }
         });
     }
 
-    // dropdown toggle for all dropdowns
-    const dropdowns = document.querySelectorAll('.dropdown');
-    
-    dropdowns.forEach(dropdown => {
-        const dropbtn = dropdown.querySelector('.dropbtn');
-        const dropdownContent = dropdown.querySelector('.dropdown-content');
-        
-        if (dropbtn) {
-            dropbtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                dropdownContent.classList.toggle('show');
-            });
-        }
-    });
+    /* ── Carga JSON solo si estamos en index.html ── */
+    if (!document.querySelector('#ayuda')) return;
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-        dropdowns.forEach(dropdown => {
-            if (!dropdown.contains(e.target)) {
-                dropdown.querySelector('.dropdown-content').classList.remove('show');
-            }
-        });
-    });
-
-    // cargar contenido desde JSON de ejemplo
     fetch('index.json')
         .then(r => r.json())
         .then(data => {
-            document.querySelector('#ayuda h3').textContent = data.ayuda.title;
-            document.querySelector('#ayuda p').textContent = data.ayuda.text;
-            document.querySelector('#ayuda button').textContent = data.ayuda.button;
-            document.querySelector('#ayuda button').onclick = () => location.href = data.ayuda.link;
+            const set = (sel, val) => { const el = document.querySelector(sel); if (el) el.textContent = val; };
 
-            document.querySelector('#explicacion h3').textContent = data.explicacion.title;
-            document.querySelector('#explicacion p').textContent = data.explicacion.text;
+            set('#ayuda h3',             data.ayuda.title);
+            set('#ayuda p',              data.ayuda.text);
+            const btnAyuda = document.querySelector('#ayuda button');
+            if (btnAyuda) { btnAyuda.textContent = data.ayuda.button; btnAyuda.onclick = () => location.href = data.ayuda.link; }
 
-            document.querySelector('#bienvenida .bienvenido h3').textContent = data.bienvenida.title;
-            document.querySelector('#bienvenida .bienvenido p').textContent = data.bienvenida.text;
+            set('#explicacion h3',       data.explicacion.title);
+            set('#explicacion p',        data.explicacion.text);
 
-            const tbody = document.querySelector('#bienvenida .ranking table');
-            data.ranking.forEach(r => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${r.pos}</td><td>${r.name}</td><td>${r.points}</td>`;
-                tbody.appendChild(tr);
-            });
+            set('#bienvenida .bienvenido h3', data.bienvenida.title);
+            set('#bienvenida .bienvenido p',  data.bienvenida.text);
 
-            document.querySelector('#unirse h3').textContent = data.unirse.title;
-            document.querySelector('#unirse p').textContent = data.unirse.text;
+            const tabla = document.querySelector('#bienvenida .ranking table');
+            if (tabla && data.ranking) {
+                data.ranking.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${r.pos}</td><td>${r.name}</td><td>${r.points}</td>`;
+                    tabla.appendChild(tr);
+                });
+            }
 
-            document.querySelector('#historia h3').textContent = data.historia.title;
-            document.querySelector('#historia p').textContent = data.historia.text;
+            set('#unirse h3',            data.unirse.title);
+            set('#unirse p',             data.unirse.text);
+            set('#historia h3',          data.historia.title);
+            set('#historia p',           data.historia.text);
         })
-        .catch(error => console.error('Error loading JSON:', error));
+        .catch(err => console.error('Error loading JSON:', err));
 });
