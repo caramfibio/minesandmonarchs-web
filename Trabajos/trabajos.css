@@ -1,0 +1,270 @@
+/* ============================================================
+   trabajos.css  –  Mines & Monarch · Página de Trabajos
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+/* ---------- Grid de cards ---------- */
+.razas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+    .razas-container { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .razas-container { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px 10px; }
+}
+@media (max-width: 480px) {
+    .razas-container { grid-template-columns: 1fr; }
+}
+
+/* ---------- Trabajo Card ---------- */
+.raza-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.raza-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+}
+.raza-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+.raza-info {
+    padding: 15px;
+    text-align: center;
+}
+.raza-name {
+    color: #ffd700;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px 0;
+    font-family: "MedievalSharp", cursive;
+}
+.raza-btn {
+    background: var(--color-principal);
+    color: var(--color-texto);
+    border: 1px solid var(--color-texto);
+    padding: 8px 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+.raza-btn:hover {
+    background: var(--color-texto);
+    color: var(--color-principal);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+    height: 25vh !important;
+    min-height: 120px;
+}
+.hero h1 {
+    font-family: "MedievalSharp", cursive !important;
+    font-size: 3em !important;
+    margin: 0;
+}
+
+/* ---------- Título de sección ---------- */
+.razas-title {
+    text-align: center;
+    margin: 0 !important;
+    padding: 12px 20px !important;
+    color: var(--color-texto);
+}
+.razas-title h2 {
+    color: #ffd700;
+    font-family: "MedievalSharp", cursive !important;
+    font-size: 1.3em;
+    margin: 0 0 4px 0;
+}
+.razas-title p {
+    font-family: Georgia, serif;
+    font-size: 0.9em;
+    margin: 0 auto;
+    max-width: 700px;
+    color: var(--color-texto);
+    line-height: 1.6;
+}
+
+/* ============================================================
+   MODAL  –  color tokens por trabajo
+   ============================================================ */
+
+.modal-overlay {
+    --tc:            #c8a951;
+    --tc-dim:        rgba(200,169,81,0.18);
+    --tc-border:     rgba(200,169,81,0.45);
+    --tc-glow:       rgba(200,169,81,0.20);
+}
+
+/* Constructor – Naranja ladrillo */
+.modal-overlay[data-trabajo="constructor"]    { --tc:#d2691e; --tc-dim:rgba(210,105,30,.18); --tc-border:rgba(210,105,30,.5); --tc-glow:rgba(210,105,30,.25); }
+/* Inútil Errante – Gris apagado */
+.modal-overlay[data-trabajo="inutilerrante"]  { --tc:#7a8694; --tc-dim:rgba(122,134,148,.18); --tc-border:rgba(122,134,148,.5); --tc-glow:rgba(122,134,148,.20); }
+/* Explorador – Verde musgo */
+.modal-overlay[data-trabajo="explorador"]     { --tc:#5a9e4c; --tc-dim:rgba(90,158,76,.18); --tc-border:rgba(90,158,76,.5); --tc-glow:rgba(90,158,76,.22); }
+/* Clérigo – Blanco dorado */
+.modal-overlay[data-trabajo="clerigo"]        { --tc:#e8d88a; --tc-dim:rgba(232,216,138,.18); --tc-border:rgba(232,216,138,.5); --tc-glow:rgba(232,216,138,.25); }
+/* Mercader – Dorado */
+.modal-overlay[data-trabajo="mercader"]       { --tc:#ffd700; --tc-dim:rgba(255,215,0,.18); --tc-border:rgba(255,215,0,.5); --tc-glow:rgba(255,215,0,.25); }
+/* Metalúrgico – Gris hierro */
+.modal-overlay[data-trabajo="metalurgico"]    { --tc:#b0b8c1; --tc-dim:rgba(176,184,193,.18); --tc-border:rgba(176,184,193,.5); --tc-glow:rgba(176,184,193,.22); }
+/* Agricultor – Verde lima */
+.modal-overlay[data-trabajo="agricultor"]     { --tc:#76b041; --tc-dim:rgba(118,176,65,.18); --tc-border:rgba(118,176,65,.5); --tc-glow:rgba(118,176,65,.22); }
+/* Granjero – Marrón tierra */
+.modal-overlay[data-trabajo="granjero"]       { --tc:#8b6914; --tc-dim:rgba(139,105,20,.18); --tc-border:rgba(139,105,20,.5); --tc-glow:rgba(139,105,20,.22); }
+/* Cocinero – Naranja cálido */
+.modal-overlay[data-trabajo="cocinero"]       { --tc:#e07820; --tc-dim:rgba(224,120,32,.18); --tc-border:rgba(224,120,32,.5); --tc-glow:rgba(224,120,32,.25); }
+
+/* ============================================================
+   MODAL – estructura
+   ============================================================ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+    background: #1a1208;
+    border: 2px solid var(--tc-border);
+    border-radius: 10px;
+    max-width: 680px;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 40px var(--tc-glow), 0 0 0 1px var(--tc-border);
+    animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(-30px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    background: none;
+    border: none;
+    color: var(--tc);
+    font-size: 1.8em;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 10;
+    transition: color 0.2s;
+}
+.modal-close:hover { color: #fff; }
+
+.modal-img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+/* ---------- Cuerpo ---------- */
+.modal-body {
+    padding: 24px 28px 32px;
+    color: #d4c4a0;
+    font-family: Georgia, serif;
+    line-height: 1.65;
+}
+
+.modal-trabajo-title {
+    font-family: "MedievalSharp", cursive;
+    color: var(--tc);
+    font-size: 1.8em;
+    margin: 0 0 14px 0;
+    text-shadow: 0 0 12px var(--tc-glow);
+}
+
+.modal-description {
+    font-size: 0.97em;
+    color: #c8b88a;
+    margin-bottom: 0;
+    line-height: 1.7;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid var(--tc-border);
+    margin: 20px 0;
+    opacity: 0.7;
+}
+
+.modal-section-title {
+    font-family: "MedievalSharp", cursive;
+    color: var(--tc);
+    font-size: 1.05em;
+    margin: 0 0 12px 0;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.modal-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 14px;
+    background: var(--tc);
+    border-radius: 2px;
+}
+
+.modal-section { margin-bottom: 18px; }
+
+/* ---------- Lista de habilidades ---------- */
+.modal-habilidades-list {
+    margin: 0;
+    padding-left: 18px;
+    list-style: disc;
+}
+.modal-habilidades-list li {
+    font-size: 0.93em;
+    color: #ddd0a0;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+/* ---------- Sin habilidades ---------- */
+.modal-sin-habilidades {
+    font-family: Georgia, serif;
+    font-size: 0.9em;
+    color: rgba(168, 144, 96, 0.55);
+    font-style: italic;
+    margin: 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+    .modal-img  { height: 190px; }
+    .modal-body { padding: 16px 18px 24px; }
+}

@@ -2,106 +2,18 @@
 <html lang="es">
 <head>
     <base href="/minesandmonarchs-web/">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Razas - Mines & Monarch</title>
+    <title>Trabajos - Mines & Monarch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
-    <style>
-        .razas-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 40px 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 1200px) {
-            .razas-container {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .razas-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-                padding: 20px 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .razas-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .raza-card {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .raza-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
-        }
-
-        .raza-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .raza-info {
-            padding: 15px;
-            text-align: center;
-        }
-
-        .raza-name {
-            color: #ffd700;
-            font-size: 1.2em;
-            font-weight: bold;
-            margin: 10px 0;
-            font-family: "MedievalSharp", cursive;
-        }
-
-        .raza-btn {
-            background: var(--color-principal);
-            color: var(--color-texto);
-            border: 1px solid var(--color-texto);
-            padding: 8px 16px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            text-decoration: none;
-            display: inline-block;
-            transition: background 0.3s ease;
-        }
-
-        .raza-btn:hover {
-            background: var(--color-texto);
-            color: var(--color-principal);
-        }
-
-        .razas-title {
-            text-align: center;
-            margin: 40px 0 20px 0;
-            color: var(--color-texto);
-        }
-
-        .razas-title h2 {
-            color: #ffd700;
-            font-family: "MedievalSharp", cursive;
-            font-size: 2em;
-        }
-    </style>
+    <link rel="stylesheet" href="Trabajos/trabajos.css">
 </head>
 <body>
+
+    <!-- ══════════════ HEADER ══════════════ -->
     <header>
         <div class="header-left">
             <h2>Mines & Monarch</h2>
@@ -113,20 +25,20 @@
                 <li class="dropdown">
                     <button class="dropbtn">Creación personaje</button>
                     <ul class="dropdown-content">
-                        <li><a href="raza.html">Raza</a></li>
-                        <li><a href="Clases\Clases.html">Clase</a></li>
-                        <li><a href="#">Trabajo</a></li>
+                        <li><a href="Razas/raza.html">Raza</a></li>
+                        <li><a href="Clases/Clases.html">Clase</a></li>
+                        <li><a href="Trabajos/Trabajos.html">Trabajo</a></li>
                         <li><a href="#">Cartilla</a></li>
                     </ul>
                 </li>
-                <li><a href="index.html#territories">Territorios</a></li>
+                <li><a href="Territorios/Territorios.html">Territorios</a></li>
                 <li><a href="index.html#lore">Lore Oficial</a></li>
                 <li class="dropdown">
                     <button class="dropbtn">Ayuda</button>
                     <ul class="dropdown-content">
-                        <li><a href="Guias\GuiaBasica.html">Guía Básica</a></li>
-                        <li><a href="Guias\GuiaMods.html">Guía de Mods</a></li>
-                        <li><a href="Guias\GuiaRol.html">Guía de Rol</a></li>
+                        <li><a href="Guias/GuiaBasica.html">Guía Básica</a></li>
+                        <li><a href="Guias/GuiaMods.html">Guía de Mods</a></li>
+                        <li><a href="Guias/GuiaRol.html">Guía de Rol</a></li>
                     </ul>
                 </li>
                 <li><a href="#">Mapa</a></li>
@@ -135,97 +47,51 @@
         </nav>
     </header>
 
+    <!-- ══════════════ CONTENIDO ══════════════ -->
     <index>
         <section class="hero">
-            <h1>Razas De Mines & Monarchs</h1>
+            <h1>Trabajos de Belmaria</h1>
         </section>
 
         <section class="razas-title">
-            <h2>Elige tu Raza</h2>
-            <p>Los Trabajos son esenciales en Belmaria. Todo ciudadano debe seleccionar uno antes de conocer al mundo en el que se adentra. No obstante, si se selecciona uno y hay un desacuerdo o se está disconforme, hablar con los dioses siempre es la mejor solución. Eso sí, si llevas más de 2 semanas conociendo este mundo, no se te permitirá el cambio.</p>
+            <h2>Elige tu Trabajo</h2>
+            <p>Los Trabajos son esenciales en Belmaria. Todo ciudadano debe seleccionar uno antes de conocer al mundo en el que se adentra. Si llevas menos de dos semanas y estás disconforme, habla con los dioses para hacer un cambio.</p>
         </section>
 
-        <section class="razas-container">
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Humano" alt="Humano">
-                <div class="raza-info">
-                    <div class="raza-name">Constructor</div>
-                    <a href="raza-humano.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Elfo+del+Bosque" alt="Elfo del Bosque">
-                <div class="raza-info">
-                    <div class="raza-name">Inútil</div>
-                    <a href="raza-elfobosque.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Alfiq" alt="Alfiq">
-                <div class="raza-info">
-                    <div class="raza-name">Explodador</div>
-                    <a href="raza-alfiq.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Goblin" alt="Goblin">
-                <div class="raza-info">
-                    <div class="raza-name">Clerigo</div>
-                    <a href="raza-goblin.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Enano" alt="Enano">
-                <div class="raza-info">
-                    <div class="raza-name">Mercader</div>
-                    <a href="raza-enano.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Aracnido" alt="Aracnido">
-                <div class="raza-info">
-                    <div class="raza-name">Metalurgico</div>
-                    <a href="raza-aracnido.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Yeti" alt="Yeti">
-                <div class="raza-info">
-                    <div class="raza-name">Agricultor</div>
-                    <a href="raza-yeti.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Sirena+Demonio" alt="Sirena Demonio">
-                <div class="raza-info">
-                    <div class="raza-name">Granjero</div>
-                    <a href="raza-sirenademonio.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-
-            <div class="raza-card">
-                <img src="https://via.placeholder.com/300x200?text=Sirena" alt="Sirena">
-                <div class="raza-info">
-                    <div class="raza-name">Cocinero</div>
-                    <a href="raza-sirena.html" class="raza-btn">Leer Más</a>
-                </div>
-            </div>
-        </section>
+        <section class="razas-container" id="trabajosGrid"></section>
     </index>
 
+    <!-- ══════════════ MODAL ══════════════ -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box" id="modalBox">
+            <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
+
+            <img class="modal-img" id="modalImg" src="" alt="">
+
+            <div class="modal-body">
+                <h2 class="modal-trabajo-title" id="modalTitle"></h2>
+                <p class="modal-description" id="modalDesc"></p>
+
+                <hr class="modal-divider">
+
+                <div class="modal-section">
+                    <h3 class="modal-section-title">Habilidades & Capacidades</h3>
+                    <ul class="modal-habilidades-list" id="modalHabilidades"></ul>
+                    <p class="modal-sin-habilidades" id="modalSinHabilidades" style="display:none">
+                        Este trabajo no otorga habilidades especiales. Su fortaleza reside en la libertad total.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
     <footer>
         <div class="socials">
-            <a href="#" class="discord" title="Discord"></a>
+            <a href="#" class="discord"   title="Discord"></a>
             <a href="#" class="instagram" title="Instagram"></a>
-            <a href="#" class="tiktok" title="TikTok"></a>
-            <a href="#" class="x" title="X"></a>
+            <a href="#" class="tiktok"    title="TikTok"></a>
+            <a href="#" class="x"         title="X"></a>
         </div>
         <button class="apoyar">Apoyar servidor</button>
         <div class="footer-text">
@@ -234,5 +100,6 @@
     </footer>
 
     <script src="index.js"></script>
+    <script src="Trabajos/trabajos.js"></script>
 </body>
 </html>
