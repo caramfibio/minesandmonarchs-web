@@ -73,7 +73,7 @@
   "alfiq": {
     "id": "alfiq",
     "nombre": "Alfiq",
-    "img": "",
+    "img": "images/Razas/Alfiq.png",
     "desc": "Los Alfiqs son una de las razas más pícaras que existen en Belmaria. Se les considera salvajes y no son de fiar en la mayoría de los casos. Hasta los aldeanos los quieren lejos de ellos. Tienen comportamientos gatunos y los creepers huyen de ellos.",
     "cambios": [
       "Reciben bonificaciones estando desarmados.",
