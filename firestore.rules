@@ -1,0 +1,95 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ── Funciones auxiliares ── */
+    function estaAutenticado() {
+      return request.auth != null;
+    }
+    function esAdmin() {
+      return estaAutenticado()
+          && get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.isAdmin == true;
+    }
+    function esPropioUsuario(uid) {
+      return estaAutenticado() && request.auth.uid == uid;
+    }
+
+    /* Enums válidos — sincroniza con enums.js si añades valores */
+    function razaValida() {
+      return request.resource.data.raza in [
+        'humano','elfobosque','alfiq','goblin','enano','aracnido','yeti',
+        'demonio','sirena','valquiria','hadapixie','hadafae','granelfo',
+        'gorgona','victimapeste','banshee','elfolunar','ogro','revenant'
+      ];
+    }
+    function claseValida() {
+      return request.resource.data.clase in [
+        'cazador','guardabosques','curador','magoender','magoelectrico',
+        'magosangre','magohelado','magoinvocador','magofuego','granmago',
+        'granmagooscuro','guerrerobendito','hiedravenenosa','picaro','tanque',
+        'berserker','guerrero','bardo','guerrerodelmar','carterista',
+        'paladin','ingeniero','bestiasalvaje','pescador'
+      ];
+    }
+    function trabajoValido() {
+      return request.resource.data.trabajo in [
+        'constructor','inutilerrante','explorador','clerigo','mercader',
+        'metalurgico','agricultor','granjero','cocinero'
+      ];
+    }
+
+    /* ══════════════════════════════════════
+       /usuarios/{uid}
+       ══════════════════════════════════════ */
+    match /usuarios/{uid} {
+      /* Cualquiera puede leer perfiles públicos */
+      allow read: if true;
+
+      /* Solo el propio usuario puede crear su perfil (una vez registrado) */
+      allow create: if esPropioUsuario(uid)
+                    && request.resource.data.isAdmin == false
+                    && razaValida()
+                    && claseValida()
+                    && trabajoValido()
+                    && request.resource.data.keys().hasAll([
+                         'id','usuarioDiscord','nombre',
+                         'raza','clase','trabajo','isAdmin','creadoEn'
+                       ]);
+
+      /* El usuario puede editar sus propios campos excepto isAdmin e id */
+      allow update: if esPropioUsuario(uid)
+                    && !('isAdmin' in request.resource.data.diff(resource.data).affectedKeys())
+                    && !('id'      in request.resource.data.diff(resource.data).affectedKeys())
+                    && razaValida()
+                    && claseValida()
+                    && trabajoValido();
+
+      /* Solo admins pueden borrar cuentas o cambiar isAdmin */
+      allow delete: if esAdmin();
+    }
+
+    /* ══════════════════════════════════════
+       /meta/contador_usuarios
+       Solo el servidor (transacciones autenticadas) puede tocarlo
+       ══════════════════════════════════════ */
+    match /meta/{docId} {
+      allow read, write: if estaAutenticado();
+    }
+
+    /* ══════════════════════════════════════
+       /solicitudes_territorio/{id}
+       ══════════════════════════════════════ */
+    match /solicitudes_territorio/{id} {
+      allow create: if true;
+      allow read, update, delete: if esAdmin();
+    }
+
+    /* ══════════════════════════════════════
+       /territorios/{id}  (datos públicos del juego)
+       ══════════════════════════════════════ */
+    match /territorios/{id} {
+      allow read: if true;
+      allow write: if esAdmin();
+    }
+  }
+}

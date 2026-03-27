@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="/minesandmonarchs-web/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta - Mines & Monarch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Cuenta/cuenta.css">
+</head>
+<body>
+
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header>
+        <div class="header-left">
+            <h2>Mines & Monarch</h2>
+        </div>
+        <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
+        <nav class="header-right">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Creación personaje</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Razas/raza.html">Raza</a></li>
+                        <li><a href="Clases/Clases.html">Clase</a></li>
+                        <li><a href="Trabajos/Trabajos.html">Trabajo</a></li>
+                        <li><a href="#">Cartilla</a></li>
+                    </ul>
+                </li>
+                <li><a href="Territorios/Territorios.html">Territorios</a></li>
+                <li><a href="index.html#lore">Lore Oficial</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Ayuda</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Guias/GuiaBasica.html">Guía Básica</a></li>
+                        <li><a href="Guias/GuiaMods.html">Guía de Mods</a></li>
+                        <li><a href="Guias/GuiaRol.html">Guía de Rol</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Mapa</a></li>
+                <li><a href="#">Donar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ══════════════ CONTENIDO ══════════════ -->
+    <main id="cuentaMain">
+
+        <!-- Estado: cargando -->
+        <div id="estadoCargando" class="cuenta-estado">
+            <p class="cuenta-estado-texto">Cargando…</p>
+        </div>
+
+        <!-- Estado: sin sesión -->
+        <div id="estadoSinSesion" class="cuenta-estado" style="display:none">
+            <div class="cuenta-sin-sesion">
+                <h2 class="cuenta-sin-sesion-titulo">Accede a tu cuenta</h2>
+                <p class="cuenta-sin-sesion-desc">Inicia sesión o crea una cuenta para acceder a tu perfil de Belmaria.</p>
+                <button class="cuenta-btn-entrar" id="btnAbrirModal">⚔ Entrar / Registrarse</button>
+            </div>
+        </div>
+
+        <!-- Estado: con sesión — perfil -->
+        <div id="estadoConSesion" style="display:none">
+
+            <!-- Banner -->
+            <section class="cuenta-hero">
+                <div class="cuenta-hero-inner">
+                    <div class="cuenta-avatar" id="cuentaAvatar"></div>
+                    <div class="cuenta-hero-info">
+                        <p class="cuenta-id" id="cuentaId">#000</p>
+                        <h1 class="cuenta-nombre" id="cuentaNombre">—</h1>
+                        <p class="cuenta-discord" id="cuentaDiscord">—</p>
+                    </div>
+                    <button class="cuenta-btn-logout" id="btnLogout">Cerrar sesión</button>
+                </div>
+            </section>
+
+            <!-- Ficha de personaje -->
+            <section class="cuenta-ficha">
+                <h2 class="cuenta-ficha-titulo">Ficha de personaje</h2>
+
+                <div class="cuenta-ficha-grid">
+
+                    <div class="cuenta-ficha-item">
+                        <span class="cuenta-ficha-label">Raza</span>
+                        <span class="cuenta-ficha-valor" id="fichaRaza">—</span>
+                    </div>
+
+                    <div class="cuenta-ficha-item">
+                        <span class="cuenta-ficha-label">Clase</span>
+                        <span class="cuenta-ficha-valor" id="fichaClase">—</span>
+                    </div>
+
+                    <div class="cuenta-ficha-item">
+                        <span class="cuenta-ficha-label">Trabajo</span>
+                        <span class="cuenta-ficha-valor" id="fichaTrabajo">—</span>
+                    </div>
+
+                    <div class="cuenta-ficha-item" id="fichaAdminItem" style="display:none">
+                        <span class="cuenta-ficha-label">Rango</span>
+                        <span class="cuenta-ficha-valor cuenta-admin-badge">⚜ Administrador</span>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer>
+        <div class="socials">
+            <a href="#" class="discord"   title="Discord"></a>
+            <a href="#" class="instagram" title="Instagram"></a>
+            <a href="#" class="tiktok"    title="TikTok"></a>
+            <a href="#" class="x"         title="X"></a>
+        </div>
+        <button class="apoyar">Apoyar servidor</button>
+        <div class="footer-text">
+            <small>© 2026 Mines & Monarch. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <script src="index.js"></script>
+    <script type="module" src="Cuenta/cuenta.js"></script>
+</body>
+</html>
