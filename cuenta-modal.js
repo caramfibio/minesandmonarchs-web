@@ -21,12 +21,12 @@ import { getFirestore,
 
 /* ── Firebase config — sustituye con tus valores ── */
 const firebaseConfig = {
-    apiKey:            "TU_API_KEY",
-    authDomain:        "TU_PROYECTO.firebaseapp.com",
-    projectId:         "TU_PROYECTO",
-    storageBucket:     "TU_PROYECTO.appspot.com",
-    messagingSenderId: "TU_SENDER_ID",
-    appId:             "TU_APP_ID"
+  apiKey: "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
+  authDomain: "minesandmonarch.firebaseapp.com",
+  projectId: "minesandmonarch",
+  storageBucket: "minesandmonarch.firebasestorage.app",
+  messagingSenderId: "379898851786",
+  appId: "1:379898851786:web:b892cbf4d8508798d61f33"
 };
 
 const app  = initializeApp(firebaseConfig);
@@ -49,10 +49,34 @@ const CLASES = {
     magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego",
     granmago:"Gran Mago", granmagooscuro:"Gran Mago Oscuro",
     guerrerobendito:"Guerrero Bendito", hiedravenenosa:"Hiedra Venenosa",
-    picaro:"Pícaro", tanque:"Tanque", berserker:"Berserker",
+    rogue:"Rogue", tanque:"Tanque", berserker:"Berserker",
     guerrero:"Guerrero", bardo:"Bardo", guerrerodelmar:"Guerrero del Mar",
     carterista:"Carterista", paladin:"Paladín", ingeniero:"Ingeniero",
-    bestiasalvaje:"Bestia Salvaje", pescador:"Pescador"
+    bestiasalvaje:"Bestia Salvaje", angler:"Angler",
+    magoeldritch:"Mago del Eldritch"
+};
+
+/* Clases disponibles por raza */
+const CLASES_POR_RAZA = {
+    humano:       ['cazador','guerrero','tanque'],
+    elfobosque:   ['cazador','guardabosques','curador'],
+    alfiq:        ['carterista','angler','cazador','rogue'],
+    goblin:       ['carterista','ingeniero','cazador','rogue'],
+    enano:        ['berserker','ingeniero','tanque'],
+    aracnido:     ['berserker','ingeniero','tanque'],
+    yeti:         ['magohelado','bestiasalvaje','berserker'],
+    demonio:      ['magofuego','berserker','bestiasalvaje'],
+    sirena:       ['angler','guerrerodelmar','bardo'],
+    valquiria:    ['guerrerobendito','guerrero','paladin'],
+    hadapixie:    ['guardabosques','curador'],
+    hadafae:      ['guardabosques','curador'],
+    granelfo:     ['granmago','magoelectrico','guardabosques'],
+    gorgona:      ['hiedravenenosa','guerrero'],
+    victimapeste: ['magosangre','angler'],
+    banshee:      ['magoender','magoeldritch'],
+    elfolunar:    ['magoender','rogue','bardo'],
+    ogro:         ['magosangre','angler'],
+    revenant:     ['granmagooscuro','magoinvocador','magosangre','magoender']
 };
 const TRABAJOS = {
     constructor:"Constructor", inutilerrante:"Inútil Errante",
@@ -137,8 +161,7 @@ function inyectar() {
             <div class="cm-field">
               <label class="cm-label">Clase <span>*</span></label>
               <select class="cm-select" id="rClase">
-                <option value="" disabled selected>Selecciona…</option>
-                ${opts(CLASES)}
+                <option value="" disabled selected>Selecciona primero una raza…</option>
               </select>
             </div>
           </div>
@@ -340,6 +363,16 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?'));
     document.getElementById('loginVolver').addEventListener('click', () =>
         mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?'));
+
+    /* Filtrar clases según raza seleccionada */
+    document.getElementById('rRaza').addEventListener('change', function () {
+        const raza   = this.value;
+        const select = document.getElementById('rClase');
+        const clases = CLASES_POR_RAZA[raza] || [];
+        select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
+            clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
+        select.disabled = clases.length === 0;
+    });
 
     /* Envíos */
     document.getElementById('regSubmit').addEventListener('click', registrar);
