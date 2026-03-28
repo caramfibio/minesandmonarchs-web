@@ -1,37 +1,39 @@
 /* ============================================================
    cuenta-modal.js – Mines & Monarch · Modal de Cuenta
    ============================================================
-   Flujo sin sesión:
-     Nav "Entrar" → Modal opciones
-       · Registrarse  → formulario único (cuenta + personaje)
-       · Iniciar sesión → usuario + contraseña
-       · Volver       → cierra
-   Con sesión:
-     Nav muestra nombre → redirige a Cuenta/Cuenta.html
+   Login  → Discord OAuth
+   Registro → formulario manual (usuario + contraseña + personaje)
+   Si entra con Discord por primera vez → rellena ficha de personaje
    ============================================================ */
 
-import { initializeApp }        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }              from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth,
          createUserWithEmailAndPassword,
-         signInWithEmailAndPassword,
-         onAuthStateChanged }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+         signInWithPopup,
+         OAuthProvider,
+         onAuthStateChanged }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
          doc, setDoc, getDoc,
-         runTransaction }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         runTransaction }             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-/* ── Firebase config — sustituye con tus valores ── */
+/* ── Firebase config ── */
 const firebaseConfig = {
-    apiKey:            "TU_API_KEY",
-    authDomain:        "TU_PROYECTO.firebaseapp.com",
-    projectId:         "TU_PROYECTO",
-    storageBucket:     "TU_PROYECTO.appspot.com",
-    messagingSenderId: "TU_SENDER_ID",
-    appId:             "TU_APP_ID"
+    apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
+    authDomain:        "minesandmonarch.firebaseapp.com",
+    projectId:         "minesandmonarch",
+    storageBucket:     "minesandmonarch.firebasestorage.app",
+    messagingSenderId: "379898851786",
+    appId:             "1:379898851786:web:b892cbf4d8508798d61f33"
 };
 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
+
+/* ── Discord OAuth provider ── */
+const discordProvider = new OAuthProvider('oidc.discord');
+discordProvider.addScope('identify');
+discordProvider.setCustomParameters({ client_id: '1487501963510681680' });
 
 /* ── Enums ── */
 const RAZAS = {
@@ -55,8 +57,6 @@ const CLASES = {
     bestiasalvaje:"Bestia Salvaje", angler:"Angler",
     magoeldritch:"Mago del Eldritch"
 };
-
-/* Clases disponibles por raza */
 const CLASES_POR_RAZA = {
     humano:       ['cazador','guerrero','tanque'],
     elfobosque:   ['cazador','guardabosques','curador'],
@@ -106,13 +106,17 @@ function inyectar() {
         <!-- OPCIONES -->
         <div class="cm-body" id="vistaOpciones">
           <div class="cm-opciones">
+            <button class="cm-opcion-btn" id="optDiscord">
+              <span class="cm-opcion-icono">🎮</span>
+              <span>Iniciar sesión con Discord
+                <span class="cm-opcion-desc">Entra con tu cuenta de Discord</span>
+              </span>
+            </button>
             <button class="cm-opcion-btn" id="optRegistrar">
               <span class="cm-opcion-icono">⚜</span>
-              <span>Registrarse<span class="cm-opcion-desc">Crea tu cuenta y tu personaje</span></span>
-            </button>
-            <button class="cm-opcion-btn" id="optLogin">
-              <span class="cm-opcion-icono">⚔</span>
-              <span>Iniciar sesión<span class="cm-opcion-desc">Ya tengo cuenta</span></span>
+              <span>Registrarse
+                <span class="cm-opcion-desc">Crea tu cuenta y tu personaje</span>
+              </span>
             </button>
             <button class="cm-opcion-btn volver" id="optVolver">
               <span class="cm-opcion-icono">←</span>Volver
@@ -120,7 +124,7 @@ function inyectar() {
           </div>
         </div>
 
-        <!-- REGISTRO = CREAR PERSONAJE -->
+        <!-- REGISTRO MANUAL -->
         <div class="cm-body" id="vistaRegistro" style="display:none">
 
           <p class="cm-section">Cuenta</p>
@@ -180,21 +184,40 @@ function inyectar() {
           </div>
         </div>
 
-        <!-- LOGIN -->
-        <div class="cm-body" id="vistaLogin" style="display:none">
-          <p class="cm-section">Iniciar sesión</p>
+        <!-- FICHA DE PERSONAJE (tras login con Discord) -->
+        <div class="cm-body" id="vistaFicha" style="display:none">
+          <p class="cm-section">Tu personaje</p>
           <div class="cm-field">
-            <label class="cm-label">Nombre de usuario <span>*</span></label>
-            <input class="cm-input" type="text" id="lUsuario" placeholder="Tu nombre de usuario">
+            <label class="cm-label">Nombre del personaje <span>*</span></label>
+            <input class="cm-input" type="text" id="fNombre" placeholder="Ej: Eira Frostmantle">
+          </div>
+          <div class="cm-row">
+            <div class="cm-field">
+              <label class="cm-label">Raza <span>*</span></label>
+              <select class="cm-select" id="fRaza">
+                <option value="" disabled selected>Selecciona…</option>
+                ${opts(RAZAS)}
+              </select>
+            </div>
+            <div class="cm-field">
+              <label class="cm-label">Clase <span>*</span></label>
+              <select class="cm-select" id="fClase">
+                <option value="" disabled selected>Selecciona primero una raza…</option>
+              </select>
+            </div>
           </div>
           <div class="cm-field">
-            <label class="cm-label">Contraseña <span>*</span></label>
-            <input class="cm-input" type="password" id="lPass" placeholder="Tu contraseña">
+            <label class="cm-label">Trabajo <span>*</span></label>
+            <select class="cm-select" id="fTrabajo">
+              <option value="" disabled selected>Selecciona…</option>
+              ${opts(TRABAJOS)}
+            </select>
           </div>
-          <p class="cm-error" id="loginError"></p>
+
+          <p class="cm-error" id="fichaError"></p>
           <div class="cm-form-footer">
-            <button class="cm-btn-volver" id="loginVolver">← Volver</button>
-            <button class="cm-btn-submit" id="loginSubmit">⚔ Entrar</button>
+            <span></span>
+            <button class="cm-btn-submit" id="fichaSubmit">⚜ Guardar personaje</button>
           </div>
         </div>
 
@@ -212,28 +235,32 @@ function inyectar() {
 /* ════════════════════════════════════════
    NAVEGACIÓN
    ════════════════════════════════════════ */
-const VISTAS = ['vistaOpciones','vistaRegistro','vistaLogin','cmExito'];
+const VISTAS = ['vistaOpciones','vistaRegistro','vistaFicha','cmExito'];
 
 function mostrar(id, titulo, sub) {
     VISTAS.forEach(v => {
         const el = document.getElementById(v);
         if (!el) return;
-        el.style.display = v === id && v !== 'cmExito' ? '' : 'none';
-        if (v === 'cmExito') { el.classList.toggle('visible', v === id); el.style.display = ''; }
+        if (v === 'cmExito') {
+            el.classList.toggle('visible', v === id);
+            el.style.display = '';
+        } else {
+            el.style.display = v === id ? '' : 'none';
+        }
     });
-    if (titulo) document.getElementById('cmTitulo').textContent = titulo;
-    if (sub !== undefined) document.getElementById('cmSub').textContent = sub;
+    if (titulo !== undefined) document.getElementById('cmTitulo').textContent = titulo;
+    if (sub    !== undefined) document.getElementById('cmSub').textContent    = sub;
 }
 
 function setError(id, msg) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.textContent = msg;
-    el.style.display = msg ? '' : 'none';
+    el.textContent    = msg;
+    el.style.display  = msg ? '' : 'none';
 }
 
 /* ════════════════════════════════════════
-   FIREBASE
+   FIREBASE HELPERS
    ════════════════════════════════════════ */
 function toEmail(usuario) {
     return `${usuario.trim().toLowerCase().replace(/\s+/g,'_')}@mm.internal`;
@@ -256,7 +283,9 @@ function guardarSesion(datos) {
     if (btn) btn.textContent = datos.nombreUsuario;
 }
 
-/* ── Registro ── */
+/* ════════════════════════════════════════
+   REGISTRO MANUAL
+   ════════════════════════════════════════ */
 async function registrar() {
     const usuario = document.getElementById('rUsuario').value.trim();
     const discord = document.getElementById('rDiscord').value.trim();
@@ -267,11 +296,12 @@ async function registrar() {
     const clase   = document.getElementById('rClase').value;
     const trabajo = document.getElementById('rTrabajo').value;
 
-    if (!usuario)              return setError('regError', 'El nombre de usuario es obligatorio.');
-    if (!discord)              return setError('regError', 'El Discord es obligatorio.');
-    if (pass.length < 6)       return setError('regError', 'La contraseña debe tener al menos 6 caracteres.');
-    if (pass !== pass2)        return setError('regError', 'Las contraseñas no coinciden.');
-    if (!nombre)               return setError('regError', 'El nombre del personaje es obligatorio.');
+    if (!usuario)                return setError('regError', 'El nombre de usuario es obligatorio.');
+    if (!discord)                return setError('regError', 'El Discord es obligatorio.');
+    if (!/^@.{2,}$/.test(discord)) return setError('regError', 'El Discord debe tener el formato @usuario.');
+    if (pass.length < 6)         return setError('regError', 'La contraseña debe tener al menos 6 caracteres.');
+    if (pass !== pass2)          return setError('regError', 'Las contraseñas no coinciden.');
+    if (!nombre)                 return setError('regError', 'El nombre del personaje es obligatorio.');
     if (!raza||!clase||!trabajo) return setError('regError', 'Selecciona raza, clase y trabajo.');
     setError('regError', '');
 
@@ -283,8 +313,8 @@ async function registrar() {
             id,
             nombreUsuario: usuario,
             discord,
-            isAdmin: false,
-            creadoEn: new Date(),
+            isAdmin:   false,
+            creadoEn:  new Date(),
             personaje: { nombre, raza, clase, trabajo }
         });
 
@@ -299,29 +329,93 @@ async function registrar() {
     }
 }
 
-/* ── Login ── */
-async function login() {
-    const usuario = document.getElementById('lUsuario').value.trim();
-    const pass    = document.getElementById('lPass').value;
+/* ════════════════════════════════════════
+   LOGIN CON DISCORD (OAuth)
+   ════════════════════════════════════════ */
+async function loginDiscord() {
+    setError('regError', '');
+    try {
+        const result   = await signInWithPopup(auth, discordProvider);
+        const user     = result.user;
+        const snap     = await getDoc(doc(db, 'usuarios', user.uid));
 
-    if (!usuario) return setError('loginError', 'Introduce tu nombre de usuario.');
-    if (!pass)    return setError('loginError', 'Introduce tu contraseña.');
-    setError('loginError', '');
+        if (snap.exists() && snap.data().personaje) {
+            /* Ya tiene personaje — entrar directamente */
+            const datos = snap.data();
+            guardarSesion({ uid: user.uid, nombreUsuario: datos.nombreUsuario, id: datos.id });
+
+            document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.nombreUsuario}!`;
+            document.getElementById('exitoTexto').textContent  = 'Sesión iniciada con Discord.';
+            mostrar('cmExito', '', '');
+            setTimeout(cerrar, 1800);
+        } else {
+            /* Primera vez — crear registro base y pedir ficha */
+            if (!snap.exists()) {
+                const id           = await nextId();
+                const nombreDiscord = user.displayName || user.email?.split('@')[0] || 'Viajero';
+                await setDoc(doc(db, 'usuarios', user.uid), {
+                    id,
+                    nombreUsuario: nombreDiscord,
+                    discord:       `@${nombreDiscord}`,
+                    isAdmin:       false,
+                    creadoEn:      new Date(),
+                    personaje:     null
+                });
+                guardarSesion({ uid: user.uid, nombreUsuario: nombreDiscord, id });
+            }
+            /* Mostrar formulario de ficha */
+            mostrar('vistaFicha', 'Crear personaje', 'Rellena tu ficha para continuar');
+        }
+    } catch (err) {
+        if (err.code !== 'auth/popup-closed-by-user') {
+            mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?');
+            setError('regError', errMsg(err.code));
+        }
+    }
+}
+
+/* ════════════════════════════════════════
+   GUARDAR FICHA (tras Discord OAuth)
+   ════════════════════════════════════════ */
+async function guardarFicha() {
+    const nombre  = document.getElementById('fNombre').value.trim();
+    const raza    = document.getElementById('fRaza').value;
+    const clase   = document.getElementById('fClase').value;
+    const trabajo = document.getElementById('fTrabajo').value;
+
+    if (!nombre)                 return setError('fichaError', 'El nombre del personaje es obligatorio.');
+    if (!raza||!clase||!trabajo) return setError('fichaError', 'Selecciona raza, clase y trabajo.');
+    setError('fichaError', '');
 
     try {
-        const cred  = await signInWithEmailAndPassword(auth, toEmail(usuario), pass);
-        const snap  = await getDoc(doc(db, 'usuarios', cred.user.uid));
-        const datos = snap.data();
+        const user = auth.currentUser;
+        await setDoc(doc(db, 'usuarios', user.uid),
+            { personaje: { nombre, raza, clase, trabajo } },
+            { merge: true }
+        );
 
-        guardarSesion({ uid: cred.user.uid, nombreUsuario: datos.nombreUsuario, id: datos.id });
-
-        document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.nombreUsuario}!`;
-        document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
+        document.getElementById('exitoTitulo').textContent = '¡Personaje creado!';
+        document.getElementById('exitoTexto').textContent  = `${nombre} ha llegado a Belmaria.`;
         mostrar('cmExito', '', '');
-        setTimeout(cerrar, 1800);
+        setTimeout(cerrar, 2000);
     } catch (err) {
-        setError('loginError', errMsg(err.code));
+        setError('fichaError', 'Error al guardar. Inténtalo de nuevo.');
+        console.error(err);
     }
+}
+
+/* ════════════════════════════════════════
+   FILTRO RAZA → CLASE
+   ════════════════════════════════════════ */
+function bindRazaClase(razaId, claseId) {
+    document.getElementById(razaId).addEventListener('change', function () {
+        const select = document.getElementById(claseId);
+        const clases = CLASES_POR_RAZA[this.value] || [];
+        select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
+            clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
+        select.value   = '';
+        select.disabled = false;
+    });
 }
 
 /* ════════════════════════════════════════
@@ -333,24 +427,26 @@ function cerrar() {
 }
 
 window.abrirModalCuenta = function () {
-    mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?');
-    /* Resetear formulario de registro al abrir */
-    ['rUsuario','rDiscord','rPass','rPass2','rNombre'].forEach(id => {
+    /* Resetear formularios */
+    ['rUsuario','rDiscord','rPass','rPass2','rNombre','fNombre'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
-    const rRaza  = document.getElementById('rRaza');
-    const rClase = document.getElementById('rClase');
-    const rTrabajo = document.getElementById('rTrabajo');
-    if (rRaza)    rRaza.value    = '';
-    if (rTrabajo) rTrabajo.value = '';
-    if (rClase) {
-        rClase.innerHTML = '<option value="" disabled selected>Selecciona primero una raza…</option>';
-        rClase.value     = '';
-        rClase.disabled  = false;
-    }
+    ['rRaza','rTrabajo','fRaza','fTrabajo'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    ['rClase','fClase'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerHTML = '<option value="" disabled selected>Selecciona primero una raza…</option>';
+            el.value     = '';
+        }
+    });
     setError('regError',   '');
-    setError('loginError', '');
+    setError('fichaError', '');
+
+    mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?');
     document.getElementById('cmOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
 };
@@ -370,47 +466,39 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape' && document.getElementById('cmOverlay').classList.contains('active')) cerrar();
     });
 
-    /* Navegación */
+    /* Navegación opciones */
+    document.getElementById('optDiscord').addEventListener('click', loginDiscord);
     document.getElementById('optRegistrar').addEventListener('click', () =>
         mostrar('vistaRegistro', 'Crear cuenta', 'Cuenta y personaje'));
-    document.getElementById('optLogin').addEventListener('click', () =>
-        mostrar('vistaLogin', 'Iniciar sesión', 'Accede a tu cuenta'));
     document.getElementById('optVolver').addEventListener('click', cerrar);
     document.getElementById('regVolver').addEventListener('click', () =>
         mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?'));
-    document.getElementById('loginVolver').addEventListener('click', () =>
-        mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?'));
 
-    /* Filtrar clases según raza seleccionada */
-    document.getElementById('rRaza').addEventListener('change', function () {
-        const raza   = this.value;
-        const select = document.getElementById('rClase');
-        const clases = CLASES_POR_RAZA[raza] || [];
-        select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
-            clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
-        select.value    = '';
-        select.disabled = clases.length === 0;
-    });
+    /* Filtros raza → clase */
+    bindRazaClase('rRaza', 'rClase');
+    bindRazaClase('fRaza', 'fClase');
 
     /* Envíos */
     document.getElementById('regSubmit').addEventListener('click', registrar);
-    document.getElementById('loginSubmit').addEventListener('click', login);
+    document.getElementById('fichaSubmit').addEventListener('click', guardarFicha);
 
-    /* Sincronizar nav si Firebase ya tiene sesión activa */
+    /* Sincronizar nav al cargar si ya hay sesión Firebase */
     onAuthStateChanged(auth, async user => {
         if (!user) return;
         try {
             const snap = await getDoc(doc(db, 'usuarios', user.uid));
-            if (snap.exists()) guardarSesion({
-                uid: user.uid,
-                nombreUsuario: snap.data().nombreUsuario,
-                id: snap.data().id
-            });
+            if (snap.exists()) {
+                guardarSesion({
+                    uid:           user.uid,
+                    nombreUsuario: snap.data().nombreUsuario,
+                    id:            snap.data().id
+                });
+            }
         } catch (_) {}
     });
 });
 
-/* ── Mensajes de error ── */
+/* ── Mensajes de error Firebase ── */
 function errMsg(code) {
     return ({
         'auth/email-already-in-use':   'Ese nombre de usuario ya está registrado.',
@@ -419,6 +507,7 @@ function errMsg(code) {
         'auth/wrong-password':         'Contraseña incorrecta.',
         'auth/invalid-credential':     'Usuario o contraseña incorrectos.',
         'auth/too-many-requests':      'Demasiados intentos. Espera un momento.',
-        'auth/network-request-failed': 'Error de red. Comprueba tu conexión.'
+        'auth/network-request-failed': 'Error de red. Comprueba tu conexión.',
+        'auth/popup-blocked':          'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.'
     })[code] || 'Error inesperado. Inténtalo de nuevo.';
 }
