@@ -21,12 +21,12 @@ import { getFirestore,
 
 /* ── Firebase config — sustituye con tus valores ── */
 const firebaseConfig = {
-  apiKey: "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
-  authDomain: "minesandmonarch.firebaseapp.com",
-  projectId: "minesandmonarch",
-  storageBucket: "minesandmonarch.firebasestorage.app",
-  messagingSenderId: "379898851786",
-  appId: "1:379898851786:web:b892cbf4d8508798d61f33"
+    apiKey:            "TU_API_KEY",
+    authDomain:        "TU_PROYECTO.firebaseapp.com",
+    projectId:         "TU_PROYECTO",
+    storageBucket:     "TU_PROYECTO.appspot.com",
+    messagingSenderId: "TU_SENDER_ID",
+    appId:             "TU_APP_ID"
 };
 
 const app  = initializeApp(firebaseConfig);
@@ -334,6 +334,23 @@ function cerrar() {
 
 window.abrirModalCuenta = function () {
     mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?');
+    /* Resetear formulario de registro al abrir */
+    ['rUsuario','rDiscord','rPass','rPass2','rNombre'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    const rRaza  = document.getElementById('rRaza');
+    const rClase = document.getElementById('rClase');
+    const rTrabajo = document.getElementById('rTrabajo');
+    if (rRaza)    rRaza.value    = '';
+    if (rTrabajo) rTrabajo.value = '';
+    if (rClase) {
+        rClase.innerHTML = '<option value="" disabled selected>Selecciona primero una raza…</option>';
+        rClase.value     = '';
+        rClase.disabled  = false;
+    }
+    setError('regError',   '');
+    setError('loginError', '');
     document.getElementById('cmOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
 };
@@ -371,6 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const clases = CLASES_POR_RAZA[raza] || [];
         select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
             clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
+        select.value    = '';
         select.disabled = clases.length === 0;
     });
 
