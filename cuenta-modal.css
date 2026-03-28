@@ -4,7 +4,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
-/* ── Overlay ── */
 .cm-overlay {
     display: none;
     position: fixed;
@@ -19,12 +18,11 @@
 }
 .cm-overlay.active { display: flex; }
 
-/* ── Caja ── */
 .cm-box {
     background: #110c05;
     border: 1px solid rgba(255,215,0,0.3);
     border-radius: 12px;
-    max-width: 480px;
+    max-width: 500px;
     width: 100%;
     margin: auto;
     overflow: hidden;
@@ -37,7 +35,6 @@
     to   { opacity:1; transform:translateY(0) scale(1); }
 }
 
-/* ── Header ── */
 .cm-header {
     padding: 28px 32px 20px;
     border-bottom: 1px solid rgba(255,215,0,0.1);
@@ -55,7 +52,6 @@
     color: #ffd700;
     font-size: 1.5em;
     margin: 0 0 4px;
-    text-shadow: 0 0 16px rgba(255,215,0,0.2);
 }
 .cm-subtitulo {
     font-family: Georgia, serif;
@@ -78,15 +74,13 @@
 }
 .cm-close:hover { color: #ffd700; }
 
-/* ── Cuerpo ── */
 .cm-body { padding: 24px 32px 32px; }
 
-/* ── Vista opciones: tres botones grandes ── */
+/* ── Opciones ── */
 .cm-opciones {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 8px 0;
+    gap: 10px;
 }
 .cm-opcion-btn {
     background: rgba(255,215,0,0.06);
@@ -119,34 +113,30 @@
     color: #a89060;
     transform: none;
 }
-.cm-opcion-icono {
-    font-size: 1.3em;
-    flex-shrink: 0;
-}
+.cm-opcion-icono { font-size: 1.3em; flex-shrink: 0; }
 .cm-opcion-desc {
     font-family: Georgia, serif;
     font-size: 0.75em;
     color: #6a5a3a;
-    font-weight: 400;
     display: block;
     margin-top: 2px;
 }
 
-/* ── Formularios (registro y personaje) ── */
-.cm-form-section {
+/* ── Campos ── */
+.cm-section {
     font-family: "MedievalSharp", cursive;
     color: #ffd700;
     font-size: 0.75em;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin: 0 0 12px;
+    margin: 18px 0 12px;
     display: flex;
     align-items: center;
     gap: 8px;
     opacity: 0.8;
 }
-.cm-form-section::before,
-.cm-form-section::after {
+.cm-section:first-child { margin-top: 0; }
+.cm-section::before, .cm-section::after {
     content: '';
     flex: 1;
     height: 1px;
@@ -157,7 +147,7 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 .cm-label {
     font-family: Georgia, serif;
@@ -166,9 +156,7 @@
 }
 .cm-label span { color: #c0392b; margin-left: 2px; }
 
-.cm-input,
-.cm-select,
-.cm-textarea {
+.cm-input, .cm-select {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,215,0,0.18);
     border-radius: 6px;
@@ -181,11 +169,8 @@
     box-sizing: border-box;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
-.cm-input::placeholder,
-.cm-textarea::placeholder { color: rgba(168,144,96,0.4); }
-.cm-input:focus,
-.cm-select:focus,
-.cm-textarea:focus {
+.cm-input::placeholder { color: rgba(168,144,96,0.4); }
+.cm-input:focus, .cm-select:focus {
     border-color: rgba(255,215,0,0.5);
     box-shadow: 0 0 0 3px rgba(255,215,0,0.06);
 }
@@ -198,7 +183,6 @@
     cursor: pointer;
 }
 .cm-select option { background: #1a1208; color: #e0d0a8; }
-.cm-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
 
 .cm-row {
     display: grid;
@@ -206,7 +190,6 @@
     gap: 12px;
 }
 
-/* ── Pie del form ── */
 .cm-form-footer {
     display: flex;
     justify-content: space-between;
@@ -243,21 +226,19 @@
     box-shadow: 0 0 16px rgba(255,215,0,0.15);
 }
 
-/* ── Error ── */
 .cm-error {
     font-family: Georgia, serif;
     font-size: 0.82em;
     color: #c0392b;
-    margin: 8px 0 0;
+    margin: 10px 0 0;
     display: none;
 }
 
-/* ── Pantalla de éxito ── */
+/* ── Éxito ── */
 .cm-exito {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     padding: 50px 32px;
     text-align: center;
     gap: 14px;
@@ -282,16 +263,6 @@
     line-height: 1.6;
 }
 
-/* ── Nota informativa ── */
-.cm-nota {
-    font-family: Georgia, serif;
-    font-size: 0.77em;
-    color: rgba(168,144,96,0.5);
-    font-style: italic;
-    margin: 6px 0 0;
-}
-
-/* ── Responsive ── */
 @media (max-width: 500px) {
     .cm-body { padding: 20px; }
     .cm-header { padding: 22px 20px 16px; }
