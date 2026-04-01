@@ -1,20 +1,23 @@
 /* ============================================================
    cuenta-modal.js – Mines & Monarch · Modal de Cuenta
    ============================================================
-   Login  → Discord OAuth
-   Registro → formulario manual (usuario + contraseña + personaje)
-   Si entra con Discord por primera vez → rellena ficha de personaje
+   Flujo:
+     1. Botón "Entrar con Discord" → OAuth popup
+     2a. Usuario nuevo → formulario de personaje (nombre, raza, clase, trabajo)
+     2b. Usuario existente con personaje → cierra modal, actualiza nav
+   
+   Roles: sin_usuario | verificado | escriba | admin
+   Por ahora todas las cuentas nuevas son admin.
    ============================================================ */
 
-import { initializeApp }              from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth,
-         createUserWithEmailAndPassword,
          signInWithPopup,
          OAuthProvider,
-         onAuthStateChanged }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+         onAuthStateChanged }     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
          doc, setDoc, getDoc,
-         runTransaction }             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         runTransaction }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 /* ── Firebase config ── */
 const firebaseConfig = {
@@ -34,6 +37,14 @@ const db   = getFirestore(app);
 const discordProvider = new OAuthProvider('oidc.discord');
 discordProvider.addScope('identify');
 discordProvider.setCustomParameters({ client_id: '1487501963510681680' });
+
+/* ── Roles disponibles ── */
+const ROLES = {
+    sin_usuario: 'Sin usuario',
+    verificado:  'Verificado',
+    escriba:     'Escriba',
+    admin:       'Admin'
+};
 
 /* ── Enums ── */
 const RAZAS = {
@@ -100,91 +111,26 @@ function inyectar() {
           <div class="cm-header-deco"></div>
           <button class="cm-close" id="cmClose">✕</button>
           <h2 class="cm-titulo" id="cmTitulo">Cuenta</h2>
-          <p class="cm-subtitulo" id="cmSub">¿Qué deseas hacer?</p>
+          <p class="cm-subtitulo" id="cmSub">Accede con tu cuenta de Discord</p>
         </div>
 
-        <!-- OPCIONES -->
-        <div class="cm-body" id="vistaOpciones">
+        <!-- VISTA: Login/Registro con Discord -->
+        <div class="cm-body" id="vistaDiscord">
           <div class="cm-opciones">
             <button class="cm-opcion-btn" id="optDiscord">
               <span class="cm-opcion-icono">🎮</span>
-              <span>Iniciar sesión con Discord
-                <span class="cm-opcion-desc">Entra con tu cuenta de Discord</span>
-              </span>
-            </button>
-            <button class="cm-opcion-btn" id="optRegistrar">
-              <span class="cm-opcion-icono">⚜</span>
-              <span>Registrarse
-                <span class="cm-opcion-desc">Crea tu cuenta y tu personaje</span>
+              <span>Entrar con Discord
+                <span class="cm-opcion-desc">Login y registro en un solo paso</span>
               </span>
             </button>
             <button class="cm-opcion-btn volver" id="optVolver">
               <span class="cm-opcion-icono">←</span>Volver
             </button>
           </div>
+          <p class="cm-error" id="discordError"></p>
         </div>
 
-        <!-- REGISTRO MANUAL -->
-        <div class="cm-body" id="vistaRegistro" style="display:none">
-
-          <p class="cm-section">Cuenta</p>
-          <div class="cm-row">
-            <div class="cm-field">
-              <label class="cm-label">Nombre de usuario <span>*</span></label>
-              <input class="cm-input" type="text" id="rUsuario" placeholder="Tu nombre de usuario">
-            </div>
-            <div class="cm-field">
-              <label class="cm-label">Discord <span>*</span></label>
-              <input class="cm-input" type="text" id="rDiscord" placeholder="@usuario">
-            </div>
-          </div>
-          <div class="cm-row">
-            <div class="cm-field">
-              <label class="cm-label">Contraseña <span>*</span></label>
-              <input class="cm-input" type="password" id="rPass" placeholder="Mínimo 6 caracteres">
-            </div>
-            <div class="cm-field">
-              <label class="cm-label">Repetir contraseña <span>*</span></label>
-              <input class="cm-input" type="password" id="rPass2" placeholder="Repite la contraseña">
-            </div>
-          </div>
-
-          <p class="cm-section">Personaje</p>
-          <div class="cm-field">
-            <label class="cm-label">Nombre del personaje <span>*</span></label>
-            <input class="cm-input" type="text" id="rNombre" placeholder="Ej: Eira Frostmantle">
-          </div>
-          <div class="cm-row">
-            <div class="cm-field">
-              <label class="cm-label">Raza <span>*</span></label>
-              <select class="cm-select" id="rRaza">
-                <option value="" disabled selected>Selecciona…</option>
-                ${opts(RAZAS)}
-              </select>
-            </div>
-            <div class="cm-field">
-              <label class="cm-label">Clase <span>*</span></label>
-              <select class="cm-select" id="rClase">
-                <option value="" disabled selected>Selecciona primero una raza…</option>
-              </select>
-            </div>
-          </div>
-          <div class="cm-field">
-            <label class="cm-label">Trabajo <span>*</span></label>
-            <select class="cm-select" id="rTrabajo">
-              <option value="" disabled selected>Selecciona…</option>
-              ${opts(TRABAJOS)}
-            </select>
-          </div>
-
-          <p class="cm-error" id="regError"></p>
-          <div class="cm-form-footer">
-            <button class="cm-btn-volver" id="regVolver">← Volver</button>
-            <button class="cm-btn-submit" id="regSubmit">⚜ Crear cuenta</button>
-          </div>
-        </div>
-
-        <!-- FICHA DE PERSONAJE (tras login con Discord) -->
+        <!-- VISTA: Formulario de personaje (usuario nuevo) -->
         <div class="cm-body" id="vistaFicha" style="display:none">
           <p class="cm-section">Tu personaje</p>
           <div class="cm-field">
@@ -213,7 +159,6 @@ function inyectar() {
               ${opts(TRABAJOS)}
             </select>
           </div>
-
           <p class="cm-error" id="fichaError"></p>
           <div class="cm-form-footer">
             <span></span>
@@ -235,7 +180,7 @@ function inyectar() {
 /* ════════════════════════════════════════
    NAVEGACIÓN
    ════════════════════════════════════════ */
-const VISTAS = ['vistaOpciones','vistaRegistro','vistaFicha','cmExito'];
+const VISTAS = ['vistaDiscord', 'vistaFicha', 'cmExito'];
 
 function mostrar(id, titulo, sub) {
     VISTAS.forEach(v => {
@@ -243,7 +188,6 @@ function mostrar(id, titulo, sub) {
         if (!el) return;
         if (v === 'cmExito') {
             el.classList.toggle('visible', v === id);
-            el.style.display = '';
         } else {
             el.style.display = v === id ? '' : 'none';
         }
@@ -255,17 +199,13 @@ function mostrar(id, titulo, sub) {
 function setError(id, msg) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.textContent    = msg;
-    el.style.display  = msg ? '' : 'none';
+    el.textContent   = msg;
+    el.style.display = msg ? '' : 'none';
 }
 
 /* ════════════════════════════════════════
-   FIREBASE HELPERS
+   FIRESTORE HELPERS
    ════════════════════════════════════════ */
-function toEmail(usuario) {
-    return `${usuario.trim().toLowerCase().replace(/\s+/g,'_')}@mm.internal`;
-}
-
 async function nextId() {
     const ref = doc(db, 'meta', 'contador_usuarios');
     let id;
@@ -284,98 +224,56 @@ function guardarSesion(datos) {
 }
 
 /* ════════════════════════════════════════
-   REGISTRO MANUAL
-   ════════════════════════════════════════ */
-async function registrar() {
-    const usuario = document.getElementById('rUsuario').value.trim();
-    const discord = document.getElementById('rDiscord').value.trim();
-    const pass    = document.getElementById('rPass').value;
-    const pass2   = document.getElementById('rPass2').value;
-    const nombre  = document.getElementById('rNombre').value.trim();
-    const raza    = document.getElementById('rRaza').value;
-    const clase   = document.getElementById('rClase').value;
-    const trabajo = document.getElementById('rTrabajo').value;
-
-    if (!usuario)                return setError('regError', 'El nombre de usuario es obligatorio.');
-    if (!discord)                return setError('regError', 'El Discord es obligatorio.');
-    if (!/^@.{2,}$/.test(discord)) return setError('regError', 'El Discord debe tener el formato @usuario.');
-    if (pass.length < 6)         return setError('regError', 'La contraseña debe tener al menos 6 caracteres.');
-    if (pass !== pass2)          return setError('regError', 'Las contraseñas no coinciden.');
-    if (!nombre)                 return setError('regError', 'El nombre del personaje es obligatorio.');
-    if (!raza||!clase||!trabajo) return setError('regError', 'Selecciona raza, clase y trabajo.');
-    setError('regError', '');
-
-    try {
-        const cred = await createUserWithEmailAndPassword(auth, toEmail(usuario), pass);
-        const id   = await nextId();
-
-        await setDoc(doc(db, 'usuarios', cred.user.uid), {
-            id,
-            nombreUsuario: usuario,
-            discord,
-            isAdmin:   false,
-            creadoEn:  new Date(),
-            personaje: { nombre, raza, clase, trabajo }
-        });
-
-        guardarSesion({ uid: cred.user.uid, nombreUsuario: usuario, id });
-
-        document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
-        document.getElementById('exitoTexto').textContent  = `${nombre} ha sido creado correctamente.`;
-        mostrar('cmExito', '', '');
-        setTimeout(cerrar, 2200);
-    } catch (err) {
-        setError('regError', errMsg(err.code));
-    }
-}
-
-/* ════════════════════════════════════════
-   LOGIN CON DISCORD (OAuth)
+   LOGIN / REGISTRO CON DISCORD
    ════════════════════════════════════════ */
 async function loginDiscord() {
-    setError('regError', '');
+    setError('discordError', '');
     try {
-        const result   = await signInWithPopup(auth, discordProvider);
-        const user     = result.user;
-        const snap     = await getDoc(doc(db, 'usuarios', user.uid));
+        const result = await signInWithPopup(auth, discordProvider);
+        const user   = result.user;
+        const snap   = await getDoc(doc(db, 'usuarios', user.uid));
 
         if (snap.exists() && snap.data().personaje) {
-            /* Ya tiene personaje — entrar directamente */
+            /* ── Usuario existente con personaje ── */
             const datos = snap.data();
-            guardarSesion({ uid: user.uid, nombreUsuario: datos.nombreUsuario, id: datos.id });
+            guardarSesion({ uid: user.uid, nombreUsuario: datos.nombreUsuario, id: datos.id, rol: datos.rol });
 
             document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.nombreUsuario}!`;
             document.getElementById('exitoTexto').textContent  = 'Sesión iniciada con Discord.';
-            mostrar('cmExito', '', '');
+            mostrar('cmExito');
             setTimeout(cerrar, 1800);
+
         } else {
-            /* Primera vez — crear registro base y pedir ficha */
+            /* ── Usuario nuevo — crear documento base ── */
+            const nombreDiscord = user.displayName || 'Viajero';
+            const discord       = `@${(user.providerData[0]?.uid || nombreDiscord).toLowerCase()}`;
+
             if (!snap.exists()) {
-                const id           = await nextId();
-                const nombreDiscord = user.displayName || user.email?.split('@')[0] || 'Viajero';
+                const id = await nextId();
                 await setDoc(doc(db, 'usuarios', user.uid), {
                     id,
                     nombreUsuario: nombreDiscord,
-                    discord:       `@${nombreDiscord}`,
-                    isAdmin:       false,
-                    creadoEn:      new Date(),
-                    personaje:     null
+                    discord,
+                    rol:      'admin',   // todas las cuentas son admin por ahora
+                    creadoEn: new Date(),
+                    personaje: null
                 });
-                guardarSesion({ uid: user.uid, nombreUsuario: nombreDiscord, id });
+                guardarSesion({ uid: user.uid, nombreUsuario: nombreDiscord, id, rol: 'admin' });
             }
-            /* Mostrar formulario de ficha */
-            mostrar('vistaFicha', 'Crear personaje', 'Rellena tu ficha para continuar');
+
+            /* Mostrar formulario de personaje */
+            mostrar('vistaFicha', 'Crea tu personaje', 'Rellena tu ficha para continuar');
         }
+
     } catch (err) {
         if (err.code !== 'auth/popup-closed-by-user') {
-            mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?');
-            setError('regError', errMsg(err.code));
+            setError('discordError', errMsg(err.code));
         }
     }
 }
 
 /* ════════════════════════════════════════
-   GUARDAR FICHA (tras Discord OAuth)
+   GUARDAR FICHA DE PERSONAJE
    ════════════════════════════════════════ */
 async function guardarFicha() {
     const nombre  = document.getElementById('fNombre').value.trim();
@@ -384,7 +282,7 @@ async function guardarFicha() {
     const trabajo = document.getElementById('fTrabajo').value;
 
     if (!nombre)                 return setError('fichaError', 'El nombre del personaje es obligatorio.');
-    if (!raza||!clase||!trabajo) return setError('fichaError', 'Selecciona raza, clase y trabajo.');
+    if (!raza || !clase || !trabajo) return setError('fichaError', 'Selecciona raza, clase y trabajo.');
     setError('fichaError', '');
 
     try {
@@ -394,28 +292,18 @@ async function guardarFicha() {
             { merge: true }
         );
 
-        document.getElementById('exitoTitulo').textContent = '¡Personaje creado!';
-        document.getElementById('exitoTexto').textContent  = `${nombre} ha llegado a Belmaria.`;
-        mostrar('cmExito', '', '');
+        /* Actualizar nombre en nav con el del personaje */
+        const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || '{}');
+        guardarSesion({ ...sesion, nombreUsuario: nombre });
+
+        document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
+        document.getElementById('exitoTexto').textContent  = `${nombre} ha llegado al mundo.`;
+        mostrar('cmExito');
         setTimeout(cerrar, 2000);
     } catch (err) {
         setError('fichaError', 'Error al guardar. Inténtalo de nuevo.');
         console.error(err);
     }
-}
-
-/* ════════════════════════════════════════
-   FILTRO RAZA → CLASE
-   ════════════════════════════════════════ */
-function bindRazaClase(razaId, claseId) {
-    document.getElementById(razaId).addEventListener('change', function () {
-        const select = document.getElementById(claseId);
-        const clases = CLASES_POR_RAZA[this.value] || [];
-        select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
-            clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
-        select.value   = '';
-        select.disabled = false;
-    });
 }
 
 /* ════════════════════════════════════════
@@ -427,26 +315,17 @@ function cerrar() {
 }
 
 window.abrirModalCuenta = function () {
-    /* Resetear formularios */
-    ['rUsuario','rDiscord','rPass','rPass2','rNombre','fNombre'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-    });
-    ['rRaza','rTrabajo','fRaza','fTrabajo'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-    });
-    ['rClase','fClase'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.innerHTML = '<option value="" disabled selected>Selecciona primero una raza…</option>';
-            el.value     = '';
-        }
-    });
-    setError('regError',   '');
-    setError('fichaError', '');
-
-    mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?');
+    /* Reset formulario de personaje */
+    ['fNombre'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    ['fRaza','fTrabajo'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    const fClase = document.getElementById('fClase');
+    if (fClase) {
+        fClase.innerHTML = '<option value="" disabled selected>Selecciona primero una raza…</option>';
+        fClase.value     = '';
+    }
+    setError('discordError', '');
+    setError('fichaError',   '');
+    mostrar('vistaDiscord', 'Cuenta', 'Accede con tu cuenta de Discord');
     document.getElementById('cmOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
 };
@@ -466,32 +345,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape' && document.getElementById('cmOverlay').classList.contains('active')) cerrar();
     });
 
-    /* Navegación opciones */
+    /* Botones */
     document.getElementById('optDiscord').addEventListener('click', loginDiscord);
-    document.getElementById('optRegistrar').addEventListener('click', () =>
-        mostrar('vistaRegistro', 'Crear cuenta', 'Cuenta y personaje'));
     document.getElementById('optVolver').addEventListener('click', cerrar);
-    document.getElementById('regVolver').addEventListener('click', () =>
-        mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?'));
-
-    /* Filtros raza → clase */
-    bindRazaClase('rRaza', 'rClase');
-    bindRazaClase('fRaza', 'fClase');
-
-    /* Envíos */
-    document.getElementById('regSubmit').addEventListener('click', registrar);
     document.getElementById('fichaSubmit').addEventListener('click', guardarFicha);
 
-    /* Sincronizar nav al cargar si ya hay sesión Firebase */
+    /* Filtro raza → clase */
+    document.getElementById('fRaza').addEventListener('change', function () {
+        const select = document.getElementById('fClase');
+        const clases = CLASES_POR_RAZA[this.value] || [];
+        select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
+            clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
+        select.value = '';
+    });
+
+    /* Sincronizar nav al cargar si Firebase ya tiene sesión */
     onAuthStateChanged(auth, async user => {
         if (!user) return;
         try {
             const snap = await getDoc(doc(db, 'usuarios', user.uid));
             if (snap.exists()) {
+                const datos = snap.data();
                 guardarSesion({
                     uid:           user.uid,
-                    nombreUsuario: snap.data().nombreUsuario,
-                    id:            snap.data().id
+                    nombreUsuario: datos.personaje?.nombre || datos.nombreUsuario,
+                    id:            datos.id,
+                    rol:           datos.rol
                 });
             }
         } catch (_) {}
@@ -501,13 +380,9 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ── Mensajes de error Firebase ── */
 function errMsg(code) {
     return ({
-        'auth/email-already-in-use':   'Ese nombre de usuario ya está registrado.',
-        'auth/weak-password':          'La contraseña es demasiado débil.',
-        'auth/user-not-found':         'Usuario no encontrado.',
-        'auth/wrong-password':         'Contraseña incorrecta.',
-        'auth/invalid-credential':     'Usuario o contraseña incorrectos.',
-        'auth/too-many-requests':      'Demasiados intentos. Espera un momento.',
+        'auth/popup-blocked':          'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.',
         'auth/network-request-failed': 'Error de red. Comprueba tu conexión.',
-        'auth/popup-blocked':          'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.'
-    })[code] || 'Error inesperado. Inténtalo de nuevo.';
+        'auth/too-many-requests':      'Demasiados intentos. Espera un momento.',
+        'auth/unauthorized-domain':    'Dominio no autorizado. Contacta con un administrador.'
+    })[code] || 'Error al conectar con Discord. Inténtalo de nuevo.';
 }
