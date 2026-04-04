@@ -137,18 +137,30 @@ function inyectar() {
           <p class="cm-error" id="googleError"></p>
         </div>
 
-        <!-- ── VISTA: Paso 2 — Personaje ── -->
-        <div class="cm-body" id="vistaPersonaje" style="display:none">
-          <p class="cm-section">Personaje</p>
-          <div class="cm-row">
-            <div class="cm-field">
-              <label class="cm-label">Nombre de rol <span>*</span></label>
-              <input class="cm-input" type="text" id="pNombreRol" placeholder="Ej: Eira Frostmantle">
-            </div>
-            <div class="cm-field">
-              <label class="cm-label">Nombre de Minecraft <span>*</span></label>
-              <input class="cm-input" type="text" id="pNombreMC" placeholder="Tu nick en MC">
-            </div>
+        <!-- ── VISTA: Paso 2a — Datos ── -->
+        <div class="cm-body" id="vistaDatos" style="display:none">
+          <p class="cm-section">Datos</p>
+          <div class="cm-field">
+            <label class="cm-label">Nombre de Discord <span>*</span></label>
+            <input class="cm-input" type="text" id="pDiscord" placeholder="Ej: eira#1234">
+          </div>
+          <div class="cm-field">
+            <label class="cm-label">Nombre de Minecraft <span>*</span></label>
+            <input class="cm-input" type="text" id="pNombreMC" placeholder="Tu nick en MC">
+          </div>
+          <p class="cm-error" id="datosError"></p>
+          <div class="cm-form-footer">
+            <button class="cm-btn-volver" id="datosCancelar">Cancelar</button>
+            <button class="cm-btn-submit" id="datosSiguiente">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- ── VISTA: Paso 2b — Rol ── -->
+        <div class="cm-body" id="vistaRol" style="display:none">
+          <p class="cm-section">Rol</p>
+          <div class="cm-field">
+            <label class="cm-label">Nombre de rol <span>*</span></label>
+            <input class="cm-input" type="text" id="pNombreRol" placeholder="Ej: Eira Frostmantle">
           </div>
           <div class="cm-field">
             <label class="cm-label">Raza <span>*</span></label>
@@ -174,7 +186,7 @@ function inyectar() {
           </div>
           <p class="cm-error" id="pError"></p>
           <div class="cm-form-footer">
-            <button class="cm-btn-volver" id="pCancelar">Cancelar</button>
+            <button class="cm-btn-volver" id="rolVolver">← Volver</button>
             <button class="cm-btn-submit" id="pGuardar">⚜ Crear personaje</button>
           </div>
         </div>
@@ -193,7 +205,7 @@ function inyectar() {
 /* ════════════════════════════════════════
    NAVEGACIÓN
    ════════════════════════════════════════ */
-const VISTAS = ['vistaGoogle','vistaPersonaje','cmExito'];
+const VISTAS = ['vistaGoogle','vistaDatos','vistaRol','cmExito'];
 
 function mostrar(id, titulo, sub) {
     VISTAS.forEach(v => {
@@ -285,8 +297,8 @@ async function loginGoogle() {
             setTimeout(cerrar, 1800);
 
         } else {
-            /* ── Sin personaje → paso 2 ── */
-            mostrar('vistaPersonaje', 'Crea tu personaje', 'Paso 2 de 2 — Completa tu ficha');
+            /* ── Sin personaje → paso 2a ── */
+            mostrar('vistaDatos', 'Crea tu personaje', 'Paso 2 de 3 — Tus datos');
         }
 
     } catch (err) {
@@ -301,6 +313,7 @@ async function loginGoogle() {
    Solo guarda si el usuario tiene sesión activa de Google
    ════════════════════════════════════════ */
 async function guardarPersonaje() {
+    const discord   = document.getElementById('pDiscord').value.trim();
     const nombreRol = document.getElementById('pNombreRol').value.trim();
     const nombreMC  = document.getElementById('pNombreMC').value.trim();
     const raza      = document.getElementById('pRaza').value;
@@ -308,7 +321,6 @@ async function guardarPersonaje() {
     const trabajo   = document.getElementById('pTrabajo').value;
 
     if (!nombreRol)              return setError('pError', 'El nombre de rol es obligatorio.');
-    if (!nombreMC)               return setError('pError', 'El nombre de Minecraft es obligatorio.');
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
 
@@ -326,6 +338,7 @@ async function guardarPersonaje() {
         await setDoc(doc(db, 'usuarios', user.uid), {
             id,
             email:    user.email,
+            discord,
             rol,
             creadoEn: new Date(),
             personaje: { nombreRol, nombreMC, raza, clase, trabajo }
@@ -354,6 +367,15 @@ async function cancelarPersonaje() {
     cerrar();
 }
 
+function siguienteDatos() {
+    const discord  = document.getElementById('pDiscord').value.trim();
+    const nombreMC = document.getElementById('pNombreMC').value.trim();
+    if (!discord)  return setError('datosError', 'El nombre de Discord es obligatorio.');
+    if (!nombreMC) return setError('datosError', 'El nombre de Minecraft es obligatorio.');
+    setError('datosError', '');
+    mostrar('vistaRol', 'Crea tu personaje', 'Paso 3 de 3 — Tu rol');
+}
+
 /* ════════════════════════════════════════
    ABRIR / CERRAR
    ════════════════════════════════════════ */
@@ -373,7 +395,7 @@ function cerrar() {
 }
 
 function resetForm() {
-    ['pNombreRol','pNombreMC'].forEach(id => {
+    ['pDiscord','pNombreRol','pNombreMC'].forEach(id => {
         const el = document.getElementById(id); if (el) el.value = '';
     });
     ['pRaza','pTrabajo'].forEach(id => {
@@ -386,6 +408,7 @@ function resetForm() {
         pClase.disabled  = true;
     }
     setError('googleError', '');
+    setError('datosError', '');
     setError('pError', '');
 }
 
@@ -414,7 +437,10 @@ document.addEventListener('DOMContentLoaded', () => {
     /* Botones */
     document.getElementById('optGoogle').addEventListener('click', loginGoogle);
     document.getElementById('optVolver').addEventListener('click', cerrar);
-    document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
+    document.getElementById('datosCancelar').addEventListener('click', cancelarPersonaje);
+    document.getElementById('datosSiguiente').addEventListener('click', siguienteDatos);
+    document.getElementById('rolVolver').addEventListener('click', () =>
+        mostrar('vistaDatos', 'Crea tu personaje', 'Paso 2 de 3 — Tus datos'));
     document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
 
     /* Filtro raza → clase */
