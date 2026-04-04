@@ -1,24 +1,28 @@
 /* ============================================================
    cuenta-modal.js – Mines & Monarch · Modal de Cuenta
    ============================================================
-   Flujo Sign In:
-     1. Nombre de Discord + Contraseña + Confirmar contraseña
-     2. Nombre de rol + Nombre de Minecraft + Raza + Clase + Trabajo
-   Flujo Login:
-     1. Nombre de Discord + Contraseña → entra directamente
+   Flujo:
+     1. Botón "Entrar con Google"  → Google OAuth popup
+     2a. Usuario sin personaje     → paso 2 (nombre rol, MC, raza, clase, trabajo)
+     2b. Usuario con personaje     → entra directamente
+   
+   Si cierra sin completar paso 2:
+     - La sesión de Google queda en Auth
+     - Pero NO hay documento en Firestore
+     - La próxima vez que entre vuelve al paso 2
 
    Roles: admin | escriba | ciudadano
-   Firebase: email/password (email = discord@mm.internal)
    ============================================================ */
 
-import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth,
-         createUserWithEmailAndPassword,
-         signInWithEmailAndPassword,
-         onAuthStateChanged }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+         signInWithPopup,
+         GoogleAuthProvider,
+         onAuthStateChanged,
+         signOut }                from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
          doc, setDoc, getDoc,
-         runTransaction }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         runTransaction }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 /* ── Firebase config ── */
 const firebaseConfig = {
@@ -30,72 +34,40 @@ const firebaseConfig = {
     appId:             "1:379898851786:web:b892cbf4d8508798d61f33"
 };
 
-const app  = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const db       = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
 /* ════════════════════════════════════════
    ENUM DE ROLES
    ════════════════════════════════════════ */
-const ROL = {
-    admin:     'admin',
-    escriba:   'escriba',
-    ciudadano: 'ciudadano'
-};
+const ROL = { admin: 'admin', escriba: 'escriba', ciudadano: 'ciudadano' };
 
 /* ════════════════════════════════════════
    ENUMS DE PERSONAJE
    ════════════════════════════════════════ */
 const RAZAS = {
-    humano:       "Humano",
-    elfobosque:   "Elfo del Bosque",
-    alfiq:        "Alfiq",
-    goblin:       "Goblin",
-    enano:        "Enano",
-    aracnido:     "Arácnido",
-    yeti:         "Yeti",
-    demonio:      "Demonio",
-    sirena:       "Sirena",
-    valquiria:    "Valquiria",
-    hadapixie:    "Hada Pixie",
-    hadafae:      "Hada Fae",
-    granelfo:     "Gran Elfo",
-    gorgona:      "Gorgona",
-    victimapeste: "Víctima de la Peste",
-    banshee:      "Banshee",
-    elfolunar:    "Elfo Lunar",
-    ogro:         "Ogro",
-    revenant:     "Revenant"
+    humano:"Humano", elfobosque:"Elfo del Bosque", alfiq:"Alfiq",
+    goblin:"Goblin", enano:"Enano", aracnido:"Arácnido", yeti:"Yeti",
+    demonio:"Demonio", sirena:"Sirena", valquiria:"Valquiria",
+    hadapixie:"Hada Pixie", hadafae:"Hada Fae", granelfo:"Gran Elfo",
+    gorgona:"Gorgona", victimapeste:"Víctima de la Peste",
+    banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro", revenant:"Revenant"
 };
-
 const CLASES = {
-    cazador:        "Cazador",
-    guardabosques:  "Guardabosques",
-    curador:        "Curador",
-    magoender:      "Mago del Ender",
-    magoelectrico:  "Mago Eléctrico",
-    magosangre:     "Mago de Sangre",
-    magohelado:     "Mago Helado",
-    magoinvocador:  "Mago Invocador",
-    magofuego:      "Mago de Fuego",
-    granmago:       "Gran Mago",
-    granmagooscuro: "Gran Mago Oscuro",
-    guerrerobendito:"Guerrero Bendito",
-    hiedravenenosa: "Hiedra Venenosa",
-    rogue:          "Rogue",
-    tanque:         "Tanque",
-    berserker:      "Berserker",
-    guerrero:       "Guerrero",
-    bardo:          "Bardo",
-    guerrerodelmar: "Guerrero del Mar",
-    carterista:     "Carterista",
-    paladin:        "Paladín",
-    ingeniero:      "Ingeniero",
-    bestiasalvaje:  "Bestia Salvaje",
-    angler:         "Angler",
-    magoeldritch:   "Mago del Eldritch"
+    cazador:"Cazador", guardabosques:"Guardabosques", curador:"Curador",
+    magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico",
+    magosangre:"Mago de Sangre", magohelado:"Mago Helado",
+    magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego",
+    granmago:"Gran Mago", granmagooscuro:"Gran Mago Oscuro",
+    guerrerobendito:"Guerrero Bendito", hiedravenenosa:"Hiedra Venenosa",
+    rogue:"Rogue", tanque:"Tanque", berserker:"Berserker",
+    guerrero:"Guerrero", bardo:"Bardo", guerrerodelmar:"Guerrero del Mar",
+    carterista:"Carterista", paladin:"Paladín", ingeniero:"Ingeniero",
+    bestiasalvaje:"Bestia Salvaje", angler:"Angler",
+    magoeldritch:"Mago del Eldritch"
 };
-
 const CLASES_POR_RAZA = {
     humano:       ['cazador','guerrero','tanque'],
     elfobosque:   ['cazador','guardabosques','curador'],
@@ -117,17 +89,11 @@ const CLASES_POR_RAZA = {
     ogro:         ['magosangre','angler'],
     revenant:     ['granmagooscuro','magoinvocador','magosangre','magoender']
 };
-
 const TRABAJOS = {
-    constructor:   "Constructor",
-    inutilerrante: "Inútil Errante",
-    explorador:    "Explorador",
-    clerigo:       "Clérigo",
-    mercader:      "Mercader",
-    metalurgico:   "Metalúrgico",
-    agricultor:    "Agricultor",
-    granjero:      "Granjero",
-    cocinero:      "Cocinero"
+    constructor:"Constructor", inutilerrante:"Inútil Errante",
+    explorador:"Explorador", clerigo:"Clérigo", mercader:"Mercader",
+    metalurgico:"Metalúrgico", agricultor:"Agricultor",
+    granjero:"Granjero", cocinero:"Cocinero"
 };
 
 const opts = obj => Object.entries(obj)
@@ -145,68 +111,48 @@ function inyectar() {
           <div class="cm-header-deco"></div>
           <button class="cm-close" id="cmClose">✕</button>
           <h2 class="cm-titulo" id="cmTitulo">Cuenta</h2>
-          <p class="cm-subtitulo" id="cmSub">¿Qué deseas hacer?</p>
+          <p class="cm-subtitulo" id="cmSub">Accede con tu cuenta de Google</p>
         </div>
 
-        <!-- ── VISTA: Opciones ── -->
-        <div class="cm-body" id="vistaOpciones">
+        <!-- ── VISTA: Login/Registro con Google ── -->
+        <div class="cm-body" id="vistaGoogle">
           <div class="cm-opciones">
-            <button class="cm-opcion-btn" id="optSignin">
-              <span class="cm-opcion-icono">⚜</span>
-              <span>Sign In
-                <span class="cm-opcion-desc">Crea una cuenta nueva</span>
+            <button class="cm-opcion-btn" id="optGoogle">
+              <span class="cm-opcion-icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
               </span>
-            </button>
-            <button class="cm-opcion-btn" id="optLogin">
-              <span class="cm-opcion-icono">⚔</span>
-              <span>Login
-                <span class="cm-opcion-desc">Ya tengo cuenta</span>
+              <span>Entrar con Google
+                <span class="cm-opcion-desc">Login y registro en un solo paso</span>
               </span>
             </button>
             <button class="cm-opcion-btn secundario" id="optVolver">
               <span class="cm-opcion-icono">←</span>Volver
             </button>
           </div>
+          <p class="cm-error" id="googleError"></p>
         </div>
 
-        <!-- ── VISTA: Sign In paso 1 — Cuenta ── -->
-        <div class="cm-body" id="vistaSignin1" style="display:none">
-          <p class="cm-section">Cuenta</p>
-          <div class="cm-field">
-            <label class="cm-label">Nombre de Discord <span>*</span></label>
-            <input class="cm-input" type="text" id="s1Discord" placeholder="@usuario">
-          </div>
-          <div class="cm-field">
-            <label class="cm-label">Contraseña <span>*</span></label>
-            <input class="cm-input" type="password" id="s1Pass" placeholder="Mínimo 6 caracteres">
-          </div>
-          <div class="cm-field">
-            <label class="cm-label">Confirmar contraseña <span>*</span></label>
-            <input class="cm-input" type="password" id="s1Pass2" placeholder="Repite la contraseña">
-          </div>
-          <p class="cm-error" id="s1Error"></p>
-          <div class="cm-form-footer">
-            <button class="cm-btn-volver" id="s1Volver">← Volver</button>
-            <button class="cm-btn-submit" id="s1Siguiente">Siguiente →</button>
-          </div>
-        </div>
-
-        <!-- ── VISTA: Sign In paso 2 — Personaje ── -->
-        <div class="cm-body" id="vistaSignin2" style="display:none">
+        <!-- ── VISTA: Paso 2 — Personaje ── -->
+        <div class="cm-body" id="vistaPersonaje" style="display:none">
           <p class="cm-section">Personaje</p>
           <div class="cm-row">
             <div class="cm-field">
               <label class="cm-label">Nombre de rol <span>*</span></label>
-              <input class="cm-input" type="text" id="s2NombreRol" placeholder="Ej: Eira Frostmantle">
+              <input class="cm-input" type="text" id="pNombreRol" placeholder="Ej: Eira Frostmantle">
             </div>
             <div class="cm-field">
               <label class="cm-label">Nombre de Minecraft <span>*</span></label>
-              <input class="cm-input" type="text" id="s2NombreMC" placeholder="Tu nick en MC">
+              <input class="cm-input" type="text" id="pNombreMC" placeholder="Tu nick en MC">
             </div>
           </div>
           <div class="cm-field">
             <label class="cm-label">Raza <span>*</span></label>
-            <select class="cm-select" id="s2Raza">
+            <select class="cm-select" id="pRaza">
               <option value="" disabled selected>Selecciona…</option>
               ${opts(RAZAS)}
             </select>
@@ -214,40 +160,22 @@ function inyectar() {
           <div class="cm-row">
             <div class="cm-field">
               <label class="cm-label">Clase <span>*</span></label>
-              <select class="cm-select" id="s2Clase" disabled>
+              <select class="cm-select" id="pClase" disabled>
                 <option value="" disabled selected>Selecciona primero la raza…</option>
               </select>
             </div>
             <div class="cm-field">
               <label class="cm-label">Trabajo <span>*</span></label>
-              <select class="cm-select" id="s2Trabajo">
+              <select class="cm-select" id="pTrabajo">
                 <option value="" disabled selected>Selecciona…</option>
                 ${opts(TRABAJOS)}
               </select>
             </div>
           </div>
-          <p class="cm-error" id="s2Error"></p>
+          <p class="cm-error" id="pError"></p>
           <div class="cm-form-footer">
-            <button class="cm-btn-volver" id="s2Volver">← Volver</button>
-            <button class="cm-btn-submit" id="s2Crear">⚜ Crear cuenta</button>
-          </div>
-        </div>
-
-        <!-- ── VISTA: Login ── -->
-        <div class="cm-body" id="vistaLogin" style="display:none">
-          <p class="cm-section">Iniciar sesión</p>
-          <div class="cm-field">
-            <label class="cm-label">Nombre de Discord <span>*</span></label>
-            <input class="cm-input" type="text" id="lDiscord" placeholder="@usuario">
-          </div>
-          <div class="cm-field">
-            <label class="cm-label">Contraseña <span>*</span></label>
-            <input class="cm-input" type="password" id="lPass" placeholder="Tu contraseña">
-          </div>
-          <p class="cm-error" id="lError"></p>
-          <div class="cm-form-footer">
-            <button class="cm-btn-volver" id="lVolver">← Volver</button>
-            <button class="cm-btn-submit" id="lEntrar">⚔ Entrar</button>
+            <button class="cm-btn-volver" id="pCancelar">Cancelar</button>
+            <button class="cm-btn-submit" id="pGuardar">⚜ Crear personaje</button>
           </div>
         </div>
 
@@ -265,7 +193,7 @@ function inyectar() {
 /* ════════════════════════════════════════
    NAVEGACIÓN
    ════════════════════════════════════════ */
-const VISTAS = ['vistaOpciones','vistaSignin1','vistaSignin2','vistaLogin','cmExito'];
+const VISTAS = ['vistaGoogle','vistaPersonaje','cmExito'];
 
 function mostrar(id, titulo, sub) {
     VISTAS.forEach(v => {
@@ -289,17 +217,8 @@ function setError(id, msg) {
 }
 
 /* ════════════════════════════════════════
-   FIREBASE HELPERS
+   FIRESTORE HELPERS
    ════════════════════════════════════════ */
-
-/* Convierte el nombre de Discord en un email interno para Firebase Auth */
-function discordToEmail(discord) {
-    return discord.trim().toLowerCase()
-        .replace(/^@/, '')
-        .replace(/\s+/g, '_')
-        .replace(/[^a-z0-9_.]/g, '') + '@mm.internal';
-}
-
 async function nextId() {
     const ref = doc(db, 'meta', 'contador_usuarios');
     let id;
@@ -314,127 +233,163 @@ async function nextId() {
 function guardarSesion(datos) {
     sessionStorage.setItem('mm_usuario', JSON.stringify(datos));
     const btn = document.getElementById('nav-cuenta-btn');
-    if (btn) btn.textContent = datos.nombreRol || datos.discord;
+    if (btn) btn.textContent = `⚜ ${datos.nombreRol}`;
+    /* Si el li no tiene dropdown aún, reconstruirlo */
+    const li = document.getElementById('nav-cuenta-li');
+    if (li && !li.classList.contains('dropdown')) {
+        li.classList.add('dropdown');
+        li.innerHTML = `
+            <button class="dropbtn" style="font-weight:bold;color:#ffd700;display:flex;align-items:center;gap:6px">
+                ⚜ ${datos.nombreRol}
+            </button>
+            <ul class="dropdown-content" style="right:0;left:auto;min-width:160px;">
+                <li><a href="Cuenta/Cuenta.html">Mi cartilla</a></li>
+                <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
+            </ul>`;
+        li.querySelector('.dropbtn').addEventListener('click', e => {
+            e.preventDefault();
+            li.querySelector('.dropdown-content').classList.toggle('show');
+        });
+        document.getElementById('btnCerrarSesion').addEventListener('click', async e => {
+            e.preventDefault();
+            await signOut(auth);
+            sessionStorage.removeItem('mm_usuario');
+            location.reload();
+        });
+    }
 }
 
 /* ════════════════════════════════════════
-   SIGN IN — paso 1 (validación local)
+   LOGIN CON GOOGLE
    ════════════════════════════════════════ */
-function validarPaso1() {
-    const discord = document.getElementById('s1Discord').value.trim();
-    const pass    = document.getElementById('s1Pass').value;
-    const pass2   = document.getElementById('s1Pass2').value;
+async function loginGoogle() {
+    setError('googleError', '');
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user   = result.user;
+        const snap   = await getDoc(doc(db, 'usuarios', user.uid));
 
-    if (!discord)        return setError('s1Error', 'El nombre de Discord es obligatorio.'), false;
-    if (!/^@.{2,}$/.test(discord))
-                         return setError('s1Error', 'El Discord debe tener el formato @usuario.'), false;
-    if (pass.length < 6) return setError('s1Error', 'La contraseña debe tener al menos 6 caracteres.'), false;
-    if (pass !== pass2)  return setError('s1Error', 'Las contraseñas no coinciden.'), false;
+        if (snap.exists() && snap.data().personaje) {
+            /* ── Usuario con personaje completo → entra ── */
+            const datos = snap.data();
+            guardarSesion({
+                uid:       user.uid,
+                nombreRol: datos.personaje.nombreRol,
+                id:        datos.id,
+                rol:       datos.rol
+            });
 
-    setError('s1Error', '');
-    return true;
+            document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
+            document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
+            mostrar('cmExito');
+            setTimeout(cerrar, 1800);
+
+        } else {
+            /* ── Sin personaje → paso 2 ── */
+            mostrar('vistaPersonaje', 'Crea tu personaje', 'Paso 2 de 2 — Completa tu ficha');
+        }
+
+    } catch (err) {
+        if (err.code !== 'auth/popup-closed-by-user') {
+            setError('googleError', errMsg(err.code));
+        }
+    }
 }
 
 /* ════════════════════════════════════════
-   SIGN IN — paso 2 (crea la cuenta)
+   GUARDAR PERSONAJE (paso 2)
+   Solo guarda si el usuario tiene sesión activa de Google
    ════════════════════════════════════════ */
-async function crearCuenta() {
-    const nombreRol = document.getElementById('s2NombreRol').value.trim();
-    const nombreMC  = document.getElementById('s2NombreMC').value.trim();
-    const raza      = document.getElementById('s2Raza').value;
-    const clase     = document.getElementById('s2Clase').value;
-    const trabajo   = document.getElementById('s2Trabajo').value;
+async function guardarPersonaje() {
+    const nombreRol = document.getElementById('pNombreRol').value.trim();
+    const nombreMC  = document.getElementById('pNombreMC').value.trim();
+    const raza      = document.getElementById('pRaza').value;
+    const clase     = document.getElementById('pClase').value;
+    const trabajo   = document.getElementById('pTrabajo').value;
 
-    if (!nombreRol)               return setError('s2Error', 'El nombre de rol es obligatorio.');
-    if (!nombreMC)                return setError('s2Error', 'El nombre de Minecraft es obligatorio.');
-    if (!raza || !clase || !trabajo) return setError('s2Error', 'Selecciona raza, clase y trabajo.');
-    setError('s2Error', '');
+    if (!nombreRol)              return setError('pError', 'El nombre de rol es obligatorio.');
+    if (!nombreMC)               return setError('pError', 'El nombre de Minecraft es obligatorio.');
+    if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
+    setError('pError', '');
 
-    const discord = document.getElementById('s1Discord').value.trim();
-    const pass    = document.getElementById('s1Pass').value;
+    const user = auth.currentUser;
+    if (!user) {
+        setError('pError', 'Sesión expirada. Vuelve a entrar con Google.');
+        mostrar('vistaGoogle', 'Cuenta', 'Accede con tu cuenta de Google');
+        return;
+    }
 
     try {
-        const cred = await createUserWithEmailAndPassword(auth, discordToEmail(discord), pass);
-        const id   = await nextId();
-
-        await setDoc(doc(db, 'usuarios', cred.user.uid), {
+        const id = await nextId();
+        await setDoc(doc(db, 'usuarios', user.uid), {
             id,
-            discord,
-            rol:      ROL.ciudadano,  /* rol por defecto al registrarse */
+            email:    user.email,
+            rol:      ROL.ciudadano,
             creadoEn: new Date(),
             personaje: { nombreRol, nombreMC, raza, clase, trabajo }
         });
 
-        guardarSesion({ uid: cred.user.uid, discord, nombreRol, id, rol: ROL.ciudadano });
+        guardarSesion({ uid: user.uid, nombreRol, id, rol: ROL.ciudadano });
 
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
         mostrar('cmExito');
-        setTimeout(cerrar, 2200);
+        setTimeout(cerrar, 2000);
     } catch (err) {
-        setError('s2Error', errMsg(err.code));
+        setError('pError', 'Error al guardar. Inténtalo de nuevo.');
+        console.error(err);
     }
 }
 
 /* ════════════════════════════════════════
-   LOGIN
+   CANCELAR PASO 2 — cierra sesión de Google
+   y no crea la cuenta
    ════════════════════════════════════════ */
-async function login() {
-    const discord = document.getElementById('lDiscord').value.trim();
-    const pass    = document.getElementById('lPass').value;
-
-    if (!discord) return setError('lError', 'El nombre de Discord es obligatorio.');
-    if (!pass)    return setError('lError', 'La contraseña es obligatoria.');
-    setError('lError', '');
-
-    try {
-        const cred  = await signInWithEmailAndPassword(auth, discordToEmail(discord), pass);
-        const snap  = await getDoc(doc(db, 'usuarios', cred.user.uid));
-        const datos = snap.data();
-
-        guardarSesion({
-            uid:      cred.user.uid,
-            discord,
-            nombreRol: datos.personaje?.nombreRol || discord,
-            id:        datos.id,
-            rol:       datos.rol
-        });
-
-        document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje?.nombreRol || discord}!`;
-        document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
-        mostrar('cmExito');
-        setTimeout(cerrar, 1800);
-    } catch (err) {
-        setError('lError', errMsg(err.code));
-    }
+async function cancelarPersonaje() {
+    const user = auth.currentUser;
+    if (user) await signOut(auth);
+    sessionStorage.removeItem('mm_usuario');
+    cerrar();
 }
 
 /* ════════════════════════════════════════
    ABRIR / CERRAR
    ════════════════════════════════════════ */
 function cerrar() {
+    /* Si hay sesión de Google pero sin personaje, cerrar sesión */
+    const user = auth.currentUser;
+    if (user) {
+        getDoc(doc(db, 'usuarios', user.uid)).then(snap => {
+            if (!snap.exists() || !snap.data().personaje) {
+                signOut(auth);
+                sessionStorage.removeItem('mm_usuario');
+            }
+        });
+    }
     document.getElementById('cmOverlay').classList.remove('active');
     document.body.style.overflow = '';
 }
 
 function resetForm() {
-    ['s1Discord','s1Pass','s1Pass2','s2NombreRol','s2NombreMC','lDiscord','lPass']
-        .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    ['s2Raza','s2Trabajo'].forEach(id => {
+    ['pNombreRol','pNombreMC'].forEach(id => {
         const el = document.getElementById(id); if (el) el.value = '';
     });
-    const s2Clase = document.getElementById('s2Clase');
-    if (s2Clase) {
-        s2Clase.innerHTML = '<option value="" disabled selected>Selecciona primero la raza…</option>';
-        s2Clase.value     = '';
-        s2Clase.disabled  = true;
+    ['pRaza','pTrabajo'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+    });
+    const pClase = document.getElementById('pClase');
+    if (pClase) {
+        pClase.innerHTML = '<option value="" disabled selected>Selecciona primero la raza…</option>';
+        pClase.value     = '';
+        pClase.disabled  = true;
     }
-    ['s1Error','s2Error','lError'].forEach(id => setError(id, ''));
+    setError('googleError', '');
+    setError('pError', '');
 }
 
 window.abrirModalCuenta = function () {
     resetForm();
-    mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?');
+    mostrar('vistaGoogle', 'Cuenta', 'Accede con tu cuenta de Google');
     document.getElementById('cmOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
 };
@@ -445,7 +400,7 @@ window.abrirModalCuenta = function () {
 document.addEventListener('DOMContentLoaded', () => {
     inyectar();
 
-    /* Cerrar */
+    /* Cerrar — si está en paso 2, cancela la cuenta */
     document.getElementById('cmClose').addEventListener('click', cerrar);
     document.getElementById('cmOverlay').addEventListener('click', e => {
         if (e.target.id === 'cmOverlay') cerrar();
@@ -454,41 +409,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape' && document.getElementById('cmOverlay').classList.contains('active')) cerrar();
     });
 
-    /* Navegación opciones */
-    document.getElementById('optSignin').addEventListener('click', () =>
-        mostrar('vistaSignin1', 'Sign In', 'Paso 1 de 2 — Cuenta'));
-    document.getElementById('optLogin').addEventListener('click', () =>
-        mostrar('vistaLogin', 'Login', 'Accede a tu cuenta'));
+    /* Botones */
+    document.getElementById('optGoogle').addEventListener('click', loginGoogle);
     document.getElementById('optVolver').addEventListener('click', cerrar);
-
-    /* Sign In paso 1 */
-    document.getElementById('s1Volver').addEventListener('click', () =>
-        mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?'));
-    document.getElementById('s1Siguiente').addEventListener('click', () => {
-        if (validarPaso1()) mostrar('vistaSignin2', 'Sign In', 'Paso 2 de 2 — Personaje');
-    });
-
-    /* Sign In paso 2 */
-    document.getElementById('s2Volver').addEventListener('click', () =>
-        mostrar('vistaSignin1', 'Sign In', 'Paso 1 de 2 — Cuenta'));
-    document.getElementById('s2Crear').addEventListener('click', crearCuenta);
-
-    /* Login */
-    document.getElementById('lVolver').addEventListener('click', () =>
-        mostrar('vistaOpciones', 'Cuenta', '¿Qué deseas hacer?'));
-    document.getElementById('lEntrar').addEventListener('click', login);
-
-    /* Enter en inputs */
-    document.getElementById('s1Pass2').addEventListener('keydown', e => {
-        if (e.key === 'Enter') document.getElementById('s1Siguiente').click();
-    });
-    document.getElementById('lPass').addEventListener('keydown', e => {
-        if (e.key === 'Enter') document.getElementById('lEntrar').click();
-    });
+    document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
+    document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
 
     /* Filtro raza → clase */
-    document.getElementById('s2Raza').addEventListener('change', function () {
-        const select = document.getElementById('s2Clase');
+    document.getElementById('pRaza').addEventListener('change', function () {
+        const select = document.getElementById('pClase');
         const clases = CLASES_POR_RAZA[this.value] || [];
         select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
             clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
@@ -496,33 +425,34 @@ document.addEventListener('DOMContentLoaded', () => {
         select.disabled = false;
     });
 
-    /* Sincronizar nav al cargar si Firebase ya tiene sesión */
+    /* Sincronizar nav al cargar si Firebase ya tiene sesión con personaje */
     onAuthStateChanged(auth, async user => {
         if (!user) return;
         try {
             const snap = await getDoc(doc(db, 'usuarios', user.uid));
-            if (!snap.exists()) return;
-            const datos = snap.data();
-            guardarSesion({
-                uid:       user.uid,
-                discord:   datos.discord,
-                nombreRol: datos.personaje?.nombreRol || datos.discord,
-                id:        datos.id,
-                rol:       datos.rol
-            });
+            if (snap.exists() && snap.data().personaje) {
+                const datos = snap.data();
+                guardarSesion({
+                    uid:       user.uid,
+                    nombreRol: datos.personaje.nombreRol,
+                    id:        datos.id,
+                    rol:       datos.rol
+                });
+            } else if (snap.exists && !snap.data()?.personaje) {
+                /* Tiene sesión Google pero sin personaje → no restaurar sesión */
+                await signOut(auth);
+            }
         } catch (_) {}
     });
 });
 
-/* ── Mensajes de error Firebase ── */
+/* ── Mensajes de error ── */
 function errMsg(code) {
     return ({
-        'auth/email-already-in-use':   'Ese nombre de Discord ya está registrado.',
-        'auth/weak-password':          'La contraseña es demasiado débil.',
-        'auth/user-not-found':         'No existe ninguna cuenta con ese Discord.',
-        'auth/wrong-password':         'Contraseña incorrecta.',
-        'auth/invalid-credential':     'Discord o contraseña incorrectos.',
+        'auth/popup-blocked':          'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.',
+        'auth/popup-closed-by-user':   '',
+        'auth/network-request-failed': 'Error de red. Comprueba tu conexión.',
         'auth/too-many-requests':      'Demasiados intentos. Espera un momento.',
-        'auth/network-request-failed': 'Error de red. Comprueba tu conexión.'
-    })[code] || 'Error inesperado. Inténtalo de nuevo.';
+        'auth/unauthorized-domain':    'Dominio no autorizado en Firebase.'
+    })[code] || 'Error al conectar con Google. Inténtalo de nuevo.';
 }

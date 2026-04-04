@@ -21,16 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ── Botón de cuenta en el nav ── */
-    const navUl = document.querySelector('.header-right ul');
-    if (navUl) {
-        const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
-        const li = document.createElement('li');
-        li.id = 'nav-cuenta-li';
+    const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
+    const btnNav = document.getElementById('nav-cuenta-btn');
+    const liNav  = document.getElementById('nav-cuenta-li');
 
+    if (btnNav && liNav) {
         if (sesion) {
-            /* Con sesión — nombre del personaje + dropdown */
-            li.classList.add('dropdown');
-            li.innerHTML = `
+            /* Con sesión — reemplazar con nombre + dropdown */
+            liNav.classList.add('dropdown');
+            liNav.innerHTML = `
                 <button class="dropbtn" id="nav-cuenta-btn"
                     style="display:flex;align-items:center;gap:8px;padding:6px 14px;font-weight:bold;color:#ffd700">
                     ⚜ ${sesion.nombreRol || sesion.discord}
@@ -39,11 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li><a href="Cuenta/Cuenta.html">Mi cartilla</a></li>
                     <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
                 </ul>`;
-            navUl.appendChild(li);
 
-            li.querySelector('#nav-cuenta-btn').addEventListener('click', e => {
+            liNav.querySelector('.dropbtn').addEventListener('click', e => {
                 e.preventDefault();
-                li.querySelector('.dropdown-content').classList.toggle('show');
+                liNav.querySelector('.dropdown-content').classList.toggle('show');
             });
             document.getElementById('btnCerrarSesion').addEventListener('click', e => {
                 e.preventDefault();
@@ -52,18 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         } else {
-            /* Sin sesión — botón Entrar */
-            li.innerHTML = `
-                <a href="#" id="nav-cuenta-btn"
-                   style="font-weight:bold;white-space:nowrap;">
-                   Entrar
-                </a>`;
-            navUl.appendChild(li);
-
-            document.getElementById('nav-cuenta-btn').addEventListener('click', e => {
+            /* Sin sesión — el botón ya está en el HTML, solo enlazamos el clic */
+            btnNav.addEventListener('click', e => {
                 e.preventDefault();
+                /* Esperar a que el módulo esté listo */
                 if (typeof window.abrirModalCuenta === 'function') {
                     window.abrirModalCuenta();
+                } else {
+                    /* El módulo aún no cargó — intentar tras un tick */
+                    setTimeout(() => {
+                        if (typeof window.abrirModalCuenta === 'function') window.abrirModalCuenta();
+                    }, 300);
                 }
             });
         }
