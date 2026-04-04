@@ -320,16 +320,18 @@ async function guardarPersonaje() {
     }
 
     try {
-        const id = await nextId();
+        const id  = await nextId();
+        const rol = nombreRol.toLowerCase() === 'skyroft' ? ROL.admin : ROL.ciudadano;
+
         await setDoc(doc(db, 'usuarios', user.uid), {
             id,
             email:    user.email,
-            rol:      ROL.ciudadano,
+            rol,
             creadoEn: new Date(),
             personaje: { nombreRol, nombreMC, raza, clase, trabajo }
         });
 
-        guardarSesion({ uid: user.uid, nombreRol, id, rol: ROL.ciudadano });
+        guardarSesion({ uid: user.uid, nombreRol, id, rol });
 
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
