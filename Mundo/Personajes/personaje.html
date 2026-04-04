@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="/minesandmonarchs-web/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personaje – Mines & Monarchs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <style>
+        /* ── Layout general ── */
+        .pj-wrapper {
+            max-width: 760px;
+            margin: 48px auto;
+            padding: 0 20px 60px;
+        }
+
+        /* ── Cabecera del personaje ── */
+        .pj-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        .pj-nombre {
+            font-family: "MedievalSharp", cursive;
+            font-size: 2.6em;
+            color: #ffd700;
+            margin: 0 0 6px;
+            text-shadow: 0 0 24px rgba(255,215,0,0.3);
+        }
+        .pj-id {
+            font-family: Georgia, serif;
+            color: rgba(255,215,0,0.4);
+            font-size: 0.85em;
+            letter-spacing: 0.08em;
+        }
+        .pj-divider {
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            margin: 18px auto;
+            opacity: 0.4;
+        }
+
+        /* ── Tarjetas de sección ── */
+        .pj-card {
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,215,0,0.12);
+            border-radius: 10px;
+            padding: 24px 28px;
+            margin-bottom: 18px;
+        }
+        .pj-card-titulo {
+            font-family: "MedievalSharp", cursive;
+            color: #ffd700;
+            font-size: 0.78em;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin: 0 0 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.85;
+        }
+        .pj-card-titulo::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,215,0,0.15);
+        }
+
+        /* ── Grid de campos ── */
+        .pj-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 24px;
+        }
+        .pj-campo {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .pj-campo-label {
+            font-family: Georgia, serif;
+            color: rgba(168,144,96,0.7);
+            font-size: 0.74em;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .pj-campo-valor {
+            font-family: Georgia, serif;
+            color: #e0d0a8;
+            font-size: 1em;
+        }
+
+        /* ── Estado de carga / error ── */
+        .pj-estado {
+            text-align: center;
+            padding: 80px 20px;
+            font-family: Georgia, serif;
+            color: rgba(168,144,96,0.6);
+            font-size: 1em;
+        }
+        .pj-estado .spinner {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border: 2px solid rgba(255,215,0,0.15);
+            border-top-color: rgba(255,215,0,0.6);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 14px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 500px) {
+            .pj-grid { grid-template-columns: 1fr; }
+            .pj-nombre { font-size: 1.9em; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <h2>Mines & Monarch</h2>
+        </div>
+        <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
+        <nav class="header-right">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Creación personaje</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Razas/raza.html">Raza</a></li>
+                        <li><a href="Clases/Clases.html">Clase</a></li>
+                        <li><a href="Trabajos/Trabajos.html">Trabajo</a></li>
+                        <li><a href="Cuenta/Cuenta.html">Cartilla</a></li>
+                    </ul>
+                </li>
+                <li><a href="Territorios/Territorios.html">Territorios</a></li>
+                <li><a href="#">Lore Oficial</a></li>
+                <li><a href="#">Mapa</a></li>
+                <li><a href="https://ko-fi.com/minesandmonarchs">Donar</a></li>
+                <li id="nav-cuenta-li">
+                    <a href="#" id="nav-cuenta-btn" style="font-weight:bold">Entrar</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="pj-wrapper" id="pjWrapper">
+        <div class="pj-estado" id="pjEstado">
+            <div class="spinner"></div><br>Cargando personaje…
+        </div>
+    </div>
+
+    <footer>
+        <div class="socials">
+            <a href="#" class="discord" title="Discord"></a>
+            <a href="#" class="instagram" title="Instagram"></a>
+            <a href="#" class="tiktok" title="TikTok"></a>
+            <a href="#" class="x" title="X"></a>
+        </div>
+        <button class="apoyar">Apoyar servidor</button>
+        <div class="footer-text">
+            <small>© 2026 Mines & Monarch. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <link rel="stylesheet" href="cuenta-modal.css">
+    <script src="index.js"></script>
+    <script type="module">
+        import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getFirestore,
+                 doc, getDoc }     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
+            authDomain:        "minesandmonarch.firebaseapp.com",
+            projectId:         "minesandmonarch",
+            storageBucket:     "minesandmonarch.firebasestorage.app",
+            messagingSenderId: "379898851786",
+            appId:             "1:379898851786:web:b892cbf4d8508798d61f33"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db  = getFirestore(app);
+
+        /* ── Leer UID de la URL ── */
+        const params = new URLSearchParams(window.location.search);
+        const uid    = params.get('uid');
+
+        const wrapper = document.getElementById('pjWrapper');
+        const estado  = document.getElementById('pjEstado');
+
+        if (!uid) {
+            estado.textContent = 'No se especificó ningún personaje.';
+        } else {
+            try {
+                const snap = await getDoc(doc(db, 'usuarios', uid));
+
+                if (!snap.exists() || !snap.data().personaje) {
+                    estado.textContent = 'Este personaje no existe aún.';
+                } else {
+                    const d  = snap.data();
+                    const pj = d.personaje;
+
+                    /* Capitalizar helper */
+                    const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+
+                    wrapper.innerHTML = `
+                        <div class="pj-header">
+                            <h1 class="pj-nombre">⚜ ${pj.nombreRol}</h1>
+                            <p class="pj-id"># ${String(d.id).padStart(4,'0')} · ${d.rol}</p>
+                            <div class="pj-divider"></div>
+                        </div>
+
+                        <div class="pj-card">
+                            <p class="pj-card-titulo">Datos</p>
+                            <div class="pj-grid">
+                                <div class="pj-campo">
+                                    <span class="pj-campo-label">Discord</span>
+                                    <span class="pj-campo-valor">${d.discord || '—'}</span>
+                                </div>
+                                <div class="pj-campo">
+                                    <span class="pj-campo-label">Minecraft</span>
+                                    <span class="pj-campo-valor">${pj.nombreMC || '—'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pj-card">
+                            <p class="pj-card-titulo">Rol</p>
+                            <div class="pj-grid">
+                                <div class="pj-campo">
+                                    <span class="pj-campo-label">Nombre de rol</span>
+                                    <span class="pj-campo-valor">${pj.nombreRol}</span>
+                                </div>
+                                <div class="pj-campo">
+                                    <span class="pj-campo-label">Raza</span>
+                                    <span class="pj-campo-valor">${cap(pj.raza)}</span>
+                                </div>
+                                <div class="pj-campo">
+                                    <span class="pj-campo-label">Clase</span>
+                                    <span class="pj-campo-valor">${cap(pj.clase)}</span>
+                                </div>
+                                <div class="pj-campo">
+                                    <span class="pj-campo-label">Trabajo</span>
+                                    <span class="pj-campo-valor">${cap(pj.trabajo)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                estado.textContent = 'Error al cargar el personaje. Inténtalo de nuevo.';
+                console.error(err);
+            }
+        }
+    </script>
+    <script type="module" src="cuenta-modal.js"></script>
+</body>
+</html>

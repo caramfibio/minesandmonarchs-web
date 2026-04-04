@@ -139,8 +139,8 @@ function inyectar() {
           <p class="cm-error" id="googleError"></p>
         </div>
 
-        <!-- ── VISTA: Paso 2 — Personaje ── -->
-        <div class="cm-body" id="vistaPersonaje" style="display:none">
+        <!-- ── VISTA: Paso 2a — Datos ── -->
+        <div class="cm-body" id="vistaDatos" style="display:none">
           <p class="cm-section">Datos</p>
           <div class="cm-field">
             <label class="cm-label">Nombre de Discord <span>*</span></label>
@@ -150,7 +150,15 @@ function inyectar() {
             <label class="cm-label">Nombre de Minecraft <span>*</span></label>
             <input class="cm-input" type="text" id="pNombreMC" placeholder="Tu nick en MC">
           </div>
+          <p class="cm-error" id="datosError"></p>
+          <div class="cm-form-footer">
+            <button class="cm-btn-volver" id="datosCancelar">Cancelar</button>
+            <button class="cm-btn-submit" id="datosSiguiente">Siguiente →</button>
+          </div>
+        </div>
 
+        <!-- ── VISTA: Paso 2b — Rol ── -->
+        <div class="cm-body" id="vistaRol" style="display:none">
           <p class="cm-section">Rol</p>
           <div class="cm-field">
             <label class="cm-label">Nombre de rol <span>*</span></label>
@@ -180,7 +188,7 @@ function inyectar() {
           </div>
           <p class="cm-error" id="pError"></p>
           <div class="cm-form-footer">
-            <button class="cm-btn-volver" id="pCancelar">Cancelar</button>
+            <button class="cm-btn-volver" id="rolVolver">← Volver</button>
             <button class="cm-btn-submit" id="pGuardar">⚜ Crear personaje</button>
           </div>
         </div>
@@ -199,7 +207,7 @@ function inyectar() {
 /* ════════════════════════════════════════
    NAVEGACIÓN
    ════════════════════════════════════════ */
-const VISTAS = ['vistaGoogle','vistaPersonaje','cmExito'];
+const VISTAS = ['vistaGoogle','vistaDatos','vistaRol','cmExito'];
 
 function mostrar(id, titulo, sub) {
     VISTAS.forEach(v => {
@@ -288,11 +296,11 @@ async function loginGoogle() {
             document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
             document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
             mostrar('cmExito');
-            setTimeout(cerrar, 1800);
+            setTimeout(() => { window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`; }, 1800);
 
         } else {
-            /* ── Sin personaje → paso 2 ── */
-            mostrar('vistaPersonaje', 'Crea tu personaje', 'Paso 2 de 2 — Completa tu ficha');
+            /* ── Sin personaje → paso 2a ── */
+            mostrar('vistaDatos', 'Crea tu personaje', 'Paso 2 de 3 — Tus datos');
         }
 
     } catch (err) {
@@ -314,8 +322,6 @@ async function guardarPersonaje() {
     const clase     = document.getElementById('pClase').value;
     const trabajo   = document.getElementById('pTrabajo').value;
 
-    if (!discord)                return setError('pError', 'El nombre de Discord es obligatorio.');
-    if (!nombreMC)               return setError('pError', 'El nombre de Minecraft es obligatorio.');
     if (!nombreRol)              return setError('pError', 'El nombre de rol es obligatorio.');
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
@@ -345,7 +351,7 @@ async function guardarPersonaje() {
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
         mostrar('cmExito');
-        setTimeout(cerrar, 2000);
+        setTimeout(() => { window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`; }, 2000);
     } catch (err) {
         setError('pError', 'Error al guardar. Inténtalo de nuevo.');
         console.error(err);
@@ -361,6 +367,15 @@ async function cancelarPersonaje() {
     if (user) await signOut(auth);
     sessionStorage.removeItem('mm_usuario');
     cerrar();
+}
+
+function siguienteDatos() {
+    const discord  = document.getElementById('pDiscord').value.trim();
+    const nombreMC = document.getElementById('pNombreMC').value.trim();
+    if (!discord)  return setError('datosError', 'El nombre de Discord es obligatorio.');
+    if (!nombreMC) return setError('datosError', 'El nombre de Minecraft es obligatorio.');
+    setError('datosError', '');
+    mostrar('vistaRol', 'Crea tu personaje', 'Paso 3 de 3 — Tu rol');
 }
 
 /* ════════════════════════════════════════
@@ -395,6 +410,7 @@ function resetForm() {
         pClase.disabled  = true;
     }
     setError('googleError', '');
+    setError('datosError', '');
     setError('pError', '');
 }
 
@@ -423,7 +439,10 @@ document.addEventListener('DOMContentLoaded', () => {
     /* Botones */
     document.getElementById('optGoogle').addEventListener('click', loginGoogle);
     document.getElementById('optVolver').addEventListener('click', cerrar);
-    document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
+    document.getElementById('datosCancelar').addEventListener('click', cancelarPersonaje);
+    document.getElementById('datosSiguiente').addEventListener('click', siguienteDatos);
+    document.getElementById('rolVolver').addEventListener('click', () =>
+        mostrar('vistaDatos', 'Crea tu personaje', 'Paso 2 de 3 — Tus datos'));
     document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
 
     /* Filtro raza → clase */
