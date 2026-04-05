@@ -21,7 +21,7 @@ import { getFirestore,
 /* ── Firebase config ── */
 const firebaseConfig = {
     apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
-    authDomain:        "minesandmonarch.firebaseapp.com",
+    authDomain:        "caramfibio.github.io",
     projectId:         "minesandmonarch",
     storageBucket:     "minesandmonarch.firebasestorage.app",
     messagingSenderId: "379898851786",
