@@ -13,7 +13,8 @@ import { getAuth,
          onAuthStateChanged,
          signOut }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
-         doc, setDoc, getDoc }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         doc, setDoc, getDoc,
+         runTransaction }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
     apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
@@ -213,6 +214,17 @@ function setError(id, msg) {
 /* ════════════════════════════════════════
    FIRESTORE
    ════════════════════════════════════════ */
+async function nextId() {
+    const ref = doc(db, 'meta', 'contador_usuarios');
+    let id;
+    await runTransaction(db, async tx => {
+        const snap = await tx.get(ref);
+        id = snap.exists() ? snap.data().total + 1 : 1;
+        tx.set(ref, { total: id });
+    });
+    return id;
+}
+
 function guardarSesion(datos) {
     sessionStorage.setItem('mm_usuario', JSON.stringify(datos));
     const li = document.getElementById('nav-cuenta-li');
@@ -243,23 +255,23 @@ function guardarSesion(datos) {
    LOGIN CON GOOGLE
    ════════════════════════════════════════ */
 async function loginGoogle() {
+    /* Solo para usuarios que ya tienen personaje — verificar al entrar */
     setError('googleError', '');
     try {
         const result = await signInWithPopup(auth, provider);
-        _googleUser  = result.user;                          /* guardar referencia */
-        const snap   = await getDoc(doc(db, 'usuarios', _googleUser.uid));
-
+        const user   = result.user;
+        const snap   = await getDoc(doc(db, 'usuarios', user.uid));
         if (snap.exists() && snap.data().personaje) {
             const datos = snap.data();
-            guardarSesion({ uid: _googleUser.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
+            guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
             document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
             document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
             mostrar('cmExito');
             setTimeout(() => {
-                window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${_googleUser.uid}`;
+                window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`;
             }, 1800);
         } else {
-            mostrar('vistaPersonaje', 'Crea tu personaje', 'Paso 2 de 2 — Completa tu ficha');
+            mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
         }
     } catch (err) {
         if (err.code !== 'auth/popup-closed-by-user') {
@@ -285,18 +297,24 @@ async function guardarPersonaje() {
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
 
-    const user = _googleUser || auth.currentUser;           /* usar variable guardada */
-    if (!user) {
-        setError('pError', 'Sesión expirada. Vuelve a entrar con Google.');
-        mostrar('vistaGoogle', 'Cuenta', 'Accede con tu cuenta de Google');
+    /* Abrir popup AHORA — con token fresco inmediatamente guardamos */
+    let user;
+    try {
+        const result = await signInWithPopup(auth, provider);
+        user = result.user;
+    } catch (err) {
+        if (err.code !== 'auth/popup-closed-by-user') {
+            setError('pError', errMsg(err.code));
+        }
         return;
     }
+    const uid = user.uid;
 
     try {
-        const id  = user.uid.slice(0, 8);
+        const id  = await nextId();
         const rol = nombreRol.toLowerCase() === 'skyroft' ? ROL.admin : ROL.ciudadano;
 
-        await setDoc(doc(db, 'usuarios', user.uid), {
+        await setDoc(doc(db, 'usuarios', uid), {
             id,
             email:    user.email,
             discord,
@@ -305,12 +323,13 @@ async function guardarPersonaje() {
             personaje: { nombreRol, nombreMC, raza, clase, trabajo }
         });
 
-        guardarSesion({ uid: user.uid, nombreRol, id, rol });
+        sessionStorage.removeItem('mm_uid_pendiente');
+        guardarSesion({ uid: uid, nombreRol, id, rol });
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
         mostrar('cmExito');
         setTimeout(() => {
-            window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`;
+            window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${uid}`;
         }, 2000);
     } catch (err) {
         setError('pError', 'Error al guardar. Inténtalo de nuevo.');
