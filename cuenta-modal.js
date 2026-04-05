@@ -269,7 +269,7 @@ async function loginGoogle() {
             document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
             mostrar('cmExito');
             setTimeout(() => {
-                window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`;
+                window.location.href = `/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${user.uid}`;
             }, 1800);
         } else {
             /* Nuevo usuario: activamos el flag antes de mostrar el formulario */
@@ -327,7 +327,7 @@ async function guardarPersonaje() {
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
         mostrar('cmExito');
         setTimeout(() => {
-            window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${uid}`;
+            window.location.href = `/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${uid}`;
         }, 2000);
     } catch (err) {
         setError('pError', 'Error al guardar. Inténtalo de nuevo.');
