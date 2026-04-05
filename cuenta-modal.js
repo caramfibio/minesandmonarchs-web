@@ -264,6 +264,9 @@ function guardarSesion(datos) {
     }
 }
 
+/* Variable para guardar el usuario de Google entre pasos */
+let currentGoogleUser = null;
+
 /* ════════════════════════════════════════
    LOGIN CON GOOGLE
    ════════════════════════════════════════ */
@@ -272,6 +275,7 @@ async function loginGoogle() {
     try {
         const result = await signInWithPopup(auth, provider);
         const user   = result.user;
+        currentGoogleUser = user;
         const snap   = await getDoc(doc(db, 'usuarios', user.uid));
 
         if (snap.exists() && snap.data().personaje) {
@@ -317,7 +321,7 @@ async function guardarPersonaje() {
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
 
-    const user = auth.currentUser;
+    const user = currentGoogleUser || auth.currentUser;
     if (!user) {
         setError('pError', 'Sesión expirada. Vuelve a entrar con Google.');
         mostrar('vistaGoogle', 'Cuenta', 'Accede con tu cuenta de Google');
@@ -354,8 +358,9 @@ async function guardarPersonaje() {
    y no crea la cuenta
    ════════════════════════════════════════ */
 async function cancelarPersonaje() {
-    const user = auth.currentUser;
+    const user = currentGoogleUser || auth.currentUser;
     if (user) await signOut(auth);
+    currentGoogleUser = null;
     sessionStorage.removeItem('mm_usuario');
     cerrar();
 }
@@ -423,6 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('optGoogle').addEventListener('click', loginGoogle);
     document.getElementById('optVolver').addEventListener('click', cerrar);
     document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
+        
     document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
 
     /* Filtro raza → clase */
