@@ -13,8 +13,7 @@ import { getAuth,
          onAuthStateChanged,
          signOut }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
-         doc, setDoc, getDoc,
-         runTransaction }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         doc, setDoc, getDoc }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
     apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
@@ -214,17 +213,6 @@ function setError(id, msg) {
 /* ════════════════════════════════════════
    FIRESTORE
    ════════════════════════════════════════ */
-async function nextId() {
-    const ref = doc(db, 'meta', 'contador_usuarios');
-    let id;
-    await runTransaction(db, async tx => {
-        const snap = await tx.get(ref);
-        id = snap.exists() ? snap.data().total + 1 : 1;
-        tx.set(ref, { total: id });
-    });
-    return id;
-}
-
 function guardarSesion(datos) {
     sessionStorage.setItem('mm_usuario', JSON.stringify(datos));
     const li = document.getElementById('nav-cuenta-li');
@@ -305,7 +293,7 @@ async function guardarPersonaje() {
     }
 
     try {
-        const id  = await nextId();
+        const id  = user.uid.slice(0, 8);
         const rol = nombreRol.toLowerCase() === 'skyroft' ? ROL.admin : ROL.ciudadano;
 
         await setDoc(doc(db, 'usuarios', user.uid), {
