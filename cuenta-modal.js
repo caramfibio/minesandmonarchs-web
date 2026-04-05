@@ -1,27 +1,24 @@
 /* ============================================================
    cuenta-modal.js – Mines & Monarch · Modal de Cuenta
    Flujo:
-     1. Botón "Entrar con Google" → redirect a Google OAuth
-     2a. Usuario sin personaje   → paso 2 (datos + rol en una página)
-     2b. Usuario con personaje   → entra directamente
-   Roles: admin | escriba | ciudadano
+     1. Botón "Entrar con Google" → popup OAuth
+     2a. Nuevo usuario  → paso 2: formulario con sección Datos + Rol
+     2b. Usuario existe → entra directamente
    ============================================================ */
 
-import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth,
-         signInWithRedirect,
-         getRedirectResult,
+         signInWithPopup,
          GoogleAuthProvider,
          onAuthStateChanged,
-         signOut }             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+         signOut }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
          doc, setDoc, getDoc,
-         runTransaction }      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         runTransaction }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-/* ── Firebase config ── */
 const firebaseConfig = {
     apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
-    authDomain:        "caramfibio.github.io",
+    authDomain:        "minesandmonarch.firebaseapp.com",
     projectId:         "minesandmonarch",
     storageBucket:     "minesandmonarch.firebasestorage.app",
     messagingSenderId: "379898851786",
@@ -33,9 +30,6 @@ const auth     = getAuth(app);
 const db       = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-/* ════════════════════════════════════════
-   ENUMS
-   ════════════════════════════════════════ */
 const ROL = { admin: 'admin', escriba: 'escriba', ciudadano: 'ciudadano' };
 
 const RAZAS = {
@@ -90,14 +84,16 @@ const TRABAJOS = {
 const opts = obj => Object.entries(obj)
     .map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
 
+/* ── Usuario guardado tras el popup para no perder la referencia ── */
+let _googleUser = null;
+
 /* ════════════════════════════════════════
-   HTML
+   HTML – solo dos vistas: vistaGoogle y vistaPersonaje
    ════════════════════════════════════════ */
 function inyectar() {
     document.body.insertAdjacentHTML('beforeend', `
     <div class="cm-overlay" id="cmOverlay">
       <div class="cm-box">
-
         <div class="cm-header">
           <div class="cm-header-deco"></div>
           <button class="cm-close" id="cmClose">✕</button>
@@ -105,7 +101,7 @@ function inyectar() {
           <p class="cm-subtitulo" id="cmSub">Accede con tu cuenta de Google</p>
         </div>
 
-        <!-- ── VISTA 1: Login con Google ── -->
+        <!-- VISTA 1: botón Google -->
         <div class="cm-body" id="vistaGoogle">
           <div class="cm-opciones">
             <button class="cm-opcion-btn" id="optGoogle">
@@ -128,7 +124,7 @@ function inyectar() {
           <p class="cm-error" id="googleError"></p>
         </div>
 
-        <!-- ── VISTA 2: Crear personaje (datos + rol en una sola página) ── -->
+        <!-- VISTA 2: formulario con sección Datos arriba y Rol abajo -->
         <div class="cm-body" id="vistaPersonaje" style="display:none">
           <p class="cm-section">Datos</p>
           <div class="cm-field">
@@ -174,13 +170,12 @@ function inyectar() {
           </div>
         </div>
 
-        <!-- ── ÉXITO ── -->
+        <!-- ÉXITO -->
         <div class="cm-exito" id="cmExito">
           <div class="cm-exito-icono">⚜</div>
           <h3 id="exitoTitulo">¡Hecho!</h3>
           <p id="exitoTexto"></p>
         </div>
-
       </div>
     </div>`);
 }
@@ -188,7 +183,7 @@ function inyectar() {
 /* ════════════════════════════════════════
    NAVEGACIÓN
    ════════════════════════════════════════ */
-const VISTAS = ['vistaGoogle','vistaPersonaje','cmExito'];
+const VISTAS = ['vistaGoogle', 'vistaPersonaje', 'cmExito'];
 
 function mostrar(id, titulo, sub) {
     VISTAS.forEach(v => {
@@ -212,7 +207,7 @@ function setError(id, msg) {
 }
 
 /* ════════════════════════════════════════
-   FIRESTORE HELPERS
+   FIRESTORE
    ════════════════════════════════════════ */
 async function nextId() {
     const ref = doc(db, 'meta', 'contador_usuarios');
@@ -252,50 +247,31 @@ function guardarSesion(datos) {
 }
 
 /* ════════════════════════════════════════
-   LOGIN CON GOOGLE (redirect, funciona en GitHub Pages)
+   LOGIN CON GOOGLE
    ════════════════════════════════════════ */
 async function loginGoogle() {
     setError('googleError', '');
     try {
-        await signInWithRedirect(auth, provider);
-    } catch (err) {
-        setError('googleError', errMsg(err.code));
-    }
-}
-
-/* Se ejecuta al cargar la página — gestiona el retorno del redirect */
-async function procesarRedirect() {
-    try {
-        const result = await getRedirectResult(auth);
-        if (!result) return; /* no venimos de un redirect */
-
-        const user = result.user;
-        const snap = await getDoc(doc(db, 'usuarios', user.uid));
+        const result = await signInWithPopup(auth, provider);
+        _googleUser  = result.user;                          /* guardar referencia */
+        const snap   = await getDoc(doc(db, 'usuarios', _googleUser.uid));
 
         if (snap.exists() && snap.data().personaje) {
-            /* Usuario ya registrado → entrar directamente */
             const datos = snap.data();
-            guardarSesion({
-                uid:       user.uid,
-                nombreRol: datos.personaje.nombreRol,
-                id:        datos.id,
-                rol:       datos.rol
-            });
+            guardarSesion({ uid: _googleUser.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
             document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
             document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
             mostrar('cmExito');
             setTimeout(() => {
-                window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`;
+                window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${_googleUser.uid}`;
             }, 1800);
         } else {
-            /* Nuevo usuario → mostrar formulario paso 2 */
-            resetForm();
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Paso 2 de 2 — Completa tu ficha');
-            document.getElementById('cmOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
         }
     } catch (err) {
-        console.error('Error al procesar redirect de Google:', err);
+        if (err.code !== 'auth/popup-closed-by-user') {
+            setError('googleError', errMsg(err.code));
+        }
     }
 }
 
@@ -316,7 +292,7 @@ async function guardarPersonaje() {
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
 
-    const user = auth.currentUser;
+    const user = _googleUser || auth.currentUser;           /* usar variable guardada */
     if (!user) {
         setError('pError', 'Sesión expirada. Vuelve a entrar con Google.');
         mostrar('vistaGoogle', 'Cuenta', 'Accede con tu cuenta de Google');
@@ -337,7 +313,6 @@ async function guardarPersonaje() {
         });
 
         guardarSesion({ uid: user.uid, nombreRol, id, rol });
-
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
         mostrar('cmExito');
@@ -351,25 +326,24 @@ async function guardarPersonaje() {
 }
 
 /* ════════════════════════════════════════
-   CANCELAR
+   CANCELAR / CERRAR
    ════════════════════════════════════════ */
 async function cancelarPersonaje() {
-    const user = auth.currentUser;
+    const user = _googleUser || auth.currentUser;
     if (user) await signOut(auth);
+    _googleUser = null;
     sessionStorage.removeItem('mm_usuario');
     cerrar();
 }
 
-/* ════════════════════════════════════════
-   ABRIR / CERRAR
-   ════════════════════════════════════════ */
 function cerrar() {
-    const user = auth.currentUser;
+    const user = _googleUser || auth.currentUser;
     if (user) {
         getDoc(doc(db, 'usuarios', user.uid)).then(snap => {
             if (!snap.exists() || !snap.data().personaje) {
                 signOut(auth);
                 sessionStorage.removeItem('mm_usuario');
+                _googleUser = null;
             }
         });
     }
@@ -387,8 +361,7 @@ function resetForm() {
     const pClase = document.getElementById('pClase');
     if (pClase) {
         pClase.innerHTML = '<option value="" disabled selected>Selecciona primero la raza…</option>';
-        pClase.value     = '';
-        pClase.disabled  = true;
+        pClase.value = ''; pClase.disabled = true;
     }
     setError('googleError', '');
     setError('pError', '');
@@ -406,7 +379,6 @@ window.abrirModalCuenta = function () {
    ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
     inyectar();
-    procesarRedirect(); /* gestiona el retorno del redirect de Google */
 
     document.getElementById('cmClose').addEventListener('click', cerrar);
     document.getElementById('cmOverlay').addEventListener('click', e => {
@@ -421,29 +393,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
     document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
 
-    /* Filtro raza → clase */
     document.getElementById('pRaza').addEventListener('change', function () {
         const select = document.getElementById('pClase');
         const clases = CLASES_POR_RAZA[this.value] || [];
         select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
             clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
-        select.value    = '';
-        select.disabled = false;
+        select.value = ''; select.disabled = false;
     });
 
-    /* Restaurar sesión si Firebase ya tiene usuario con personaje */
     onAuthStateChanged(auth, async user => {
         if (!user) return;
         try {
             const snap = await getDoc(doc(db, 'usuarios', user.uid));
             if (snap.exists() && snap.data().personaje) {
                 const datos = snap.data();
-                guardarSesion({
-                    uid:       user.uid,
-                    nombreRol: datos.personaje.nombreRol,
-                    id:        datos.id,
-                    rol:       datos.rol
-                });
+                guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
             } else if (!snap.data()?.personaje) {
                 await signOut(auth);
             }
@@ -451,9 +415,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/* ── Mensajes de error ── */
 function errMsg(code) {
     return ({
+        'auth/popup-blocked':          'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.',
+        'auth/popup-closed-by-user':   '',
         'auth/network-request-failed': 'Error de red. Comprueba tu conexión.',
         'auth/too-many-requests':      'Demasiados intentos. Espera un momento.',
         'auth/unauthorized-domain':    'Dominio no autorizado en Firebase.'
