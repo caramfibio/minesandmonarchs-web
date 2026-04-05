@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ⚜ ${sesion.nombreRol || sesion.discord}
                 </button>
                 <ul class="dropdown-content" style="right:0;left:auto;min-width:160px;">
-                    <li><a href="Cuenta/Cuenta.html">Mi cartilla</a></li>
+                    <li><a href="/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${sesion.uid}">Mi cartilla</a></li>
                     <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
                 </ul>`;
 
