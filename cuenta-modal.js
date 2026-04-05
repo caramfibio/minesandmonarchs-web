@@ -299,6 +299,7 @@ async function guardarPersonaje() {
 
     /* Abrir popup AHORA — con token fresco inmediatamente guardamos */
     const user = auth.currentUser;
+    console.log('Usuario actual:', user);  // ← AÑADE ESTA LÍNEA
     if (!user) {
         setError('pError', 'No hay sesión activa. Vuelve a iniciar sesión.');
         return;
