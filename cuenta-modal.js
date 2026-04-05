@@ -77,7 +77,7 @@ const CLASES_POR_RAZA = {
     elfolunar:    ['magoender','rogue','bardo'],
     ogro:         ['magosangre','angler'],
     revenant:     ['granmagooscuro','magoinvocador','magosangre','magoender'],
-    ribbit:     ['Nice Guy']
+    ribbit:     ['niceGuy']
 };
 const TRABAJOS = {
     constructor:"Constructor", inutilerrante:"Inútil Errante",
