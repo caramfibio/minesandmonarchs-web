@@ -1,28 +1,22 @@
 /* ============================================================
    cuenta-modal.js – Mines & Monarch · Modal de Cuenta
-   ============================================================
    Flujo:
-     1. Botón "Entrar con Google"  → Google OAuth popup
-     2a. Usuario sin personaje     → paso 2 (nombre rol, MC, raza, clase, trabajo)
-     2b. Usuario con personaje     → entra directamente
-   
-   Si cierra sin completar paso 2:
-     - La sesión de Google queda en Auth
-     - Pero NO hay documento en Firestore
-     - La próxima vez que entre vuelve al paso 2
-
+     1. Botón "Entrar con Google" → redirect a Google OAuth
+     2a. Usuario sin personaje   → paso 2 (datos + rol en una página)
+     2b. Usuario con personaje   → entra directamente
    Roles: admin | escriba | ciudadano
    ============================================================ */
 
-import { initializeApp }          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth,
-         signInWithPopup,
+         signInWithRedirect,
+         getRedirectResult,
          GoogleAuthProvider,
          onAuthStateChanged,
-         signOut }                from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+         signOut }             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
          doc, setDoc, getDoc,
-         runTransaction }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         runTransaction }      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 /* ── Firebase config ── */
 const firebaseConfig = {
@@ -40,13 +34,10 @@ const db       = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 /* ════════════════════════════════════════
-   ENUM DE ROLES
+   ENUMS
    ════════════════════════════════════════ */
 const ROL = { admin: 'admin', escriba: 'escriba', ciudadano: 'ciudadano' };
 
-/* ════════════════════════════════════════
-   ENUMS DE PERSONAJE
-   ════════════════════════════════════════ */
 const RAZAS = {
     humano:"Humano", elfobosque:"Elfo del Bosque", alfiq:"Alfiq",
     goblin:"Goblin", enano:"Enano", aracnido:"Arácnido", yeti:"Yeti",
@@ -68,8 +59,6 @@ const CLASES = {
     bestiasalvaje:"Bestia Salvaje", angler:"Angler",
     magoeldritch:"Mago del Eldritch"
 };
-
-/*── Clases disponibles por raza ── */
 const CLASES_POR_RAZA = {
     humano:       ['cazador','guerrero','tanque'],
     elfobosque:   ['cazador','guardabosques','curador'],
@@ -116,7 +105,7 @@ function inyectar() {
           <p class="cm-subtitulo" id="cmSub">Accede con tu cuenta de Google</p>
         </div>
 
-        <!-- ── VISTA: Login/Registro con Google ── -->
+        <!-- ── VISTA 1: Login con Google ── -->
         <div class="cm-body" id="vistaGoogle">
           <div class="cm-opciones">
             <button class="cm-opcion-btn" id="optGoogle">
@@ -139,7 +128,7 @@ function inyectar() {
           <p class="cm-error" id="googleError"></p>
         </div>
 
-        <!-- ── VISTA: Paso 2 — Personaje ── -->
+        <!-- ── VISTA 2: Crear personaje (datos + rol en una sola página) ── -->
         <div class="cm-body" id="vistaPersonaje" style="display:none">
           <p class="cm-section">Datos</p>
           <div class="cm-field">
@@ -150,6 +139,7 @@ function inyectar() {
             <label class="cm-label">Nombre de Minecraft <span>*</span></label>
             <input class="cm-input" type="text" id="pNombreMC" placeholder="Tu nick en MC">
           </div>
+
           <p class="cm-section">Rol</p>
           <div class="cm-field">
             <label class="cm-label">Nombre de rol <span>*</span></label>
@@ -237,9 +227,6 @@ async function nextId() {
 
 function guardarSesion(datos) {
     sessionStorage.setItem('mm_usuario', JSON.stringify(datos));
-    const btn = document.getElementById('nav-cuenta-btn');
-    if (btn) btn.textContent = `⚜ ${datos.nombreRol}`;
-    /* Si el li no tiene dropdown aún, reconstruirlo */
     const li = document.getElementById('nav-cuenta-li');
     if (li && !li.classList.contains('dropdown')) {
         li.classList.add('dropdown');
@@ -264,22 +251,29 @@ function guardarSesion(datos) {
     }
 }
 
-/* Variable para guardar el usuario de Google entre pasos */
-let currentGoogleUser = null;
-
 /* ════════════════════════════════════════
-   LOGIN CON GOOGLE
+   LOGIN CON GOOGLE (redirect, funciona en GitHub Pages)
    ════════════════════════════════════════ */
 async function loginGoogle() {
     setError('googleError', '');
     try {
-        const result = await signInWithPopup(auth, provider);
-        const user   = result.user;
-        currentGoogleUser = user;
-        const snap   = await getDoc(doc(db, 'usuarios', user.uid));
+        await signInWithRedirect(auth, provider);
+    } catch (err) {
+        setError('googleError', errMsg(err.code));
+    }
+}
+
+/* Se ejecuta al cargar la página — gestiona el retorno del redirect */
+async function procesarRedirect() {
+    try {
+        const result = await getRedirectResult(auth);
+        if (!result) return; /* no venimos de un redirect */
+
+        const user = result.user;
+        const snap = await getDoc(doc(db, 'usuarios', user.uid));
 
         if (snap.exists() && snap.data().personaje) {
-            /* ── Usuario con personaje completo → entra ── */
+            /* Usuario ya registrado → entrar directamente */
             const datos = snap.data();
             guardarSesion({
                 uid:       user.uid,
@@ -287,41 +281,42 @@ async function loginGoogle() {
                 id:        datos.id,
                 rol:       datos.rol
             });
-
             document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
             document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
             mostrar('cmExito');
-            setTimeout(() => { window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`; }, 1800);
-
+            setTimeout(() => {
+                window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`;
+            }, 1800);
         } else {
-            /* ── Sin personaje → paso 2a ── */
+            /* Nuevo usuario → mostrar formulario paso 2 */
+            resetForm();
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Paso 2 de 2 — Completa tu ficha');
+            document.getElementById('cmOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
-
     } catch (err) {
-        if (err.code !== 'auth/popup-closed-by-user') {
-            setError('googleError', errMsg(err.code));
-        }
+        console.error('Error al procesar redirect de Google:', err);
     }
 }
 
 /* ════════════════════════════════════════
-   GUARDAR PERSONAJE (paso 2)
-   Solo guarda si el usuario tiene sesión activa de Google
+   GUARDAR PERSONAJE
    ════════════════════════════════════════ */
 async function guardarPersonaje() {
     const discord   = document.getElementById('pDiscord').value.trim();
-    const nombreRol = document.getElementById('pNombreRol').value.trim();
     const nombreMC  = document.getElementById('pNombreMC').value.trim();
+    const nombreRol = document.getElementById('pNombreRol').value.trim();
     const raza      = document.getElementById('pRaza').value;
     const clase     = document.getElementById('pClase').value;
     const trabajo   = document.getElementById('pTrabajo').value;
 
-    if (!nombreRol)              return setError('pError', 'El nombre de rol es obligatorio.');
+    if (!discord)                    return setError('pError', 'El nombre de Discord es obligatorio.');
+    if (!nombreMC)                   return setError('pError', 'El nombre de Minecraft es obligatorio.');
+    if (!nombreRol)                  return setError('pError', 'El nombre de rol es obligatorio.');
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
 
-    const user = currentGoogleUser || auth.currentUser;
+    const user = auth.currentUser;
     if (!user) {
         setError('pError', 'Sesión expirada. Vuelve a entrar con Google.');
         mostrar('vistaGoogle', 'Cuenta', 'Accede con tu cuenta de Google');
@@ -346,7 +341,9 @@ async function guardarPersonaje() {
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
         mostrar('cmExito');
-        setTimeout(() => { window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`; }, 2000);
+        setTimeout(() => {
+            window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`;
+        }, 2000);
     } catch (err) {
         setError('pError', 'Error al guardar. Inténtalo de nuevo.');
         console.error(err);
@@ -354,23 +351,19 @@ async function guardarPersonaje() {
 }
 
 /* ════════════════════════════════════════
-   CANCELAR PASO 2 — cierra sesión de Google
-   y no crea la cuenta
+   CANCELAR
    ════════════════════════════════════════ */
 async function cancelarPersonaje() {
-    const user = currentGoogleUser || auth.currentUser;
+    const user = auth.currentUser;
     if (user) await signOut(auth);
-    currentGoogleUser = null;
     sessionStorage.removeItem('mm_usuario');
     cerrar();
 }
-
 
 /* ════════════════════════════════════════
    ABRIR / CERRAR
    ════════════════════════════════════════ */
 function cerrar() {
-    /* Si hay sesión de Google pero sin personaje, cerrar sesión */
     const user = auth.currentUser;
     if (user) {
         getDoc(doc(db, 'usuarios', user.uid)).then(snap => {
@@ -398,7 +391,6 @@ function resetForm() {
         pClase.disabled  = true;
     }
     setError('googleError', '');
-    
     setError('pError', '');
 }
 
@@ -414,8 +406,8 @@ window.abrirModalCuenta = function () {
    ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
     inyectar();
+    procesarRedirect(); /* gestiona el retorno del redirect de Google */
 
-    /* Cerrar — si está en paso 2, cancela la cuenta */
     document.getElementById('cmClose').addEventListener('click', cerrar);
     document.getElementById('cmOverlay').addEventListener('click', e => {
         if (e.target.id === 'cmOverlay') cerrar();
@@ -424,11 +416,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape' && document.getElementById('cmOverlay').classList.contains('active')) cerrar();
     });
 
-    /* Botones */
     document.getElementById('optGoogle').addEventListener('click', loginGoogle);
     document.getElementById('optVolver').addEventListener('click', cerrar);
     document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
-        
     document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
 
     /* Filtro raza → clase */
@@ -441,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
         select.disabled = false;
     });
 
-    /* Sincronizar nav al cargar si Firebase ya tiene sesión con personaje */
+    /* Restaurar sesión si Firebase ya tiene usuario con personaje */
     onAuthStateChanged(auth, async user => {
         if (!user) return;
         try {
@@ -454,8 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     id:        datos.id,
                     rol:       datos.rol
                 });
-            } else if (snap.exists && !snap.data()?.personaje) {
-                /* Tiene sesión Google pero sin personaje → no restaurar sesión */
+            } else if (!snap.data()?.personaje) {
                 await signOut(auth);
             }
         } catch (_) {}
@@ -465,8 +454,6 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ── Mensajes de error ── */
 function errMsg(code) {
     return ({
-        'auth/popup-blocked':          'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.',
-        'auth/popup-closed-by-user':   '',
         'auth/network-request-failed': 'Error de red. Comprueba tu conexión.',
         'auth/too-many-requests':      'Demasiados intentos. Espera un momento.',
         'auth/unauthorized-domain':    'Dominio no autorizado en Firebase.'
