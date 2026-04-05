@@ -298,14 +298,9 @@ async function guardarPersonaje() {
     setError('pError', '');
 
     /* Abrir popup AHORA — con token fresco inmediatamente guardamos */
-    let user;
-    try {
-        const result = await signInWithPopup(auth, provider);
-        user = result.user;
-    } catch (err) {
-        if (err.code !== 'auth/popup-closed-by-user') {
-            setError('pError', errMsg(err.code));
-        }
+    const user = auth.currentUser;
+    if (!user) {
+        setError('pError', 'No hay sesión activa. Vuelve a iniciar sesión.');
         return;
     }
     const uid = user.uid;
