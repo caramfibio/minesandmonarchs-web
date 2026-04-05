@@ -91,6 +91,8 @@ const opts = obj => Object.entries(obj)
 
 /* ── Usuario guardado tras el popup para no perder la referencia ── */
 let _googleUser = null;
+/* ── Flag para evitar que onAuthStateChanged haga signOut mientras creamos personaje ── */
+let _creandoPersonaje = false;
 
 /* ════════════════════════════════════════
    HTML – solo dos vistas: vistaGoogle y vistaPersonaje
@@ -255,7 +257,6 @@ function guardarSesion(datos) {
    LOGIN CON GOOGLE
    ════════════════════════════════════════ */
 async function loginGoogle() {
-    /* Solo para usuarios que ya tienen personaje — verificar al entrar */
     setError('googleError', '');
     try {
         const result = await signInWithPopup(auth, provider);
@@ -271,6 +272,8 @@ async function loginGoogle() {
                 window.location.href = `/minesandmonarchs-web/mundo/personajes/personaje.html?uid=${user.uid}`;
             }, 1800);
         } else {
+            /* Nuevo usuario: activamos el flag antes de mostrar el formulario */
+            _creandoPersonaje = true;
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
         }
     } catch (err) {
@@ -297,9 +300,7 @@ async function guardarPersonaje() {
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
 
-    /* Abrir popup AHORA — con token fresco inmediatamente guardamos */
     const user = auth.currentUser;
-    console.log('Usuario actual:', user);  // ← AÑADE ESTA LÍNEA
     if (!user) {
         setError('pError', 'No hay sesión activa. Vuelve a iniciar sesión.');
         return;
@@ -319,6 +320,7 @@ async function guardarPersonaje() {
             personaje: { nombreRol, nombreMC, raza, clase, trabajo }
         });
 
+        _creandoPersonaje = false;
         sessionStorage.removeItem('mm_uid_pendiente');
         guardarSesion({ uid: uid, nombreRol, id, rol });
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
@@ -337,6 +339,7 @@ async function guardarPersonaje() {
    CANCELAR / CERRAR
    ════════════════════════════════════════ */
 async function cancelarPersonaje() {
+    _creandoPersonaje = false;
     const user = _googleUser || auth.currentUser;
     if (user) await signOut(auth);
     _googleUser = null;
@@ -349,6 +352,7 @@ function cerrar() {
     if (user) {
         getDoc(doc(db, 'usuarios', user.uid)).then(snap => {
             if (!snap.exists() || !snap.data().personaje) {
+                _creandoPersonaje = false;
                 signOut(auth);
                 sessionStorage.removeItem('mm_usuario');
                 _googleUser = null;
@@ -416,7 +420,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (snap.exists() && snap.data().personaje) {
                 const datos = snap.data();
                 guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
-            } else if (!snap.data()?.personaje) {
+            } else if (!snap.data()?.personaje && !_creandoPersonaje) {
+                /* Solo cerramos sesión si NO estamos en medio de crear el personaje */
                 await signOut(auth);
             }
         } catch (_) {}
