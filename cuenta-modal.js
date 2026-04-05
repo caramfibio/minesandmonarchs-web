@@ -38,7 +38,9 @@ const RAZAS = {
     demonio:"Demonio", sirena:"Sirena", valquiria:"Valquiria",
     hadapixie:"Hada Pixie", hadafae:"Hada Fae", granelfo:"Gran Elfo",
     gorgona:"Gorgona", victimapeste:"Víctima de la Peste",
-    banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro", revenant:"Revenant"
+    banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro", revenant:"Revenant",
+    
+    ribbit:"Ribbit" 
 };
 const CLASES = {
     cazador:"Cazador", guardabosques:"Guardabosques", curador:"Curador",
@@ -51,7 +53,9 @@ const CLASES = {
     guerrero:"Guerrero", bardo:"Bardo", guerrerodelmar:"Guerrero del Mar",
     carterista:"Carterista", paladin:"Paladín", ingeniero:"Ingeniero",
     bestiasalvaje:"Bestia Salvaje", angler:"Angler",
-    magoeldritch:"Mago del Eldritch"
+    magoeldritch:"Mago del Eldritch", 
+
+    niceGuy:"Nice Guy" 
 };
 const CLASES_POR_RAZA = {
     humano:       ['cazador','guerrero','tanque'],
@@ -72,7 +76,8 @@ const CLASES_POR_RAZA = {
     banshee:      ['magoender','magoeldritch'],
     elfolunar:    ['magoender','rogue','bardo'],
     ogro:         ['magosangre','angler'],
-    revenant:     ['granmagooscuro','magoinvocador','magosangre','magoender']
+    revenant:     ['granmagooscuro','magoinvocador','magosangre','magoender'],
+    ribbit:     ['Nice Guy']
 };
 const TRABAJOS = {
     constructor:"Constructor", inutilerrante:"Inútil Errante",
