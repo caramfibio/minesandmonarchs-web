@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="/minesandmonarchs-web/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración – Mines & Monarch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Admin/admin.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h2>Mines & Monarch</h2>
+        </div>
+        <nav class="header-right">
+            <ul>
+                <li><a href="/minesandmonarchs-web/">Inicio</a></li>
+                <li id="nav-admin-nombre" style="color:#ffd700;font-weight:bold;padding:10px 15px;">⚜ Admin</li>
+                <li><a href="#" id="btnCerrarSesionAdmin">Cerrar sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <div class="admin-header">
+            <h1>⚜ Panel de Administración</h1>
+            <p class="admin-sub">Gestión de personajes del reino</p>
+        </div>
+
+        <div class="admin-stats" id="adminStats">
+            <div class="stat-card">
+                <span class="stat-num" id="totalPersonajes">—</span>
+                <span class="stat-label">Personajes</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num" id="totalAdmins">—</span>
+                <span class="stat-label">Admins</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num" id="totalCiudadanos">—</span>
+                <span class="stat-label">Ciudadanos</span>
+            </div>
+        </div>
+
+        <div class="admin-search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre de rol, Discord o Minecraft…" />
+        </div>
+
+        <div class="admin-tabla-wrap">
+            <div id="loadingMsg" class="admin-loading">Cargando personajes…</div>
+            <table class="admin-tabla" id="adminTabla" style="display:none">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre de Rol</th>
+                        <th>Discord</th>
+                        <th>Minecraft</th>
+                        <th>Raza</th>
+                        <th>Clase</th>
+                        <th>Trabajo</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTbody"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- MODAL EDITAR -->
+    <div class="adm-overlay" id="editOverlay">
+        <div class="adm-modal">
+            <div class="adm-modal-header">
+                <h3>✏️ Editar Personaje</h3>
+                <button class="adm-close" id="editClose">✕</button>
+            </div>
+            <div class="adm-modal-body">
+                <input type="hidden" id="editUid">
+                <div class="adm-field">
+                    <label>Nombre de Discord</label>
+                    <input type="text" id="editDiscord">
+                </div>
+                <div class="adm-field">
+                    <label>Nombre de Minecraft</label>
+                    <input type="text" id="editNombreMC">
+                </div>
+                <div class="adm-field">
+                    <label>Nombre de Rol</label>
+                    <input type="text" id="editNombreRol">
+                </div>
+                <div class="adm-row">
+                    <div class="adm-field">
+                        <label>Raza</label>
+                        <select id="editRaza"></select>
+                    </div>
+                    <div class="adm-field">
+                        <label>Clase</label>
+                        <select id="editClase"></select>
+                    </div>
+                    <div class="adm-field">
+                        <label>Trabajo</label>
+                        <select id="editTrabajo"></select>
+                    </div>
+                </div>
+                <div class="adm-field">
+                    <label>Rol del sistema</label>
+                    <select id="editRolSistema">
+                        <option value="ciudadano">Ciudadano</option>
+                        <option value="escriba">Escriba</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <p class="adm-error" id="editError"></p>
+            </div>
+            <div class="adm-modal-footer">
+                <button class="adm-btn-cancel" id="editCancel">Cancelar</button>
+                <button class="adm-btn-save" id="editSave">⚜ Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMAR ELIMINAR -->
+    <div class="adm-overlay" id="deleteOverlay">
+        <div class="adm-modal adm-modal-small">
+            <div class="adm-modal-header">
+                <h3>🗑️ Eliminar Personaje</h3>
+                <button class="adm-close" id="deleteClose">✕</button>
+            </div>
+            <div class="adm-modal-body">
+                <p class="adm-confirm-txt">¿Seguro que quieres eliminar a <strong id="deleteNombre"></strong>? Esta acción no se puede deshacer.</p>
+                <input type="hidden" id="deleteUid">
+            </div>
+            <div class="adm-modal-footer">
+                <button class="adm-btn-cancel" id="deleteCancel">Cancelar</button>
+                <button class="adm-btn-delete" id="deleteConfirm">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="Admin/admin.js"></script>
+</body>
+</html>

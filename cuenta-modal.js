@@ -4,6 +4,8 @@
      1. Botón "Entrar con Google" → popup OAuth
      2a. Nuevo usuario  → paso 2: formulario con sección Datos + Rol
      2b. Usuario existe → entra directamente
+        - Si es admin → redirige al panel de admin
+        - Si es ciudadano/escriba → redirige a su cartilla
    ============================================================ */
 
 import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
@@ -39,8 +41,7 @@ const RAZAS = {
     hadapixie:"Hada Pixie", hadafae:"Hada Fae", granelfo:"Gran Elfo",
     gorgona:"Gorgona", victimapeste:"Víctima de la Peste",
     banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro", revenant:"Revenant",
-    
-    ribbit:"Ribbit" 
+    ribbit:"Ribbit"
 };
 const CLASES = {
     cazador:"Cazador", guardabosques:"Guardabosques", curador:"Curador",
@@ -53,9 +54,8 @@ const CLASES = {
     guerrero:"Guerrero", bardo:"Bardo", guerrerodelmar:"Guerrero del Mar",
     carterista:"Carterista", paladin:"Paladín", ingeniero:"Ingeniero",
     bestiasalvaje:"Bestia Salvaje", angler:"Angler",
-    magoeldritch:"Mago del Eldritch", 
-
-    niceGuy:"Nice Guy" 
+    magoeldritch:"Mago del Eldritch",
+    niceGuy:"Nice Guy"
 };
 const CLASES_POR_RAZA = {
     humano:       ['cazador','guerrero','tanque'],
@@ -77,7 +77,7 @@ const CLASES_POR_RAZA = {
     elfolunar:    ['magoender','rogue','bardo'],
     ogro:         ['magosangre','angler'],
     revenant:     ['granmagooscuro','magoinvocador','magosangre','magoender'],
-    ribbit:     ['niceGuy']
+    ribbit:       ['niceGuy']
 };
 const TRABAJOS = {
     constructor:"Constructor", inutilerrante:"Inútil Errante",
@@ -89,13 +89,21 @@ const TRABAJOS = {
 const opts = obj => Object.entries(obj)
     .map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
 
-/* ── Usuario guardado tras el popup para no perder la referencia ── */
-let _googleUser = null;
-/* ── Flag para evitar que onAuthStateChanged haga signOut mientras creamos personaje ── */
+/* ── Estado ── */
+let _googleUser       = null;
 let _creandoPersonaje = false;
 
+/* ── Redirección según rol ── */
+function redirigirSegunRol(rol, uid) {
+    if (rol === 'admin') {
+        window.location.href = `/minesandmonarchs-web/Admin/admin.html`;
+    } else {
+        window.location.href = `/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${uid}`;
+    }
+}
+
 /* ════════════════════════════════════════
-   HTML – solo dos vistas: vistaGoogle y vistaPersonaje
+   HTML
    ════════════════════════════════════════ */
 function inyectar() {
     document.body.insertAdjacentHTML('beforeend', `
@@ -131,7 +139,7 @@ function inyectar() {
           <p class="cm-error" id="googleError"></p>
         </div>
 
-        <!-- VISTA 2: formulario con sección Datos arriba y Rol abajo -->
+        <!-- VISTA 2: formulario -->
         <div class="cm-body" id="vistaPersonaje" style="display:none">
           <p class="cm-section">Datos</p>
           <div class="cm-field">
@@ -231,13 +239,15 @@ function guardarSesion(datos) {
     sessionStorage.setItem('mm_usuario', JSON.stringify(datos));
     const li = document.getElementById('nav-cuenta-li');
     if (li && !li.classList.contains('dropdown')) {
+        const esAdmin = datos.rol === 'admin';
         li.classList.add('dropdown');
         li.innerHTML = `
             <button class="dropbtn" style="font-weight:bold;color:#ffd700;display:flex;align-items:center;gap:6px">
                 ⚜ ${datos.nombreRol}
             </button>
             <ul class="dropdown-content" style="right:0;left:auto;min-width:160px;">
-                <li><a href="Cuenta/Cuenta.html">Mi cartilla</a></li>
+                <li><a href="/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${datos.uid}">Mi cartilla</a></li>
+                ${esAdmin ? `<li><a href="/minesandmonarchs-web/Admin/admin.html" style="color:#ffd700">⚙️ Panel Admin</a></li>` : ''}
                 <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
             </ul>`;
         li.querySelector('.dropbtn').addEventListener('click', e => {
@@ -266,13 +276,12 @@ async function loginGoogle() {
             const datos = snap.data();
             guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
             document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
-            document.getElementById('exitoTexto').textContent  = 'Sesión iniciada correctamente.';
+            document.getElementById('exitoTexto').textContent  = datos.rol === 'admin'
+                ? 'Redirigiendo al panel de administración…'
+                : 'Sesión iniciada correctamente.';
             mostrar('cmExito');
-            setTimeout(() => {
-                window.location.href = `/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${user.uid}`;
-            }, 1800);
+            setTimeout(() => redirigirSegunRol(datos.rol, user.uid), 1800);
         } else {
-            /* Nuevo usuario: activamos el flag antes de mostrar el formulario */
             _creandoPersonaje = true;
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
         }
@@ -322,13 +331,11 @@ async function guardarPersonaje() {
 
         _creandoPersonaje = false;
         sessionStorage.removeItem('mm_uid_pendiente');
-        guardarSesion({ uid: uid, nombreRol, id, rol });
+        guardarSesion({ uid, nombreRol, id, rol });
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
         mostrar('cmExito');
-        setTimeout(() => {
-            window.location.href = `/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${uid}`;
-        }, 2000);
+        setTimeout(() => redirigirSegunRol(rol, uid), 2000);
     } catch (err) {
         setError('pError', 'Error al guardar. Inténtalo de nuevo.');
         console.error(err);
@@ -421,7 +428,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const datos = snap.data();
                 guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
             } else if (!snap.data()?.personaje && !_creandoPersonaje) {
-                /* Solo cerramos sesión si NO estamos en medio de crear el personaje */
                 await signOut(auth);
             }
         } catch (_) {}

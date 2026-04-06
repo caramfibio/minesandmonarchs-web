@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnNav && liNav) {
         if (sesion) {
             /* Con sesión — reemplazar con nombre + dropdown */
+            const esAdmin = sesion.rol === 'admin';
             liNav.classList.add('dropdown');
             liNav.innerHTML = `
                 <button class="dropbtn" id="nav-cuenta-btn"
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>
                 <ul class="dropdown-content" style="right:0;left:auto;min-width:160px;">
                     <li><a href="/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${sesion.uid}">Mi cartilla</a></li>
+                    ${esAdmin ? `<li><a href="/minesandmonarchs-web/Admin/admin.html" style="color:#ffd700">⚙️ Panel Admin</a></li>` : ''}
                     <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
                 </ul>`;
 
@@ -53,11 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
             /* Sin sesión — el botón ya está en el HTML, solo enlazamos el clic */
             btnNav.addEventListener('click', e => {
                 e.preventDefault();
-                /* Esperar a que el módulo esté listo */
                 if (typeof window.abrirModalCuenta === 'function') {
                     window.abrirModalCuenta();
                 } else {
-                    /* El módulo aún no cargó — intentar tras un tick */
                     setTimeout(() => {
                         if (typeof window.abrirModalCuenta === 'function') window.abrirModalCuenta();
                     }, 300);
