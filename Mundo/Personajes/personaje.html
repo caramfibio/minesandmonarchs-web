@@ -7,116 +7,330 @@
     <title>Personaje – Mines & Monarchs</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <style>
-        /* ── Layout general ── */
-        .pj-wrapper {
-            max-width: 760px;
+        /* ════════════════════════════════════
+           LAYOUT PRINCIPAL
+        ════════════════════════════════════ */
+        .pj-page {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 32px;
+            max-width: 1100px;
             margin: 48px auto;
-            padding: 0 20px 60px;
+            padding: 0 24px 80px;
+            align-items: start;
         }
 
-        /* ── Cabecera del personaje ── */
+        /* ════════════════════════════════════
+           CABECERA
+        ════════════════════════════════════ */
         .pj-header {
             text-align: center;
             margin-bottom: 36px;
         }
         .pj-nombre {
             font-family: "MedievalSharp", cursive;
-            font-size: 2.6em;
+            font-size: 2.8em;
             color: #ffd700;
-            margin: 0 0 6px;
-            text-shadow: 0 0 24px rgba(255,215,0,0.3);
+            margin: 0 0 8px;
+            text-shadow: 0 0 32px rgba(255,215,0,0.25);
+            line-height: 1.15;
         }
-        .pj-id {
-            font-family: Georgia, serif;
+        .pj-registro {
+            font-family: "Cinzel", serif;
             color: rgba(255,215,0,0.4);
-            font-size: 0.85em;
-            letter-spacing: 0.08em;
+            font-size: 0.82em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
         }
         .pj-divider {
-            width: 120px;
+            width: 140px;
             height: 1px;
             background: linear-gradient(90deg, transparent, #ffd700, transparent);
-            margin: 18px auto;
-            opacity: 0.4;
+            margin: 20px auto;
+            opacity: 0.35;
+        }
+        .pj-divider-ornament {
+            text-align: center;
+            color: rgba(255,215,0,0.3);
+            font-size: 1.1em;
+            margin: -10px 0 24px;
+            letter-spacing: 0.5em;
         }
 
-        /* ── Tarjetas de sección ── */
-        .pj-card {
-            background: rgba(0,0,0,0.35);
-            border: 1px solid rgba(255,215,0,0.12);
+        /* ════════════════════════════════════
+           SECCIÓN BIO
+        ════════════════════════════════════ */
+        .pj-bio-section {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,215,0,0.1);
             border-radius: 10px;
-            padding: 24px 28px;
-            margin-bottom: 18px;
+            padding: 28px;
+            position: relative;
         }
-        .pj-card-titulo {
-            font-family: "MedievalSharp", cursive;
-            color: #ffd700;
-            font-size: 0.78em;
-            letter-spacing: 0.12em;
+        .pj-bio-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+            border-radius: 10px 10px 0 0;
+        }
+        .pj-section-label {
+            font-family: "Cinzel", serif;
+            color: rgba(255,215,0,0.55);
+            font-size: 0.7em;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            margin: 0 0 18px;
+            margin: 0 0 16px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            opacity: 0.85;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        .pj-card-titulo::after {
+        .pj-section-label::after {
             content: '';
             flex: 1;
+            min-width: 20px;
             height: 1px;
-            background: rgba(255,215,0,0.15);
+            background: rgba(255,215,0,0.12);
+        }
+        .pj-bio-texto {
+            font-family: "IM Fell English", Georgia, serif;
+            color: #c8b888;
+            font-size: 1.05em;
+            line-height: 1.85;
+            font-style: italic;
+            min-height: 60px;
+        }
+        .pj-bio-vacio {
+            color: rgba(168,144,96,0.3);
+            font-style: italic;
+            font-family: Georgia, serif;
+            font-size: 0.9em;
+        }
+        .pj-bio-textarea {
+            display: none;
+            width: 100%;
+            min-height: 130px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,215,0,0.25);
+            border-radius: 6px;
+            color: #e0d0a8;
+            font-family: "IM Fell English", Georgia, serif;
+            font-size: 1em;
+            font-style: italic;
+            line-height: 1.7;
+            padding: 12px 14px;
+            box-sizing: border-box;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .pj-bio-textarea:focus {
+            border-color: rgba(255,215,0,0.45);
+            box-shadow: 0 0 0 3px rgba(255,215,0,0.05);
         }
 
-        /* ── Grid de campos ── */
-        .pj-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px 24px;
+        /* Badges estado */
+        .pj-bio-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: Georgia, serif;
+            font-size: 0.78em;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-style: normal;
+            letter-spacing: 0.02em;
         }
-        .pj-campo {
+        .pj-bio-badge.pendiente {
+            background: rgba(255,165,0,0.12);
+            border: 1px solid rgba(255,165,0,0.3);
+            color: #ffa500;
+        }
+        .pj-bio-badge.aprobada {
+            background: rgba(80,200,100,0.1);
+            border: 1px solid rgba(80,200,100,0.25);
+            color: #6dc87a;
+        }
+        .pj-bio-badge.rechazada {
+            background: rgba(200,50,50,0.1);
+            border: 1px solid rgba(200,50,50,0.25);
+            color: #e07070;
+        }
+
+        /* Botones */
+        .pj-bio-acciones {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .pj-btn {
+            font-family: "Cinzel", serif;
+            font-size: 0.75em;
+            letter-spacing: 0.05em;
+            padding: 7px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .pj-btn-editar {
+            background: rgba(255,215,0,0.08);
+            border: 1px solid rgba(255,215,0,0.3);
+            color: #ffd700;
+        }
+        .pj-btn-editar:hover { background: rgba(255,215,0,0.16); }
+        .pj-btn-guardar {
+            background: rgba(255,215,0,0.15);
+            border: 1px solid rgba(255,215,0,0.5);
+            color: #ffd700;
+        }
+        .pj-btn-guardar:hover {
+            background: rgba(255,215,0,0.25);
+            box-shadow: 0 0 12px rgba(255,215,0,0.12);
+        }
+        .pj-btn-cancelar {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(168,144,96,0.6);
+        }
+        .pj-btn-cancelar:hover { color: #a89060; border-color: rgba(255,255,255,0.2); }
+        .pj-btn-aprobar {
+            background: rgba(80,200,100,0.1);
+            border: 1px solid rgba(80,200,100,0.3);
+            color: #6dc87a;
+        }
+        .pj-btn-aprobar:hover { background: rgba(80,200,100,0.2); }
+        .pj-btn-rechazar {
+            background: rgba(200,50,50,0.1);
+            border: 1px solid rgba(200,50,50,0.3);
+            color: #e07070;
+        }
+        .pj-btn-rechazar:hover { background: rgba(200,50,50,0.2); }
+
+        .pj-privado-note {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: Georgia, serif;
+            font-size: 0.75em;
+            color: rgba(168,144,96,0.4);
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .pj-bio-msg {
+            font-family: Georgia, serif;
+            font-size: 0.78em;
+            color: rgba(168,144,96,0.55);
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* ════════════════════════════════════
+           SIDEBAR
+        ════════════════════════════════════ */
+        .pj-sidebar {
+            position: sticky;
+            top: 24px;
+        }
+        .pj-ficha {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,215,0,0.13);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .pj-ficha::before {
+            content: '';
+            display: block;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent);
+        }
+        .pj-avatar-wrap {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,215,0,0.08);
+        }
+        .pj-avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .pj-avatar-placeholder {
+            font-size: 5em;
+            opacity: 0.12;
+            user-select: none;
+        }
+        .pj-ficha-body {
+            padding: 20px;
+        }
+        .pj-ficha-fila {
+            padding: 11px 0;
+            border-bottom: 1px solid rgba(255,215,0,0.06);
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
-        .pj-campo-label {
-            font-family: Georgia, serif;
-            color: rgba(168,144,96,0.7);
-            font-size: 0.74em;
-            letter-spacing: 0.05em;
+        .pj-ficha-fila:last-child { border-bottom: none; padding-bottom: 0; }
+        .pj-ficha-fila:first-child { padding-top: 0; }
+        .pj-ficha-label {
+            font-family: "Cinzel", serif;
+            color: rgba(168,144,96,0.5);
+            font-size: 0.63em;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
         }
-        .pj-campo-valor {
-            font-family: Georgia, serif;
+        .pj-ficha-valor {
+            font-family: "IM Fell English", Georgia, serif;
             color: #e0d0a8;
             font-size: 1em;
         }
-
-        /* ── Estado de carga / error ── */
-        .pj-estado {
-            text-align: center;
-            padding: 80px 20px;
-            font-family: Georgia, serif;
-            color: rgba(168,144,96,0.6);
-            font-size: 1em;
+        .pj-ficha-nombre-rol {
+            font-family: "MedievalSharp", cursive;
+            color: #ffd700;
+            font-size: 1.08em;
         }
-        .pj-estado .spinner {
+
+        /* ════════════════════════════════════
+           ESTADO / CARGA
+        ════════════════════════════════════ */
+        .pj-estado {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 100px 20px;
+            font-family: Georgia, serif;
+            color: rgba(168,144,96,0.5);
+        }
+        .pj-spinner {
             display: inline-block;
-            width: 28px;
-            height: 28px;
-            border: 2px solid rgba(255,215,0,0.15);
-            border-top-color: rgba(255,215,0,0.6);
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255,215,0,0.12);
+            border-top-color: rgba(255,215,0,0.55);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 14px;
+            animation: spin 0.85s linear infinite;
+            margin-bottom: 16px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media (max-width: 500px) {
-            .pj-grid { grid-template-columns: 1fr; }
-            .pj-nombre { font-size: 1.9em; }
+        /* ════════════════════════════════════
+           RESPONSIVE
+        ════════════════════════════════════ */
+        @media (max-width: 720px) {
+            .pj-page { grid-template-columns: 1fr; }
+            .pj-sidebar { order: -1; position: static; }
+            .pj-avatar-wrap { aspect-ratio: 3 / 2; }
+            .pj-nombre { font-size: 2em; }
         }
     </style>
 </head>
@@ -150,9 +364,9 @@
         </nav>
     </header>
 
-    <div class="pj-wrapper" id="pjWrapper">
+    <div class="pj-page" id="pjPage">
         <div class="pj-estado" id="pjEstado">
-            <div class="spinner"></div><br>Cargando personaje…
+            <div class="pj-spinner"></div><br>Cargando personaje…
         </div>
     </div>
 
@@ -172,9 +386,12 @@
     <link rel="stylesheet" href="cuenta-modal.css">
     <script src="index.js"></script>
     <script type="module">
-        import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-        import { getFirestore,
-                 doc, getDoc }     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+        import { initializeApp, getApp, getApps }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+        import { getFirestore, doc, getDoc, updateDoc }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
@@ -185,79 +402,257 @@
             appId:             "1:379898851786:web:b892cbf4d8508798d61f33"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db  = getFirestore(app);
+        const app  = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db   = getFirestore(app);
 
-        /* ── Leer UID de la URL ── */
+        const RAZAS = {
+            humano:"Humano", elfobosque:"Elfo del Bosque", alfiq:"Alfiq",
+            goblin:"Goblin", enano:"Enano", aracnido:"Arácnido", yeti:"Yeti",
+            demonio:"Demonio", sirena:"Sirena", valquiria:"Valquiria",
+            hadapixie:"Hada Pixie", hadafae:"Hada Fae", granelfo:"Gran Elfo",
+            gorgona:"Gorgona", victimapeste:"Víctima de la Peste",
+            banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro",
+            revenant:"Revenant", ribbit:"Ribbit"
+        };
+        const CLASES = {
+            cazador:"Cazador", guardabosques:"Guardabosques", curador:"Curador",
+            magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico",
+            magosangre:"Mago de Sangre", magohelado:"Mago Helado",
+            magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego",
+            granmago:"Gran Mago", granmagooscuro:"Gran Mago Oscuro",
+            guerrerobendito:"Guerrero Bendito", hiedravenenosa:"Hiedra Venenosa",
+            rogue:"Rogue", tanque:"Tanque", berserker:"Berserker",
+            guerrero:"Guerrero", bardo:"Bardo", guerrerodelmar:"Guerrero del Mar",
+            carterista:"Carterista", paladin:"Paladín", ingeniero:"Ingeniero",
+            bestiasalvaje:"Bestia Salvaje", angler:"Angler",
+            magoeldritch:"Mago del Eldritch", niceGuy:"Nice Guy"
+        };
+        const TRABAJOS = {
+            constructor:"Constructor", inutilerrante:"Inútil Errante",
+            explorador:"Explorador", clerigo:"Clérigo", mercader:"Mercader",
+            metalurgico:"Metalúrgico", agricultor:"Agricultor",
+            granjero:"Granjero", cocinero:"Cocinero"
+        };
+
+        function badgeHtml(estado) {
+            const map = {
+                pendiente: ['pendiente', '⏳ Pendiente'],
+                aprobada:  ['aprobada',  '✓ Aprobada'],
+                rechazada: ['rechazada', '✗ Rechazada'],
+            };
+            const [cls, txt] = map[estado] || map.pendiente;
+            return `<span class="pj-bio-badge ${cls}">${txt}</span>`;
+        }
+
         const params = new URLSearchParams(window.location.search);
         const uid    = params.get('uid');
-
-        const wrapper = document.getElementById('pjWrapper');
-        const estado  = document.getElementById('pjEstado');
+        const page   = document.getElementById('pjPage');
+        const estado = document.getElementById('pjEstado');
 
         if (!uid) {
             estado.textContent = 'No se especificó ningún personaje.';
         } else {
-            try {
-                const snap = await getDoc(doc(db, 'usuarios', uid));
+            onAuthStateChanged(auth, async currentUser => {
+                try {
+                    const snap = await getDoc(doc(db, 'usuarios', uid));
+                    if (!snap.exists() || !snap.data().personaje) {
+                        estado.textContent = 'Este personaje no existe aún.';
+                        return;
+                    }
 
-                if (!snap.exists() || !snap.data().personaje) {
-                    estado.textContent = 'Este personaje no existe aún.';
-                } else {
-                    const d  = snap.data();
-                    const pj = d.personaje;
+                    const d   = snap.data();
+                    const pj  = d.personaje;
+                    const bio = d.bio || { texto: '', estado: 'aprobada' };
 
-                    /* Capitalizar helper */
-                    const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+                    const esPropietario = currentUser && currentUser.uid === uid;
+                    let   esAdmin       = false;
+                    if (currentUser && !esPropietario) {
+                        try {
+                            const mySnap = await getDoc(doc(db, 'usuarios', currentUser.uid));
+                            esAdmin = mySnap.exists() && mySnap.data().rol === 'admin';
+                        } catch (_) {}
+                    }
 
-                    wrapper.innerHTML = `
-                        <div class="pj-header">
-                            <h1 class="pj-nombre">⚜ ${pj.nombreRol}</h1>
-                            <p class="pj-id"># ${String(d.id).padStart(4,'0')} · ${d.rol}</p>
-                            <div class="pj-divider"></div>
+                    /* La bio es visible si: eres el dueño, eres admin,
+                       o está aprobada y tiene texto */
+                    const mostrarBio = esPropietario || esAdmin ||
+                                       (bio.estado === 'aprobada' && bio.texto);
+
+                    page.innerHTML = `
+                        <!-- ── Columna principal ── -->
+                        <div class="pj-main">
+                            <div class="pj-header">
+                                <h1 class="pj-nombre">⚜ ${pj.nombreRol}</h1>
+                                <p class="pj-registro">Registro # ${String(d.id).padStart(4,'0')}</p>
+                                <div class="pj-divider"></div>
+                                <div class="pj-divider-ornament">✦ ✦ ✦</div>
+                            </div>
+
+                            ${mostrarBio ? `
+                            <div class="pj-bio-section" id="bioSection">
+                                <p class="pj-section-label">
+                                    Historia
+                                    ${esPropietario || esAdmin ? badgeHtml(bio.estado) : ''}
+                                </p>
+
+                                <div class="pj-bio-texto" id="bioTexto">
+                                    ${bio.texto
+                                        ? bio.texto.replace(/\n/g,'<br>')
+                                        : `<span class="pj-bio-vacio">${esPropietario ? 'Todavía no has escrito tu historia. Pulsa Editar para comenzar.' : 'Sin historia.'}</span>`}
+                                </div>
+
+                                <textarea class="pj-bio-textarea" id="bioTextarea" maxlength="1200"
+                                    placeholder="Cuéntanos la historia de tu personaje…">${bio.texto || ''}</textarea>
+
+                                ${esPropietario ? `
+                                <div class="pj-bio-acciones" id="accionesDueno">
+                                    <button class="pj-btn pj-btn-editar"   id="btnEditar">✏ Editar historia</button>
+                                    <button class="pj-btn pj-btn-guardar"  id="btnGuardar"  style="display:none">⚜ Enviar para aprobación</button>
+                                    <button class="pj-btn pj-btn-cancelar" id="btnCancelar" style="display:none">Cancelar</button>
+                                </div>
+                                <p class="pj-privado-note">🔒 Solo tú y los administradores ven esto hasta que sea aprobado</p>
+                                ` : ''}
+
+                                ${esAdmin && bio.estado === 'pendiente' ? `
+                                <div class="pj-bio-acciones" id="accionesAdmin">
+                                    <span style="font-family:Georgia,serif;font-size:0.8em;color:#a89060;font-style:italic">Revisar:</span>
+                                    <button class="pj-btn pj-btn-aprobar"  id="btnAprobar">✓ Aprobar</button>
+                                    <button class="pj-btn pj-btn-rechazar" id="btnRechazar">✗ Rechazar</button>
+                                </div>
+                                ` : ''}
+
+                                <p class="pj-bio-msg" id="bioMsg" style="display:none"></p>
+                            </div>
+                            ` : ''}
                         </div>
 
-                        <div class="pj-card">
-                            <p class="pj-card-titulo">Datos</p>
-                            <div class="pj-grid">
-                                <div class="pj-campo">
-                                    <span class="pj-campo-label">Discord</span>
-                                    <span class="pj-campo-valor">${d.discord || '—'}</span>
+                        <!-- ── Sidebar ── -->
+                        <aside class="pj-sidebar">
+                            <div class="pj-ficha">
+                                <div class="pj-avatar-wrap">
+                                    ${pj.imagenUrl
+                                        ? `<img src="${pj.imagenUrl}" alt="${pj.nombreRol}">`
+                                        : `<span class="pj-avatar-placeholder">⚜</span>`}
                                 </div>
-                                <div class="pj-campo">
-                                    <span class="pj-campo-label">Minecraft</span>
-                                    <span class="pj-campo-valor">${pj.nombreMC || '—'}</span>
+                                <div class="pj-ficha-body">
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Nombre de rol</span>
+                                        <span class="pj-ficha-valor pj-ficha-nombre-rol">${pj.nombreRol}</span>
+                                    </div>
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Minecraft</span>
+                                        <span class="pj-ficha-valor">${pj.nombreMC || '—'}</span>
+                                    </div>
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Raza</span>
+                                        <span class="pj-ficha-valor">${RAZAS[pj.raza] || pj.raza}</span>
+                                    </div>
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Clase</span>
+                                        <span class="pj-ficha-valor">${CLASES[pj.clase] || pj.clase}</span>
+                                    </div>
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Trabajo</span>
+                                        <span class="pj-ficha-valor">${TRABAJOS[pj.trabajo] || pj.trabajo}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="pj-card">
-                            <p class="pj-card-titulo">Rol</p>
-                            <div class="pj-grid">
-                                <div class="pj-campo">
-                                    <span class="pj-campo-label">Nombre de rol</span>
-                                    <span class="pj-campo-valor">${pj.nombreRol}</span>
-                                </div>
-                                <div class="pj-campo">
-                                    <span class="pj-campo-label">Raza</span>
-                                    <span class="pj-campo-valor">${cap(pj.raza)}</span>
-                                </div>
-                                <div class="pj-campo">
-                                    <span class="pj-campo-label">Clase</span>
-                                    <span class="pj-campo-valor">${cap(pj.clase)}</span>
-                                </div>
-                                <div class="pj-campo">
-                                    <span class="pj-campo-label">Trabajo</span>
-                                    <span class="pj-campo-valor">${cap(pj.trabajo)}</span>
-                                </div>
-                            </div>
-                        </div>
+                        </aside>
                     `;
+
+                    /* ── Lógica propietario ── */
+                    if (esPropietario) {
+                        const btnEditar   = document.getElementById('btnEditar');
+                        const btnGuardar  = document.getElementById('btnGuardar');
+                        const btnCancelar = document.getElementById('btnCancelar');
+                        const textarea    = document.getElementById('bioTextarea');
+                        const textoDiv    = document.getElementById('bioTexto');
+                        const msg         = document.getElementById('bioMsg');
+                        let original      = bio.texto || '';
+
+                        btnEditar.addEventListener('click', () => {
+                            textoDiv.style.display    = 'none';
+                            textarea.style.display    = 'block';
+                            btnEditar.style.display   = 'none';
+                            btnGuardar.style.display  = '';
+                            btnCancelar.style.display = '';
+                            msg.style.display         = 'none';
+                        });
+
+                        btnCancelar.addEventListener('click', () => {
+                            textarea.value            = original;
+                            textarea.style.display    = 'none';
+                            textoDiv.style.display    = '';
+                            btnEditar.style.display   = '';
+                            btnGuardar.style.display  = 'none';
+                            btnCancelar.style.display = 'none';
+                        });
+
+                        btnGuardar.addEventListener('click', async () => {
+                            const nuevo = textarea.value.trim();
+                            if (!nuevo) { msg.textContent = 'Escribe algo antes de enviar.'; msg.style.display = ''; return; }
+                            btnGuardar.disabled = true;
+                            btnGuardar.textContent = 'Guardando…';
+                            try {
+                                await updateDoc(doc(db, 'usuarios', uid), {
+                                    'bio.texto':  nuevo,
+                                    'bio.estado': 'pendiente'
+                                });
+                                original = nuevo;
+                                textoDiv.innerHTML        = nuevo.replace(/\n/g,'<br>');
+                                textarea.style.display    = 'none';
+                                textoDiv.style.display    = '';
+                                btnEditar.style.display   = '';
+                                btnGuardar.style.display  = 'none';
+                                btnCancelar.style.display = 'none';
+                                const badge = document.querySelector('.pj-bio-badge');
+                                if (badge) { badge.className = 'pj-bio-badge pendiente'; badge.textContent = '⏳ Pendiente'; }
+                                msg.textContent   = 'Historia enviada. Un administrador la revisará pronto.';
+                                msg.style.display = '';
+                            } catch (err) {
+                                msg.textContent = 'Error al guardar. Inténtalo de nuevo.';
+                                msg.style.display = '';
+                                console.error(err);
+                            }
+                            btnGuardar.disabled = false;
+                            btnGuardar.textContent = '⚜ Enviar para aprobación';
+                        });
+                    }
+
+                    /* ── Lógica admin ── */
+                    if (esAdmin) {
+                        const btnAprobar  = document.getElementById('btnAprobar');
+                        const btnRechazar = document.getElementById('btnRechazar');
+                        const msg         = document.getElementById('bioMsg');
+
+                        if (btnAprobar) {
+                            btnAprobar.addEventListener('click', async () => {
+                                await updateDoc(doc(db, 'usuarios', uid), { 'bio.estado': 'aprobada' });
+                                document.getElementById('accionesAdmin')?.remove();
+                                const badge = document.querySelector('.pj-bio-badge');
+                                if (badge) { badge.className = 'pj-bio-badge aprobada'; badge.textContent = '✓ Aprobada'; }
+                                if (msg) { msg.textContent = 'Historia aprobada.'; msg.style.display = ''; }
+                            });
+                        }
+                        if (btnRechazar) {
+                            btnRechazar.addEventListener('click', async () => {
+                                await updateDoc(doc(db, 'usuarios', uid), { 'bio.estado': 'rechazada', 'bio.texto': '' });
+                                document.getElementById('accionesAdmin')?.remove();
+                                const textoDiv = document.getElementById('bioTexto');
+                                if (textoDiv) textoDiv.innerHTML = '<span class="pj-bio-vacio">Historia rechazada.</span>';
+                                const badge = document.querySelector('.pj-bio-badge');
+                                if (badge) { badge.className = 'pj-bio-badge rechazada'; badge.textContent = '✗ Rechazada'; }
+                                if (msg) { msg.textContent = 'Historia rechazada y eliminada.'; msg.style.display = ''; }
+                            });
+                        }
+                    }
+
+                } catch (err) {
+                    estado.textContent = 'Error al cargar el personaje.';
+                    console.error(err);
                 }
-            } catch (err) {
-                estado.textContent = 'Error al cargar el personaje. Inténtalo de nuevo.';
-                console.error(err);
-            }
+            });
         }
     </script>
     <script type="module" src="cuenta-modal.js"></script>
