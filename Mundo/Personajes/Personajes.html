@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="/minesandmonarchs-web/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personajes - Mines & Monarch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="cuenta-modal.css">
+
+    <style>
+        /* ════════════════════════════════════
+           HERO CAROUSEL
+        ════════════════════════════════════ */
+        .pjs-carousel {
+            position: relative;
+            width: 100%;
+            height: 62vh;
+            min-height: 320px;
+            overflow: hidden;
+            background: #0d0805;
+        }
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center top;
+            position: relative;
+        }
+        .carousel-slide::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(10,5,2,0.20) 0%,
+                rgba(10,5,2,0.10) 40%,
+                rgba(10,5,2,0.80) 100%
+            );
+        }
+        .carousel-overlay {
+            position: absolute;
+            bottom: 72px;
+            left: 0; right: 0;
+            text-align: center;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .carousel-title {
+            font-family: "MedievalSharp", cursive;
+            font-size: clamp(2em, 5vw, 3.8em);
+            color: #ffd700;
+            text-shadow: 0 2px 24px rgba(0,0,0,0.9), 0 0 40px rgba(255,215,0,0.3);
+            margin: 0 0 8px;
+        }
+        .carousel-subtitle {
+            font-family: "IM Fell English", Georgia, serif;
+            color: #e0d0a8;
+            font-size: clamp(0.85em, 2vw, 1.1em);
+            font-style: italic;
+            margin: 0;
+            opacity: 0.85;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,215,0,0.35);
+            color: #ffd700;
+            font-size: 2.2em;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .carousel-btn:hover { background: rgba(255,215,0,0.18); border-color: rgba(255,215,0,0.7); }
+        .carousel-btn.prev { left: 18px; }
+        .carousel-btn.next { right: 18px; }
+        .carousel-dots {
+            position: absolute;
+            bottom: 22px;
+            left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px;
+            z-index: 10;
+        }
+        .carousel-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255,215,0,0.3);
+            border: 1px solid rgba(255,215,0,0.5);
+            cursor: pointer;
+            transition: background 0.25s, transform 0.2s;
+        }
+        .carousel-dot.active { background: #ffd700; transform: scale(1.25); }
+
+        /* ════════════════════════════════════
+           INTRO
+        ════════════════════════════════════ */
+        .pjs-intro {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 44px 24px 20px;
+            text-align: center;
+        }
+        .pjs-intro h2 {
+            font-family: "MedievalSharp", cursive;
+            color: #ffd700;
+            font-size: 1.6em;
+            margin: 0 0 14px;
+        }
+        .pjs-intro p {
+            font-family: "IM Fell English", Georgia, serif;
+            color: #c8b88a;
+            font-size: 1em;
+            line-height: 1.75;
+            font-style: italic;
+            margin: 0 0 20px;
+        }
+
+        /* ════════════════════════════════════
+           BUSCADOR
+        ════════════════════════════════════ */
+        .pjs-search-wrap {
+            max-width: 480px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        .pjs-search {
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 6px;
+            color: #e0d0a8;
+            font-family: "Cinzel", serif;
+            font-size: 0.85em;
+            padding: 10px 40px 10px 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .pjs-search::placeholder { color: rgba(168,144,96,0.4); }
+        .pjs-search:focus { border-color: rgba(255,215,0,0.45); }
+        .pjs-search-icon {
+            position: absolute;
+            right: 14px; top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,215,0,0.35);
+            font-size: 1em;
+            pointer-events: none;
+        }
+
+        /* ════════════════════════════════════
+           FILTROS POR RAZA
+        ════════════════════════════════════ */
+        .pjs-filtros {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 24px 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .pjs-filtro {
+            font-family: "Cinzel", serif;
+            font-size: 0.72em;
+            letter-spacing: 0.06em;
+            padding: 5px 14px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,215,0,0.18);
+            color: rgba(200,184,136,0.7);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .pjs-filtro:hover,
+        .pjs-filtro.active {
+            background: rgba(255,215,0,0.1);
+            border-color: rgba(255,215,0,0.5);
+            color: #ffd700;
+        }
+
+        /* ════════════════════════════════════
+           GRID
+        ════════════════════════════════════ */
+        .pjs-grid-section {
+            max-width: 1300px;
+            margin: 0 auto 60px;
+            padding: 0 24px;
+        }
+        .grid-title {
+            font-family: "MedievalSharp", cursive;
+            color: #ffd700;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 0 0 24px;
+        }
+        .pjs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
+        }
+
+        /* ════════════════════════════════════
+           CARD PERSONAJE
+        ════════════════════════════════════ */
+        .pj-card {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,215,0,0.12);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+            animation: cardIn 0.4s both;
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .pj-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,215,0,0.45);
+            box-shadow: 0 10px 36px rgba(0,0,0,0.55), 0 0 18px rgba(255,215,0,0.07);
+        }
+        .pj-card-avatar-wrap {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            background: rgba(0,0,0,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pj-card-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            transition: transform 0.35s;
+        }
+        .pj-card:hover .pj-card-avatar { transform: scale(1.05); }
+        .pj-card-skin {
+            width: 80px; height: 80px;
+            image-rendering: pixelated;
+        }
+        .pj-card-avatar-placeholder {
+            font-size: 4.5em;
+            color: rgba(255,215,0,0.07);
+            user-select: none;
+        }
+        .pj-card-raza-badge {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: rgba(0,0,0,0.65);
+            border: 1px solid rgba(255,215,0,0.25);
+            border-radius: 4px;
+            font-family: "Cinzel", serif;
+            font-size: 0.63em;
+            color: rgba(200,184,136,0.9);
+            padding: 3px 8px;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(4px);
+        }
+        .pj-card-body { padding: 15px 17px 18px; }
+        .pj-card-nombre {
+            font-family: "MedievalSharp", cursive;
+            color: #ffd700;
+            font-size: 1.12em;
+            margin: 0 0 3px;
+        }
+        .pj-card-mc {
+            font-family: "Cinzel", serif;
+            color: rgba(168,144,96,0.5);
+            font-size: 0.68em;
+            letter-spacing: 0.1em;
+            margin: 0 0 11px;
+        }
+        .pj-card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+        .pj-card-tag {
+            font-family: Georgia, serif;
+            font-size: 0.72em;
+            padding: 2px 9px;
+            border-radius: 3px;
+            background: rgba(255,215,0,0.07);
+            border: 1px solid rgba(255,215,0,0.16);
+            color: rgba(200,184,136,0.7);
+        }
+
+        /* ════════════════════════════════════
+           ESTADO / CARGA
+        ════════════════════════════════════ */
+        .pjs-estado {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            font-family: "IM Fell English", Georgia, serif;
+            color: rgba(168,144,96,0.45);
+            font-style: italic;
+        }
+        .pjs-spinner {
+            display: inline-block;
+            width: 28px; height: 28px;
+            border: 2px solid rgba(255,215,0,0.1);
+            border-top-color: rgba(255,215,0,0.5);
+            border-radius: 50%;
+            animation: spin 0.85s linear infinite;
+            margin-bottom: 14px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            .carousel-btn { display: none; }
+            .pjs-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .pj-card-avatar-wrap { height: 150px; }
+        }
+        @media (max-width: 380px) {
+            .pjs-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header>
+        <div class="header-left">
+            <h2>Mines & Monarch</h2>
+        </div>
+        <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
+        <nav class="header-right">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Creación personaje</button>
+                    <ul class="dropdown-content">
+                        <li><a href="Razas/raza.html">Raza</a></li>
+                        <li><a href="Clases/Clases.html">Clase</a></li>
+                        <li><a href="Trabajos/Trabajos.html">Trabajo</a></li>
+                        <li><a href="Cuenta/Cuenta.html">Cartilla</a></li>
+                    </ul>
+                </li>
+                <li><a href="Territorios/Territorios.html">Territorios</a></li>
+                <li><a href="#">Lore Oficial</a></li>
+                <li><a href="#">Mapa</a></li>
+                <li><a href="https://ko-fi.com/minesandmonarchs">Donar</a></li>
+                <li id="nav-cuenta-li">
+                    <a href="#" id="nav-cuenta-btn" style="font-weight:bold">Entrar</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ══════════════ CARRUSEL HERO ══════════════ -->
+    <section class="pjs-carousel" id="carouselHero">
+        <div class="carousel-track" id="carouselTrack"></div>
+        <div class="carousel-overlay">
+            <h1 class="carousel-title">Héroes de Belmaria</h1>
+            <p class="carousel-subtitle">Los aventureros que dan vida al mundo</p>
+        </div>
+        <button class="carousel-btn prev" id="carouselPrev" aria-label="Anterior">‹</button>
+        <button class="carousel-btn next" id="carouselNext" aria-label="Siguiente">›</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+    </section>
+
+    <!-- ══════════════ INTRO + BUSCADOR ══════════════ -->
+    <section class="pjs-intro">
+        <h2>Los Aventureros de Belmaria</h2>
+        <p>
+            Cada personaje tiene su propia historia, su raza, su clase y su lugar en el mundo.
+            Explora a los héroes y villanos que pueblan Belmaria y descubre qué les mueve.
+        </p>
+        <div class="pjs-search-wrap">
+            <input class="pjs-search" id="buscador" type="text"
+                   placeholder="Buscar por nombre de rol o Minecraft…" autocomplete="off">
+            <span class="pjs-search-icon">⚔</span>
+        </div>
+    </section>
+
+    <!-- Filtros raza (se generan dinámicamente) -->
+    <div class="pjs-filtros" id="filtrosRaza">
+        <button class="pjs-filtro active" data-raza="">Todos</button>
+    </div>
+
+    <!-- ══════════════ GRID ══════════════ -->
+    <section class="pjs-grid-section" id="personajes-grid">
+        <h2 class="grid-title">Todos los Personajes</h2>
+        <div class="pjs-grid" id="pjsGrid">
+            <div class="pjs-estado">
+                <div class="pjs-spinner"></div><br>Convocando a los aventureros…
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer>
+        <div class="socials">
+            <a href="#" class="discord"   title="Discord"></a>
+            <a href="#" class="instagram" title="Instagram"></a>
+            <a href="#" class="tiktok"    title="TikTok"></a>
+            <a href="#" class="x"         title="X"></a>
+        </div>
+        <button class="apoyar">Apoyar servidor</button>
+        <div class="footer-text">
+            <small>© 2026 Mines & Monarch. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <script src="index.js"></script>
+
+    <script type="module">
+        import { initializeApp, getApp, getApps }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getFirestore, collection, getDocs }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
+            authDomain:        "minesandmonarch.firebaseapp.com",
+            projectId:         "minesandmonarch",
+            storageBucket:     "minesandmonarch.firebasestorage.app",
+            messagingSenderId: "379898851786",
+            appId:             "1:379898851786:web:b892cbf4d8508798d61f33"
+        };
+
+        const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+        const db  = getFirestore(app);
+
+        const RAZAS = {
+            humano:"Humano", elfobosque:"Elfo del Bosque", alfiq:"Alfiq",
+            goblin:"Goblin", enano:"Enano", aracnido:"Arácnido", yeti:"Yeti",
+            demonio:"Demonio", sirena:"Sirena", valquiria:"Valquiria",
+            hadapixie:"Hada Pixie", hadafae:"Hada Fae", granelfo:"Gran Elfo",
+            gorgona:"Gorgona", victimapeste:"Víctima de la Peste",
+            banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro",
+            revenant:"Revenant", ribbit:"Ribbit"
+        };
+        const CLASES = {
+            cazador:"Cazador", guardabosques:"Guardabosques", curador:"Curador",
+            magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico",
+            magosangre:"Mago de Sangre", magohelado:"Mago Helado",
+            magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego",
+            granmago:"Gran Mago", granmagooscuro:"Gran Mago Oscuro",
+            guerrerobendito:"Guerrero Bendito", hiedravenenosa:"Hiedra Venenosa",
+            rogue:"Rogue", tanque:"Tanque", berserker:"Berserker",
+            guerrero:"Guerrero", bardo:"Bardo", guerrerodelmar:"Guerrero del Mar",
+            carterista:"Carterista", paladin:"Paladín", ingeniero:"Ingeniero",
+            bestiasalvaje:"Bestia Salvaje", angler:"Angler",
+            magoeldritch:"Mago del Eldritch", niceGuy:"Nice Guy"
+        };
+
+        /* ── Estado global ── */
+        let todosLosPersonajes = [];
+        let filtroRazaActual   = '';
+        let textoBuscador      = '';
+
+        /* ════════ CARGA FIREBASE ════════ */
+        async function cargarPersonajes() {
+            const grid = document.getElementById('pjsGrid');
+            try {
+                const snap = await getDocs(collection(db, 'usuarios'));
+                const lista = [];
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if (data.personaje) {
+                        lista.push({
+                            uid:       docSnap.id,
+                            pj:        data.personaje,
+                            imagenUrl: data.personaje.imagenUrl || null
+                        });
+                    }
+                });
+
+                if (lista.length === 0) {
+                    grid.innerHTML = '<div class="pjs-estado">Aún no hay aventureros registrados.</div>';
+                    return;
+                }
+
+                todosLosPersonajes = lista;
+                construirFiltrosRaza(lista);
+                construirCarrusel(lista);
+                renderGrid(lista);
+
+            } catch (err) {
+                console.error('[Personajes]', err);
+                grid.innerHTML = '<div class="pjs-estado">Error al cargar los personajes.</div>';
+            }
+        }
+
+        /* ════════ CARRUSEL ════════ */
+        function construirCarrusel(lista) {
+            const conImagen = lista.filter(p => p.imagenUrl);
+            const track     = document.getElementById('carouselTrack');
+            const dotsEl    = document.getElementById('carouselDots');
+            if (!track || conImagen.length === 0) return;
+
+            const slides = [...conImagen].sort(() => Math.random() - 0.5).slice(0, 8);
+            let current = 0, timer;
+
+            slides.forEach((p, i) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.style.backgroundImage = `url('${p.imagenUrl}')`;
+                slide.style.cursor = 'pointer';
+                slide.addEventListener('click', () => {
+                    window.location.href = `personaje.html?uid=${p.uid}`;
+                });
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Ir a ${p.pj.nombreRol}`);
+                dot.addEventListener('click', () => goTo(i));
+                dotsEl.appendChild(dot);
+            });
+
+            function goTo(idx) {
+                current = (idx + slides.length) % slides.length;
+                track.style.transform = `translateX(-${current * 100}%)`;
+                dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) =>
+                    d.classList.toggle('active', i === current)
+                );
+            }
+            function startAuto() { timer = setInterval(() => goTo(current + 1), 4500); }
+            function stopAuto()  { clearInterval(timer); }
+
+            document.getElementById('carouselPrev')?.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+            document.getElementById('carouselNext')?.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+            startAuto();
+        }
+
+        /* ════════ FILTROS ════════ */
+        function construirFiltrosRaza(lista) {
+            const razasEnUso = [...new Set(lista.map(p => p.pj.raza).filter(Boolean))].sort();
+            const contenedor = document.getElementById('filtrosRaza');
+
+            razasEnUso.forEach(razaKey => {
+                const btn = document.createElement('button');
+                btn.className   = 'pjs-filtro';
+                btn.dataset.raza = razaKey;
+                btn.textContent  = RAZAS[razaKey] || razaKey;
+                contenedor.appendChild(btn);
+            });
+
+            contenedor.addEventListener('click', e => {
+                const btn = e.target.closest('.pjs-filtro');
+                if (!btn) return;
+                contenedor.querySelectorAll('.pjs-filtro').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filtroRazaActual = btn.dataset.raza;
+                aplicarFiltros();
+            });
+        }
+
+        document.getElementById('buscador').addEventListener('input', e => {
+            textoBuscador = e.target.value.toLowerCase().trim();
+            aplicarFiltros();
+        });
+
+        function aplicarFiltros() {
+            let resultado = todosLosPersonajes;
+            if (filtroRazaActual) resultado = resultado.filter(p => p.pj.raza === filtroRazaActual);
+            if (textoBuscador) result = resultado.filter(p =>
+                (p.pj.nombreRol || '').toLowerCase().includes(textoBuscador) ||
+                (p.pj.nombreMC  || '').toLowerCase().includes(textoBuscador)
+            );
+            renderGrid(resultado);
+        }
+
+        /* ════════ RENDER GRID ════════ */
+        function renderGrid(lista) {
+            const grid = document.getElementById('pjsGrid');
+            grid.innerHTML = '';
+
+            if (lista.length === 0) {
+                grid.innerHTML = '<div class="pjs-estado">Ningún aventurero coincide con la búsqueda.</div>';
+                return;
+            }
+
+            lista.forEach((p, i) => {
+                const { uid, pj } = p;
+                const card = document.createElement('a');
+                card.className = 'pj-card';
+                card.href = `personaje.html?uid=${uid}`;
+                card.style.animationDelay = `${i * 0.06}s`;
+
+                /* Avatar: imagen propia → skin MC → placeholder */
+                let avatarHtml;
+                if (pj.imagenUrl) {
+                    avatarHtml = `<img class="pj-card-avatar" src="${pj.imagenUrl}" alt="${pj.nombreRol}" loading="lazy">`;
+                } else if (pj.nombreMC) {
+                    avatarHtml = `
+                        <img class="pj-card-skin"
+                            src="https://mc-heads.net/avatar/${encodeURIComponent(pj.nombreMC)}/80"
+                            alt="${pj.nombreMC}" loading="lazy"
+                            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <span class="pj-card-avatar-placeholder" style="display:none">⚜</span>`;
+                } else {
+                    avatarHtml = `<span class="pj-card-avatar-placeholder">⚔</span>`;
+                }
+
+                const razaNombre  = RAZAS[pj.raza]  || pj.raza  || '';
+                const claseNombre = CLASES[pj.clase] || pj.clase || '';
+
+                card.innerHTML = `
+                    <div class="pj-card-avatar-wrap">
+                        ${avatarHtml}
+                        ${razaNombre ? `<span class="pj-card-raza-badge">${razaNombre}</span>` : ''}
+                    </div>
+                    <div class="pj-card-body">
+                        <p class="pj-card-nombre">⚜ ${pj.nombreRol || 'Sin nombre'}</p>
+                        ${pj.nombreMC ? `<p class="pj-card-mc">${pj.nombreMC}</p>` : ''}
+                        <div class="pj-card-tags">
+                            ${claseNombre ? `<span class="pj-card-tag">${claseNombre}</span>` : ''}
+                            ${pj.trabajo  ? `<span class="pj-card-tag">${pj.trabajo}</span>`  : ''}
+                        </div>
+                    </div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        cargarPersonajes();
+    </script>
+
+    <!-- Dropdown nav -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                const btn     = dropdown.querySelector('.dropbtn');
+                const content = dropdown.querySelector('.dropdown-content');
+                if (btn) btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    content.classList.toggle('show');
+                });
+            });
+            document.addEventListener('click', e => {
+                document.querySelectorAll('.dropdown').forEach(d => {
+                    if (!d.contains(e.target))
+                        d.querySelector('.dropdown-content').classList.remove('show');
+                });
+            });
+        });
+    </script>
+
+    <script type="module" src="cuenta-modal.js"></script>
+</body>
+</html>
