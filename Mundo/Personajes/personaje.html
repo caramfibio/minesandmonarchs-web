@@ -474,10 +474,12 @@
                         } catch (_) {}
                     }
 
-                    /* La bio es visible si: eres el dueño, eres admin,
-                       o está aprobada y tiene texto */
+                    /* La cartilla (raza, clase, trabajo) la ven TODOS siempre.
+                       La sección Historia se muestra a TODOS, pero:
+                       - Si está pendiente/rechazada: solo la ve el dueño y el admin
+                       - Si está aprobada: la ve cualquier visitante */
                     const mostrarBio = esPropietario || esAdmin ||
-                                       (bio.estado === 'aprobada' && bio.texto);
+                                       bio.estado === 'aprobada';
 
                     page.innerHTML = `
                         <!-- ── Columna principal ── -->
