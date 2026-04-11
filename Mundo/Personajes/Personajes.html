@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <base href="/minesandmonarchs-web/">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personajes - Mines & Monarch</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="cuenta-modal.css">
+    <link rel="stylesheet" href="../../index.css">
+    <link rel="stylesheet" href="../../cuenta-modal.css">
 
     <style>
         /* ════════════════════════════════════
@@ -344,17 +344,17 @@
         <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
         <nav class="header-right">
             <ul>
-                <li><a href="index.html">Inicio</a></li>
+                <li><a href="../../index.html">Inicio</a></li>
                 <li class="dropdown">
                     <button class="dropbtn">Creación personaje</button>
                     <ul class="dropdown-content">
-                        <li><a href="Razas/raza.html">Raza</a></li>
-                        <li><a href="Clases/Clases.html">Clase</a></li>
-                        <li><a href="Trabajos/Trabajos.html">Trabajo</a></li>
-                        <li><a href="Cuenta/Cuenta.html">Cartilla</a></li>
+                        <li><a href="../../Razas/raza.html">Raza</a></li>
+                        <li><a href="../../Clases/Clases.html">Clase</a></li>
+                        <li><a href="../../Trabajos/Trabajos.html">Trabajo</a></li>
+                        <li><a href="../../Cuenta/Cuenta.html">Cartilla</a></li>
                     </ul>
                 </li>
-                <li><a href="Territorios/Territorios.html">Territorios</a></li>
+                <li><a href="../../Territorios/Territorios.html">Territorios</a></li>
                 <li><a href="#">Lore Oficial</a></li>
                 <li><a href="#">Mapa</a></li>
                 <li><a href="https://ko-fi.com/minesandmonarchs">Donar</a></li>
@@ -420,7 +420,7 @@
         </div>
     </footer>
 
-    <script src="index.js"></script>
+    <script src="../../index.js"></script>
 
     <script type="module">
         import { initializeApp, getApp, getApps }
@@ -517,7 +517,7 @@
                 slide.style.backgroundImage = `url('${p.imagenUrl}')`;
                 slide.style.cursor = 'pointer';
                 slide.addEventListener('click', () => {
-                    window.location.href = `/minesandmonarchs-web/personaje.html?uid=${p.uid}`;
+                    window.location.href = `personaje.html?uid=${p.uid}`;
                 });
                 track.appendChild(slide);
 
@@ -595,7 +595,7 @@
                 const { uid, pj } = p;
                 const card = document.createElement('a');
                 card.className = 'pj-card';
-                card.href = `/minesandmonarchs-web/personaje.html?uid=${uid}`;
+                card.href = `personaje.html?uid=${uid}`;
                 card.style.animationDelay = `${i * 0.06}s`;
 
                 /* Avatar: imagen propia → skin MC → placeholder */
@@ -656,6 +656,6 @@
         });
     </script>
 
-    <script type="module" src="cuenta-modal.js"></script>
+    <script type="module" src="../../cuenta-modal.js"></script>
 </body>
 </html>
