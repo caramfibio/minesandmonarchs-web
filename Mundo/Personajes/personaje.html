@@ -9,14 +9,212 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="Mundo/Personajes/personaje.css">
+    <style>
+        /* ── LAYOUT GRID ── */
+        .pj-page {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            grid-template-areas: "main sidebar";
+            gap: 32px;
+            max-width: 1100px;
+            margin: 48px auto;
+            padding: 0 24px 80px;
+            align-items: start;
+        }
+        .pj-main    { grid-area: main; min-width: 0; }
+        .pj-sidebar { grid-area: sidebar; position: sticky; top: 24px; }
+
+        /* ── CABECERA ── */
+        .pj-header { text-align: center; margin-bottom: 36px; }
+        .pj-nombre {
+            font-family: "MedievalSharp", cursive;
+            font-size: 2.8em; color: #ffd700; margin: 0 0 8px;
+            text-shadow: 0 0 32px rgba(255,215,0,0.25); line-height: 1.15;
+        }
+        .pj-registro {
+            font-family: "Cinzel", serif; color: rgba(255,215,0,0.4);
+            font-size: 0.82em; letter-spacing: 0.18em; text-transform: uppercase;
+        }
+        .pj-divider {
+            width: 140px; height: 1px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            margin: 20px auto; opacity: 0.35;
+        }
+        .pj-divider-ornament {
+            text-align: center; color: rgba(255,215,0,0.3);
+            font-size: 1.1em; margin: -10px 0 24px; letter-spacing: 0.5em;
+        }
+
+        /* ── SECCIÓN HISTORIA ── */
+        .pj-bio-section {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.1);
+            border-radius: 10px; padding: 28px; position: relative;
+        }
+        .pj-bio-section::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+            border-radius: 10px 10px 0 0;
+        }
+        .pj-section-label {
+            font-family: "Cinzel", serif; color: rgba(255,215,0,0.55);
+            font-size: 0.7em; letter-spacing: 0.2em; text-transform: uppercase;
+            margin: 0 0 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        }
+        .pj-section-label::after {
+            content: ''; flex: 1; min-width: 20px; height: 1px; background: rgba(255,215,0,0.12);
+        }
+        .pj-bio-vacio { color: rgba(168,144,96,0.3); font-style: italic; font-family: Georgia, serif; font-size: 0.9em; }
+
+        /* ── BADGES ── */
+        .pj-bio-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-family: Georgia, serif; font-size: 0.78em; padding: 2px 10px;
+            border-radius: 20px; font-style: normal; letter-spacing: 0.02em;
+        }
+        .pj-bio-badge.pendiente { background: rgba(255,165,0,0.12); border: 1px solid rgba(255,165,0,0.3); color: #ffa500; }
+        .pj-bio-badge.aprobado  { background: rgba(80,200,100,0.1);  border: 1px solid rgba(80,200,100,0.25); color: #6dc87a; }
+        .pj-bio-badge.rechazado { background: rgba(200,50,50,0.1);   border: 1px solid rgba(200,50,50,0.25);  color: #e07070; }
+
+        /* ── BOTONES ── */
+        .pj-btn {
+            font-family: "Cinzel", serif; font-size: 0.75em; letter-spacing: 0.05em;
+            padding: 7px 18px; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s;
+        }
+        .pj-btn-editar   { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); color: #ffd700; }
+        .pj-btn-editar:hover { background: rgba(255,215,0,0.16); }
+        .pj-btn-guardar  { background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.5); color: #ffd700; }
+        .pj-btn-guardar:hover { background: rgba(255,215,0,0.25); }
+        .pj-btn-cancelar { background: none; border: 1px solid rgba(255,255,255,0.1); color: rgba(168,144,96,0.6); }
+        .pj-btn-cancelar:hover { color: #a89060; }
+        .pj-btn-aprobar  { background: rgba(80,200,100,0.1); border: 1px solid rgba(80,200,100,0.3); color: #6dc87a; }
+        .pj-btn-aprobar:hover  { background: rgba(80,200,100,0.2); }
+        .pj-btn-rechazar { background: rgba(200,50,50,0.1);  border: 1px solid rgba(200,50,50,0.3);  color: #e07070; }
+        .pj-btn-rechazar:hover { background: rgba(200,50,50,0.2); }
+
+        /* ── CAPÍTULOS ── */
+        .caps-lista { display: flex; flex-direction: column; gap: 20px; }
+        .cap-bloque {
+            background: rgba(0,0,0,0.2); border: 1px solid rgba(255,215,0,0.1);
+            border-radius: 8px; overflow: hidden;
+        }
+        .cap-bloque.aprobado  { border-color: rgba(80,200,100,0.2); }
+        .cap-bloque.pendiente { border-color: rgba(255,165,0,0.2); }
+        .cap-bloque.rechazado { border-color: rgba(200,50,50,0.25); }
+        .cap-header {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            padding: 11px 16px; border-bottom: 1px solid rgba(255,215,0,0.06);
+        }
+        .cap-titulo {
+            font-family: "Cinzel", serif; color: rgba(255,215,0,0.75);
+            font-size: 0.75em; letter-spacing: 0.15em; text-transform: uppercase; margin: 0; flex: 1;
+        }
+        .cap-texto {
+            font-family: "IM Fell English", Georgia, serif; color: #c8b888;
+            font-size: 1.02em; line-height: 1.85; font-style: italic; padding: 16px 18px;
+        }
+        .cap-rechazo-nota {
+            display: flex; gap: 10px; background: rgba(200,50,50,0.08);
+            border-top: 1px solid rgba(200,50,50,0.2); padding: 12px 16px;
+        }
+        .cap-rechazo-label {
+            font-family: "Cinzel", serif; font-size: 0.68em; letter-spacing: 0.1em;
+            color: rgba(224,112,112,0.7); text-transform: uppercase; margin-bottom: 4px;
+        }
+        .cap-rechazo-texto { font-family: Georgia, serif; font-size: 0.85em; color: #e07070; line-height: 1.6; font-style: italic; }
+        .cap-input-titulo {
+            width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.35);
+            border: none; border-bottom: 1px solid rgba(255,215,0,0.15); color: #ffd700;
+            font-family: "Cinzel", serif; font-size: 0.8em; padding: 9px 16px; outline: none;
+        }
+        .cap-input-titulo::placeholder { color: rgba(168,144,96,0.4); }
+        .cap-textarea {
+            display: none; width: 100%; box-sizing: border-box; min-height: 130px;
+            background: rgba(0,0,0,0.4); border: none; border-top: 1px solid rgba(255,215,0,0.1);
+            color: #e0d0a8; font-family: "IM Fell English", Georgia, serif;
+            font-size: 1em; font-style: italic; line-height: 1.7; padding: 12px 16px; resize: vertical; outline: none;
+        }
+        .cap-textarea-nota {
+            display: none; width: 100%; box-sizing: border-box; min-height: 65px;
+            background: rgba(200,50,50,0.06); border: none; border-top: 1px solid rgba(200,50,50,0.2);
+            color: #e0b0b0; font-family: Georgia, serif; font-size: 0.88em;
+            font-style: italic; padding: 9px 16px; resize: vertical; outline: none;
+        }
+        .cap-acciones { display: flex; gap: 8px; padding: 10px 14px 12px; flex-wrap: wrap; align-items: center; }
+        .cap-msg { font-family: Georgia, serif; font-size: 0.78em; color: rgba(168,144,96,0.6); font-style: italic; padding: 0 16px 10px; }
+        .cap-nuevo-btn {
+            font-family: "Cinzel", serif; font-size: 0.78em; letter-spacing: 0.06em;
+            padding: 9px 20px; border-radius: 6px; background: rgba(255,215,0,0.05);
+            border: 1px dashed rgba(255,215,0,0.3); color: rgba(255,215,0,0.55);
+            cursor: pointer; width: 100%; margin-top: 16px; transition: all 0.2s;
+        }
+        .cap-nuevo-btn:hover { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.55); color: #ffd700; }
+        .pj-privado-note {
+            display: flex; align-items: center; gap: 6px; font-family: Georgia, serif;
+            font-size: 0.75em; color: rgba(168,144,96,0.4); margin: 6px 16px 0; font-style: italic;
+        }
+
+        /* ── FICHA SIDEBAR ── */
+        .pj-ficha {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,215,0,0.13);
+            border-radius: 10px; overflow: hidden;
+        }
+        .pj-ficha::before {
+            content: ''; display: block; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent);
+        }
+        .pj-avatar-wrap {
+            width: 100%; min-height: 200px; background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; border-bottom: 1px solid rgba(255,215,0,0.08);
+        }
+        .pj-avatar-wrap img.pj-avatar-custom {
+            width: 100%; height: 100%; object-fit: cover; object-position: top;
+        }
+        .pj-avatar-wrap img.pj-avatar-skin {
+            width: auto; height: 185px; image-rendering: pixelated; display: block;
+        }
+        .pj-avatar-placeholder { font-size: 5em; opacity: 0.12; user-select: none; }
+        .pj-ficha-body { padding: 20px; }
+        .pj-ficha-fila {
+            padding: 11px 0; border-bottom: 1px solid rgba(255,215,0,0.06);
+            display: flex; flex-direction: column; gap: 3px;
+        }
+        .pj-ficha-fila:last-child { border-bottom: none; padding-bottom: 0; }
+        .pj-ficha-fila:first-child { padding-top: 0; }
+        .pj-ficha-label {
+            font-family: "Cinzel", serif; color: rgba(168,144,96,0.5);
+            font-size: 0.63em; letter-spacing: 0.18em; text-transform: uppercase;
+        }
+        .pj-ficha-valor { font-family: "IM Fell English", Georgia, serif; color: #e0d0a8; font-size: 1em; }
+        .pj-ficha-nombre-rol { font-family: "MedievalSharp", cursive; color: #ffd700; font-size: 1.08em; }
+
+        /* ── ESTADO / CARGA ── */
+        .pj-estado {
+            grid-column: 1 / -1; text-align: center; padding: 100px 20px;
+            font-family: Georgia, serif; color: rgba(168,144,96,0.5);
+        }
+        .pj-spinner {
+            display: inline-block; width: 30px; height: 30px;
+            border: 2px solid rgba(255,215,0,0.12); border-top-color: rgba(255,215,0,0.55);
+            border-radius: 50%; animation: spin 0.85s linear infinite; margin-bottom: 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 720px) {
+            .pj-page {
+                grid-template-columns: 1fr;
+                grid-template-areas: "sidebar" "main";
+            }
+            .pj-sidebar { position: static; }
+            .pj-nombre { font-size: 2em; }
+        }
+    </style>
 </head>
 <body>
 
     <header>
-        <div class="header-left">
-            <h2>Mines & Monarch</h2>
-        </div>
+        <div class="header-left"><h2>Mines & Monarch</h2></div>
         <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
         <nav class="header-right">
             <ul>
@@ -31,6 +229,7 @@
                     </ul>
                 </li>
                 <li><a href="Territorios/Territorios.html">Territorios</a></li>
+                <li><a href="Mundo/Personajes/Personajes.html">Personajes</a></li>
                 <li><a href="#">Lore Oficial</a></li>
                 <li><a href="#">Mapa</a></li>
                 <li><a href="https://ko-fi.com/minesandmonarchs">Donar</a></li>
@@ -62,6 +261,329 @@
 
     <link rel="stylesheet" href="cuenta-modal.css">
     <script src="index.js"></script>
-    <script type="module" src="Mundo/Personajes/personaje.js"></script>
+    <script type="module">
+        import { initializeApp, getApp, getApps }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+        import { getFirestore, doc, getDoc, updateDoc }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
+            authDomain:        "minesandmonarch.firebaseapp.com",
+            projectId:         "minesandmonarch",
+            storageBucket:     "minesandmonarch.firebasestorage.app",
+            messagingSenderId: "379898851786",
+            appId:             "1:379898851786:web:b892cbf4d8508798d61f33"
+        };
+
+        const app  = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db   = getFirestore(app);
+
+        const RAZAS = {
+            humano:"Humano", elfobosque:"Elfo del Bosque", alfiq:"Alfiq",
+            goblin:"Goblin", enano:"Enano", aracnido:"Arácnido", yeti:"Yeti",
+            demonio:"Demonio", sirena:"Sirena", valquiria:"Valquiria",
+            hadapixie:"Hada Pixie", hadafae:"Hada Fae", granelfo:"Gran Elfo",
+            gorgona:"Gorgona", victimapeste:"Víctima de la Peste",
+            banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro",
+            revenant:"Revenant", ribbit:"Ribbit"
+        };
+        const CLASES = {
+            cazador:"Cazador", guardabosques:"Guardabosques", curador:"Curador",
+            magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico",
+            magosangre:"Mago de Sangre", magohelado:"Mago Helado",
+            magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego",
+            granmago:"Gran Mago", granmagooscuro:"Gran Mago Oscuro",
+            guerrerobendito:"Guerrero Bendito", hiedravenenosa:"Hiedra Venenosa",
+            rogue:"Rogue", tanque:"Tanque", berserker:"Berserker",
+            guerrero:"Guerrero", bardo:"Bardo", guerrerodelmar:"Guerrero del Mar",
+            carterista:"Carterista", paladin:"Paladín", ingeniero:"Ingeniero",
+            bestiasalvaje:"Bestia Salvaje", angler:"Angler",
+            magoeldritch:"Mago del Eldritch", niceGuy:"Nice Guy"
+        };
+        const TRABAJOS = {
+            constructor:"Constructor", inutilerrante:"Inútil Errante",
+            explorador:"Explorador", clerigo:"Clérigo", mercader:"Mercader",
+            metalurgico:"Metalúrgico", agricultor:"Agricultor",
+            granjero:"Granjero", cocinero:"Cocinero"
+        };
+
+        function badgeHtml(estado) {
+            const map = {
+                pendiente: ['pendiente', '⏳ Pendiente'],
+                aprobado:  ['aprobado',  '✓ Aprobado'],
+                rechazado: ['rechazado', '✗ Rechazado'],
+            };
+            const [cls, txt] = map[estado] || ['pendiente','⏳ Pendiente'];
+            return `<span class="pj-bio-badge ${cls}">${txt}</span>`;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const uid    = params.get('uid');
+        const page   = document.getElementById('pjPage');
+        const estado = document.getElementById('pjEstado');
+
+        if (!uid) {
+            estado.textContent = 'No se especificó ningún personaje.';
+        } else {
+            onAuthStateChanged(auth, async currentUser => {
+                try {
+                    const snap = await getDoc(doc(db, 'usuarios', uid));
+                    if (!snap.exists() || !snap.data().personaje) {
+                        estado.textContent = 'Este personaje no existe aún.';
+                        return;
+                    }
+
+                    const d  = snap.data();
+                    const pj = d.personaje;
+
+                    // Capítulos — retrocompatible con bio antigua
+                    let capitulos = d.capitulos || [];
+                    if (capitulos.length === 0 && d.bio && d.bio.texto) {
+                        capitulos = [{
+                            id: 'cap_legacy',
+                            titulo: 'Historia',
+                            texto: d.bio.texto,
+                            estado: d.bio.estado === 'aprobada' ? 'aprobado' : (d.bio.estado || 'pendiente'),
+                            notaRechazo: ''
+                        }];
+                    }
+
+                    const esPropietario = currentUser && currentUser.uid === uid;
+                    let esAdmin = false;
+                    if (currentUser && !esPropietario) {
+                        try {
+                            const mySnap = await getDoc(doc(db, 'usuarios', currentUser.uid));
+                            esAdmin = mySnap.exists() && mySnap.data().rol === 'admin';
+                        } catch (_) {}
+                    }
+
+                    // Avatar: imagen propia > skin MC > placeholder
+                    const avatarHtml = pj.imagenUrl
+                        ? `<img class="pj-avatar-custom" src="${pj.imagenUrl}" alt="${pj.nombreRol}">`
+                        : pj.nombreMC
+                            ? `<img class="pj-avatar-skin"
+                                src="https://mc-heads.net/body/${encodeURIComponent(pj.nombreMC)}/200"
+                                alt="${pj.nombreMC}"
+                                onerror="this.style.display='none'">`
+                            : `<span class="pj-avatar-placeholder">⚜</span>`;
+
+                    // Render página
+                    page.innerHTML = `
+                        <div class="pj-main">
+                            <div class="pj-header">
+                                <h1 class="pj-nombre">⚜ ${pj.nombreRol}</h1>
+                                <p class="pj-registro">Registro # ${String(d.id || '0').padStart(4,'0')}</p>
+                                <div class="pj-divider"></div>
+                                <div class="pj-divider-ornament">✦ ✦ ✦</div>
+                            </div>
+                            <div class="pj-bio-section">
+                                <p class="pj-section-label">Historia</p>
+                                <div class="caps-lista" id="capsLista"></div>
+                                ${esPropietario ? `<button class="cap-nuevo-btn" id="btnNuevoCap">+ Añadir nuevo capítulo</button>` : ''}
+                            </div>
+                        </div>
+
+                        <aside class="pj-sidebar">
+                            <div class="pj-ficha">
+                                <div class="pj-avatar-wrap">${avatarHtml}</div>
+                                <div class="pj-ficha-body">
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Nombre de rol</span>
+                                        <span class="pj-ficha-valor pj-ficha-nombre-rol">${pj.nombreRol}</span>
+                                    </div>
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Minecraft</span>
+                                        <span class="pj-ficha-valor">${pj.nombreMC || '—'}</span>
+                                    </div>
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Raza</span>
+                                        <span class="pj-ficha-valor">${RAZAS[pj.raza] || pj.raza || '—'}</span>
+                                    </div>
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Clase</span>
+                                        <span class="pj-ficha-valor">${CLASES[pj.clase] || pj.clase || '—'}</span>
+                                    </div>
+                                    <div class="pj-ficha-fila">
+                                        <span class="pj-ficha-label">Trabajo</span>
+                                        <span class="pj-ficha-valor">${TRABAJOS[pj.trabajo] || pj.trabajo || '—'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+                    `;
+
+                    // ── Render capítulos ──
+                    const lista = document.getElementById('capsLista');
+
+                    function renderCapitulos() {
+                        lista.innerHTML = '';
+                        const visibles = capitulos.filter(c =>
+                            c.estado === 'aprobado' || esPropietario || esAdmin
+                        );
+
+                        if (visibles.length === 0) {
+                            lista.innerHTML = `<span class="pj-bio-vacio" style="display:block;padding:8px 0">
+                                ${esPropietario
+                                    ? 'Aún no has escrito ningún capítulo. Pulsa el botón de abajo para comenzar.'
+                                    : 'Sin historia aún.'}
+                            </span>`;
+                            return;
+                        }
+
+                        visibles.forEach(cap => {
+                            const numCap   = capitulos.indexOf(cap) + 1;
+                            const editable = esPropietario && cap.estado !== 'aprobado';
+                            const div = document.createElement('div');
+                            div.className = `cap-bloque ${cap.estado}`;
+                            div.id = 'cap_' + cap.id;
+
+                            div.innerHTML = `
+                                <div class="cap-header">
+                                    <p class="cap-titulo">Capítulo ${numCap}${cap.titulo ? ' · ' + cap.titulo : ''}</p>
+                                    ${(esPropietario || esAdmin) ? badgeHtml(cap.estado) : ''}
+                                </div>
+
+                                ${cap.estado === 'rechazado' && cap.notaRechazo && (esPropietario || esAdmin) ? `
+                                <div class="cap-rechazo-nota">
+                                    <div>
+                                        <p class="cap-rechazo-label">✗ Motivo del rechazo</p>
+                                        <p class="cap-rechazo-texto">${cap.notaRechazo}</p>
+                                    </div>
+                                </div>` : ''}
+
+                                <div class="cap-texto" id="txt_${cap.id}">
+                                    ${cap.texto ? cap.texto.replace(/\n/g,'<br>') : '<span class="pj-bio-vacio">Sin contenido aún.</span>'}
+                                </div>
+
+                                ${editable ? `
+                                    <input class="cap-input-titulo" id="ti_${cap.id}" type="text"
+                                        placeholder="Título del capítulo (opcional)"
+                                        value="${cap.titulo || ''}" style="display:none">
+                                    <textarea class="cap-textarea" id="ta_${cap.id}"
+                                        placeholder="Escribe este capítulo…">${cap.texto || ''}</textarea>
+                                    <div class="cap-acciones" id="ac_${cap.id}">
+                                        <button class="pj-btn pj-btn-editar"   id="be_${cap.id}">✏ Editar</button>
+                                        <button class="pj-btn pj-btn-guardar"  id="bg_${cap.id}" style="display:none">⚜ Enviar para aprobación</button>
+                                        <button class="pj-btn pj-btn-cancelar" id="bc_${cap.id}" style="display:none">Cancelar</button>
+                                    </div>
+                                    <p class="pj-privado-note">🔒 Solo tú y los administradores ven esto hasta que sea aprobado</p>
+                                ` : ''}
+
+                                ${esAdmin && cap.estado === 'pendiente' ? `
+                                    <div class="cap-acciones" id="adAc_${cap.id}">
+                                        <span style="font-family:Georgia,serif;font-size:0.8em;color:#a89060;font-style:italic">Revisar:</span>
+                                        <button class="pj-btn pj-btn-aprobar"  id="adAp_${cap.id}">✓ Aprobar</button>
+                                        <button class="pj-btn pj-btn-rechazar" id="adRt_${cap.id}">✗ Rechazar</button>
+                                    </div>
+                                    <textarea class="cap-textarea-nota" id="adNota_${cap.id}"
+                                        placeholder="Escribe el motivo del rechazo para el jugador…"></textarea>
+                                    <div class="cap-acciones" id="adConf_${cap.id}" style="display:none">
+                                        <button class="pj-btn pj-btn-rechazar" id="adRc_${cap.id}">✗ Confirmar rechazo</button>
+                                        <button class="pj-btn pj-btn-cancelar" id="adCn_${cap.id}">Cancelar</button>
+                                    </div>
+                                ` : ''}
+                                <p class="cap-msg" id="msg_${cap.id}" style="display:none"></p>
+                            `;
+                            lista.appendChild(div);
+
+                            // Lógica propietario
+                            if (editable) {
+                                const be = document.getElementById('be_' + cap.id);
+                                const bg = document.getElementById('bg_' + cap.id);
+                                const bc = document.getElementById('bc_' + cap.id);
+                                const ta = document.getElementById('ta_' + cap.id);
+                                const ti = document.getElementById('ti_' + cap.id);
+                                const tx = document.getElementById('txt_' + cap.id);
+                                const mg = document.getElementById('msg_' + cap.id);
+
+                                be.addEventListener('click', () => {
+                                    tx.style.display = 'none'; ta.style.display = 'block'; ti.style.display = 'block';
+                                    be.style.display = 'none'; bg.style.display = ''; bc.style.display = '';
+                                });
+                                bc.addEventListener('click', () => {
+                                    ta.value = cap.texto || ''; ti.value = cap.titulo || '';
+                                    ta.style.display = 'none'; ti.style.display = 'none'; tx.style.display = '';
+                                    be.style.display = ''; bg.style.display = 'none'; bc.style.display = 'none';
+                                });
+                                bg.addEventListener('click', async () => {
+                                    const nuevoTexto = ta.value.trim();
+                                    if (!nuevoTexto) { mg.textContent = 'Escribe algo antes de enviar.'; mg.style.display = ''; return; }
+                                    bg.disabled = true; bg.textContent = 'Guardando…';
+                                    try {
+                                        cap.texto  = nuevoTexto;
+                                        cap.titulo = ti.value.trim();
+                                        cap.estado = 'pendiente';
+                                        cap.notaRechazo = '';
+                                        await updateDoc(doc(db, 'usuarios', uid), { capitulos });
+                                        renderCapitulos();
+                                    } catch(e) {
+                                        mg.textContent = 'Error al guardar.'; mg.style.display = '';
+                                        bg.disabled = false; bg.textContent = '⚜ Enviar para aprobación';
+                                    }
+                                });
+                            }
+
+                            // Lógica admin
+                            if (esAdmin && cap.estado === 'pendiente') {
+                                const adAp   = document.getElementById('adAp_'   + cap.id);
+                                const adRt   = document.getElementById('adRt_'   + cap.id);
+                                const adRc   = document.getElementById('adRc_'   + cap.id);
+                                const adCn   = document.getElementById('adCn_'   + cap.id);
+                                const adNota = document.getElementById('adNota_' + cap.id);
+                                const adAc   = document.getElementById('adAc_'   + cap.id);
+                                const adConf = document.getElementById('adConf_' + cap.id);
+
+                                adAp.addEventListener('click', async () => {
+                                    adAp.disabled = true;
+                                    cap.estado = 'aprobado'; cap.notaRechazo = '';
+                                    await updateDoc(doc(db, 'usuarios', uid), { capitulos });
+                                    renderCapitulos();
+                                });
+                                adRt.addEventListener('click', () => {
+                                    adNota.style.display = 'block'; adConf.style.display = '';
+                                    adAc.style.display = 'none'; adNota.focus();
+                                });
+                                adCn.addEventListener('click', () => {
+                                    adNota.style.display = 'none'; adConf.style.display = 'none';
+                                    adAc.style.display = '';
+                                });
+                                adRc.addEventListener('click', async () => {
+                                    const nota = adNota.value.trim();
+                                    if (!nota) { adNota.placeholder = '⚠ Escribe el motivo antes de confirmar'; adNota.focus(); return; }
+                                    adRc.disabled = true;
+                                    cap.estado = 'rechazado'; cap.notaRechazo = nota;
+                                    await updateDoc(doc(db, 'usuarios', uid), { capitulos });
+                                    renderCapitulos();
+                                });
+                            }
+                        });
+                    }
+
+                    renderCapitulos();
+
+                    // Añadir nuevo capítulo
+                    document.getElementById('btnNuevoCap')?.addEventListener('click', () => {
+                        const nuevo = {
+                            id: 'cap_' + Date.now(),
+                            titulo: '', texto: '', estado: 'pendiente', notaRechazo: ''
+                        };
+                        capitulos.push(nuevo);
+                        renderCapitulos();
+                        document.getElementById('be_' + nuevo.id)?.click();
+                        document.getElementById('cap_' + nuevo.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+
+                } catch (err) {
+                    estado.textContent = 'Error al cargar el personaje.';
+                    console.error(err);
+                }
+            });
+        }
+    </script>
+    <script type="module" src="cuenta-modal.js"></script>
 </body>
 </html>
