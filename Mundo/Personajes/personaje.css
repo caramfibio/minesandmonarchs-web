@@ -1,14 +1,18 @@
+/* ════════════════════════════════════
    LAYOUT PRINCIPAL
 ════════════════════════════════════ */
 .pj-page {
     display: grid;
     grid-template-columns: 1fr 280px;
+    grid-template-areas: "main sidebar";
     gap: 32px;
     max-width: 1100px;
     margin: 48px auto;
     padding: 0 24px 80px;
     align-items: start;
 }
+.pj-main    { grid-area: main; }
+.pj-sidebar { grid-area: sidebar; }
 
 /* ════════════════════════════════════
    CABECERA
@@ -320,7 +324,7 @@
    RESPONSIVE
 ════════════════════════════════════ */
 @media (max-width: 720px) {
-    .pj-page { grid-template-columns: 1fr; }
+    .pj-page { grid-template-columns: 1fr; grid-template-areas: "sidebar" "main"; }
     .pj-sidebar { order: -1; position: static; }
     .pj-avatar-wrap { aspect-ratio: 3 / 2; }
     .pj-nombre { font-size: 2em; }
