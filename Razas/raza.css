@@ -130,7 +130,7 @@
 /* Enano – Marrón */
 .modal-overlay[data-raza="enano"]        { --rc:#8b5e3c; --rc-dim:rgba(139,94,60,.18); --rc-border:rgba(139,94,60,.5); --rc-glow:rgba(139,94,60,.22); --rc-tag-bg:rgba(139,94,60,.14); --rc-tag-border:rgba(139,94,60,.4); --rc-clase-bg:rgba(139,94,60,.12); --rc-clase-border:rgba(139,94,60,.4); --rc-clase-text:#c49a72; }
 /* Arácnido – Verde */
-.modal-overlay[data-raza="aracnido"]     { --rc:#3dba3d; --rc-dim:rgba(61,186,61,.18); --rc-border:rgba(61,186,61,.5); --rc-glow:rgba(61,186,61,.22); --rc-tag-bg:rgba(61,186,61,.14); --rc-tag-border:rgba(61,186,61,.4); --rc-clase-bg:rgba(61,186,61,.12); --rc-clase-border:rgba(61,186,61,.4); --rc-clase-text:#80d880; }
+.modal-overlay[data-raza="aracnido"]     { --rc:#393b39; --rc-dim:rgba(93, 112, 93, 0.18); --rc-border:rgba(134, 151, 134, 0.5); --rc-glow:rgba(41, 49, 41, 0.22); --rc-tag-bg:rgba(61,186,61,.14); --rc-tag-border:rgba(160, 177, 160, 0.4); --rc-clase-bg:rgba(73, 97, 73, 0.12); --rc-clase-border:rgba(125, 131, 125, 0.4); --rc-clase-text:#80d880; }
 /* Yeti – Celeste */
 .modal-overlay[data-raza="yeti"]         { --rc:#6dd5ed; --rc-dim:rgba(109,213,237,.18); --rc-border:rgba(109,213,237,.5); --rc-glow:rgba(109,213,237,.22); --rc-tag-bg:rgba(109,213,237,.14); --rc-tag-border:rgba(109,213,237,.4); --rc-clase-bg:rgba(109,213,237,.12); --rc-clase-border:rgba(109,213,237,.4); --rc-clase-text:#a2e6f4; }
 /* Demonio – Rojo */
