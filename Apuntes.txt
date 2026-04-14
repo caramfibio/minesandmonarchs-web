@@ -3,8 +3,10 @@ Forma de gobierno, manual
 
 url banner - 
 
+bloquear manolo
+
 Falta configurar el nav
 
 git add .
 git commit -m "Actualizacion apuntes"
-git push
+git pull
