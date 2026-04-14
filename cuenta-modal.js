@@ -40,8 +40,7 @@ const RAZAS = {
     demonio:"Demonio", sirena:"Sirena", valquiria:"Valquiria",
     hadapixie:"Hada Pixie", hadafae:"Hada Fae", granelfo:"Gran Elfo",
     gorgona:"Gorgona", victimapeste:"Víctima de la Peste",
-    banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro", revenant:"Revenant",
-    ribbit:"Ribbit"
+    banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro", revenant:"Revenant"
 };
 const CLASES = {
     cazador:"Cazador", guardabosques:"Guardabosques", curador:"Curador",
