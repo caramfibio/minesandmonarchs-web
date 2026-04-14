@@ -2,3 +2,9 @@ quitar identificacion
 Forma de gobierno, manual
 
 url banner - 
+
+Falta configurar el nav
+
+git add .
+git commit -m "Actualizacion apuntes"
+git push
