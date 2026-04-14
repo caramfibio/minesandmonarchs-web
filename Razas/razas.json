@@ -116,7 +116,7 @@
   "goblin": {
     "id": "goblin",
     "nombre": "Goblin",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SROpUR1-I_y_-EAddmvAG4vA_V8DbJ8gzq6qqs2JWBa0x7CkYPhK1y08JB7MtxkLJyppT0g5GMcma6jsm0lIlfwaCfTW2IJfrb6uAfvLi7etvYNPoqoAgH4i4v1qqPPbY9XxElSUMiL3x7TAF8rnnei87esMs5NSaMOb1Tfxgvc4CnKaZjTdm9Le2Y-F1xBjmYg1V9xqSD5mXbd99fU708f8yxg4EXBbGJh_4E=w1280",
+    "img": "Images/Razas/goblin.jpg",
     "desc": "Los Goblins son reconocidos por su rapidez y por su suerte al encontrar oro. Se dice que si tienen lingotes a mano, se mantendrán en mejor estado y estarán en mejores condiciones.",
     "cambios": [
       "Bonificación de armadura de oro.",
