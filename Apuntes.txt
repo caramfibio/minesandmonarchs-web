@@ -5,8 +5,18 @@ url banner -
 
 bloquear manolo
 
+Versionar lore, 
+
+parrafo inicial lore ofcicial desde stuff
+
+parrafo con modal con lores de las personas
+
+
 Falta configurar el nav
 
 git add .
 git commit -m "Actualizacion apuntes"
+git push
+
+
 git pull

@@ -1,160 +1,263 @@
 /* ============================================================
    territorio-formulario.js – Mines & Monarch · Formulario de Territorio
+   4 secciones: General · Descripción · Lore · Gobierno
+   Guarda en Firebase Firestore → colección "solicitudes_territorio"
    ============================================================ */
+
+import { initializeApp, getApps }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection,
+         addDoc, serverTimestamp }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+/* ── Firebase (reutiliza la instancia si ya existe) ── */
+const firebaseConfig = {
+    apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
+    authDomain:        "minesandmonarch.firebaseapp.com",
+    projectId:         "minesandmonarch",
+    storageBucket:     "minesandmonarch.firebasestorage.app",
+    messagingSenderId: "379898851786",
+    appId:             "1:379898851786:web:b892cbf4d8508798d61f33"
+};
+
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const db  = getFirestore(app);
 
 (function () {
 
-    const RAZAS_DISPONIBLES = [
-        'Humanos', 'Elfos del Bosque', 'Elfos de las Nieves',
-        'Enanos', 'Enanos del Norte', 'Goblins', 'Medianos',
-        'Orcos', 'Semielfos', 'No-muertos', 'Draconidos'
-    ];
-
-    /* ── Inyectar HTML del modal en el body ── */
+    /* ════════════════════════════════════════
+       HTML DEL MODAL
+       ════════════════════════════════════════ */
     function injectFormModal() {
-        const razasCheckboxes = RAZAS_DISPONIBLES.map(r => `
-            <label class="raza-check-label">
-                <input type="checkbox" name="raza_permitida" value="${r}">
-                <span>${r}</span>
-            </label>`).join('');
-
         const html = `
         <div class="form-overlay" id="formOverlay">
             <div class="form-box" id="formBox">
+
+                <!-- Cabecera -->
                 <div class="form-header">
                     <div class="form-header-deco"></div>
                     <button class="form-close" id="formClose" aria-label="Cerrar">✕</button>
-                    <h2 class="form-title">Crear Territorio</h2>
-                    <p class="form-subtitle">Completa todos los campos para registrar tu reino en Belmaria</p>
+                    <h2 class="form-title">Solicitar Territorio</h2>
+                    <p class="form-subtitle">Completa las cuatro secciones para registrar tu reino en Belmaria</p>
                 </div>
 
-                <div class="form-body" id="formBody">
+                <!-- Barra de progreso de secciones -->
+                <div class="form-steps" id="formSteps">
+                    <button class="form-step active" data-step="1">1 · General</button>
+                    <button class="form-step" data-step="2">2 · Descripción</button>
+                    <button class="form-step" data-step="3">3 · Lore</button>
+                    <button class="form-step" data-step="4">4 · Gobierno</button>
+                </div>
 
-                    <!-- Discord -->
+                <!-- ─────────────────────────────── -->
+                <!-- SECCIÓN 1 · GENERAL             -->
+                <!-- ─────────────────────────────── -->
+                <div class="form-body form-section-panel" id="section1">
+
                     <p class="form-section-label">Identificación</p>
                     <div class="form-row full">
-                        <div class="form-group discord-field">
-                            <label class="form-label">
-                                Nombre de Discord <span>*</span>
-                                <span class="discord-badge">⚡ Discord</span>
-                            </label>
-                            <input class="form-input" type="text" id="f_discord"
-                                placeholder="usuario#0000 o @usuario" required>
-                        </div>
-                    </div>
-
-                    <!-- Información básica -->
-                    <p class="form-section-label">Información del Territorio</p>
-
-                    <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Nombre del Territorio <span>*</span></label>
+                            <label class="form-label">Nombre completo del territorio <span>*</span></label>
                             <input class="form-input" type="text" id="f_nombre"
-                                placeholder="Ej: Kalheim" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Subtítulo / Lema</label>
-                            <input class="form-input" type="text" id="f_subtitulo"
-                                placeholder="Ej: El Reino Matriarcal del Norte">
+                                placeholder="Ej: Gran Kalheim del Norte" required>
                         </div>
                     </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">Nombre corto <span>*</span></label>
+                            <input class="form-input" type="text" id="f_nombre_corto"
+                                placeholder="Ej: Kalheim">
+                        </div>
+                    </div>
+
+                    <p class="form-section-label">Gentilicio</p>
+                    <p class="form-note" style="margin-bottom:12px">
+                        Cómo se llama a los habitantes. Ejemplo: <em>kalheimiano, kalheimiana, kalheimiano, kalheimianos</em>
+                    </p>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Forma de Gobierno <span>*</span></label>
-                            <select class="form-select" id="f_gobierno">
-                                <option value="" disabled selected>Selecciona…</option>
-                                <option>Monarquía Absoluta</option>
-                                <option>Monarquía Constitucional</option>
-                                <option>Monarquía Hereditaria</option>
-                                <option>República Democrática</option>
-                                <option>República Oligárquica</option>
-                                <option>Matriarcado</option>
-                                <option>Patriarcado</option>
-                                <option>Consejo de Ancianos</option>
-                                <option>Teocracia</option>
-                                <option>Anarquía Pactada</option>
-                                <option>Dictadura</option>
-                                <option>Otro</option>
-                            </select>
+                            <label class="form-label">Masculino singular <span>*</span></label>
+                            <input class="form-input" type="text" id="f_gent_masc_sg"
+                                placeholder="Ej: kalheimiano">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">URL de imagen banner</label>
-                            <input class="form-input" type="url" id="f_img_banner"
-                                placeholder="https://…">
+                            <label class="form-label">Femenino singular <span>*</span></label>
+                            <input class="form-input" type="text" id="f_gent_fem_sg"
+                                placeholder="Ej: kalheimiana">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Masculino plural <span>*</span></label>
+                            <input class="form-input" type="text" id="f_gent_masc_pl"
+                                placeholder="Ej: kalheimianos">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Femenino plural <span>*</span></label>
+                            <input class="form-input" type="text" id="f_gent_fem_pl"
+                                placeholder="Ej: kalheimianas">
                         </div>
                     </div>
 
-                    <div class="form-row full">
+                    <div class="form-row full" style="margin-top:4px">
                         <div class="form-group">
-                            <label class="form-label">Descripción corta <span>*</span></label>
-                            <input class="form-input" type="text" id="f_desc_corta"
-                                placeholder="Resumen en una frase de tu territorio" required>
+                            <label class="form-label">
+                                Neutro / No binario
+                                <span class="form-badge-optional">Opcional</span>
+                            </label>
+                            <input class="form-input" type="text" id="f_gent_neutro"
+                                placeholder="Ej: kalheimiane / kalheimianx">
                         </div>
                     </div>
 
-                    <!-- Descripción larga — UN solo textarea -->
-                    <p class="form-section-label">Historia & Lore</p>
+                    <div class="form-nav-row">
+                        <button class="form-cancel" id="formCancel" type="button">Cancelar</button>
+                        <button class="form-next" type="button" data-next="2">Siguiente →</button>
+                    </div>
+                </div>
 
+                <!-- ─────────────────────────────── -->
+                <!-- SECCIÓN 2 · DESCRIPCIÓN         -->
+                <!-- ─────────────────────────────── -->
+                <div class="form-body form-section-panel" id="section2" style="display:none">
+
+                    <p class="form-section-label">Descripción</p>
                     <div class="form-row full">
                         <div class="form-group">
-                            <label class="form-label">Descripción completa <span>*</span></label>
-                            <textarea class="form-textarea" id="f_descripcion" style="min-height:160px"
-                                placeholder="Escribe el lore de tu territorio. Pulsa Enter para separar párrafos." required></textarea>
+                            <label class="form-label">Descripción del territorio <span>*</span></label>
+                            <textarea class="form-textarea" id="f_descripcion" style="min-height:180px"
+                                placeholder="Describe el territorio, su paisaje, su historia general, su cultura… Cada salto de línea será un párrafo separado." required></textarea>
                             <span class="form-note" style="margin-top:5px;display:block">
                                 Cada salto de línea se convertirá en un párrafo separado.
                             </span>
                         </div>
                     </div>
 
-                    <!-- Fundadores expandibles -->
-                    <p class="form-section-label">Fundadores & Religión</p>
-
-                    <div class="leyes-dynamic" id="fundadoresDynamic"></div>
-                    <button class="ley-add" id="fundadorAddBtn" type="button">+ Añadir fundador</button>
-
-                    <div class="form-row full" style="margin-top:14px">
+                    <p class="form-section-label">Creencia</p>
+                    <div class="form-row full">
                         <div class="form-group">
-                            <label class="form-label">Religión / Creencia</label>
-                            <input class="form-input" type="text" id="f_religion"
-                                placeholder="Ej: Culto a las Ancestras">
+                            <label class="form-label">Religión / Creencia principal <span>*</span></label>
+                            <textarea class="form-textarea" id="f_creencia" style="min-height:100px"
+                                placeholder="¿En qué creen los habitantes? ¿Dioses, ancestros, la naturaleza, la magia…?"></textarea>
                         </div>
                     </div>
 
-                    <!-- Razas permitidas -->
-                    <p class="form-section-label">Razas Permitidas</p>
-
-                    <div class="razas-check-grid" id="razasCheckGrid">
-                        ${razasCheckboxes}
+                    <div class="form-nav-row">
+                        <button class="form-back" type="button" data-back="1">← Anterior</button>
+                        <button class="form-next" type="button" data-next="3">Siguiente →</button>
                     </div>
-                    <div class="raza-add-row">
-                        <input class="form-input" type="text" id="razaCustomInput"
-                            placeholder="Añadir raza personalizada…">
-                        <button class="raza-add-btn" id="razaAddBtn" type="button" title="Añadir">+</button>
+                </div>
+
+                <!-- ─────────────────────────────── -->
+                <!-- SECCIÓN 3 · LORE                -->
+                <!-- ─────────────────────────────── -->
+                <div class="form-body form-section-panel" id="section3" style="display:none">
+
+                    <p class="form-section-label">Miembro antes de empezar</p>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">
+                                ¿Cuántos miembros necesitas antes de abrir el territorio?
+                                <span class="form-badge-optional">Editable más tarde</span>
+                            </label>
+                            <input class="form-input" type="text" id="f_miembros_previos"
+                                placeholder="Ej: 3 miembros fundadores confirmados"
+                                disabled style="opacity:0.5;cursor:not-allowed">
+                            <span class="form-note" style="margin-top:5px;display:block">
+                                Este campo se habilitará en una actualización próxima.
+                            </span>
+                        </div>
                     </div>
-                    <div class="razas-pills" id="razasPills"></div>
 
-                    <!-- Leyes -->
-                    <p class="form-section-label">Leyes del Territorio</p>
+                    <p class="form-section-label">Lore</p>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">Historia / Lore profundo <span>*</span></label>
+                            <textarea class="form-textarea" id="f_lore" style="min-height:200px"
+                                placeholder="Cuenta la historia del territorio con detalle: su origen, eventos clave, guerras pasadas, figuras legendarias, misterios…"></textarea>
+                        </div>
+                    </div>
 
-                    <div class="leyes-dynamic" id="leyesDynamic"></div>
-                    <button class="ley-add" id="leyAddBtn" type="button">+ Añadir ley</button>
+                    <div class="form-nav-row">
+                        <button class="form-back" type="button" data-back="2">← Anterior</button>
+                        <button class="form-next" type="button" data-next="4">Siguiente →</button>
+                    </div>
+                </div>
 
-                    <!-- Enviar -->
+                <!-- ─────────────────────────────── -->
+                <!-- SECCIÓN 4 · GOBIERNO            -->
+                <!-- ─────────────────────────────── -->
+                <div class="form-body form-section-panel" id="section4" style="display:none">
+
+                    <p class="form-section-label">Estructura de Gobierno</p>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">Explica la forma de gobierno <span>*</span></label>
+                            <textarea class="form-textarea" id="f_gobierno_desc" style="min-height:100px"
+                                placeholder="¿Cómo funciona el poder? ¿Quién manda y cómo se toman las decisiones?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">Planificación <span>*</span></label>
+                            <textarea class="form-textarea" id="f_planificacion" style="min-height:90px"
+                                placeholder="¿Qué planes tiene el territorio a corto/largo plazo? Construcciones, alianzas, expansión…"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">Políticas exteriores <span>*</span></label>
+                            <textarea class="form-textarea" id="f_politicas_ext" style="min-height:90px"
+                                placeholder="¿Cómo se relaciona con otros territorios? ¿Es abierto, neutral, hostil…?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">Posibles guerras</label>
+                            <textarea class="form-textarea" id="f_guerras" style="min-height:80px"
+                                placeholder="¿Con qué territorios podría haber conflicto? ¿Por qué?"></textarea>
+                        </div>
+                    </div>
+
+                    <p class="form-section-label">Tu personaje</p>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">¿Por qué tu personaje es el fundador? <span>*</span></label>
+                            <textarea class="form-textarea" id="f_por_que_fundador" style="min-height:100px"
+                                placeholder="Justifica desde el lore y la historia de tu personaje por qué es el fundador de este territorio."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label class="form-label">Comentario adicional</label>
+                            <textarea class="form-textarea" id="f_comentario" style="min-height:70px"
+                                placeholder="Cualquier cosa que quieras añadir y no encaje en los apartados anteriores."></textarea>
+                        </div>
+                    </div>
+
                     <div class="form-submit-row">
+                        <button class="form-back" type="button" data-back="3" style="margin-right:auto">← Anterior</button>
                         <span class="form-note">Los campos con <span style="color:#c0392b">*</span> son obligatorios</span>
-                        <button class="form-cancel" id="formCancel" type="button">Cancelar</button>
                         <button class="form-submit" id="formSubmit" type="button">⚜ Enviar Solicitud</button>
                     </div>
+
+                    <p class="form-error-msg" id="formError"></p>
                 </div>
 
                 <!-- Pantalla de éxito -->
                 <div class="form-success" id="formSuccess">
                     <div class="form-success-icon">⚜</div>
                     <h3>¡Solicitud Enviada!</h3>
-                    <p>Tu solicitud para crear el territorio ha sido registrada.<br>
+                    <p>Tu solicitud ha sido registrada en Belmaria.<br>
                     Un administrador la revisará y contactará contigo por Discord.</p>
                 </div>
+
             </div>
         </div>`;
 
@@ -162,123 +265,143 @@
     }
 
     /* ════════════════════════════════════════
-       Lista dinámica genérica — leyes Y fundadores
+       NAVEGACIÓN ENTRE SECCIONES
        ════════════════════════════════════════ */
-    function addItem(containerId, label, text = '') {
-        const container = document.getElementById(containerId);
-        const i = container.children.length + 1;
-        const div = document.createElement('div');
-        div.className = 'ley-item';
-        div.innerHTML = `
-            <input class="form-input" type="text" placeholder="${label} ${i}…" value="${text}">
-            <button class="ley-remove" type="button" title="Eliminar">✕</button>`;
-        div.querySelector('.ley-remove').addEventListener('click', () => {
-            div.remove();
-            renumberItems(containerId, label);
+    function goToSection(n) {
+        document.querySelectorAll('.form-section-panel').forEach(p => p.style.display = 'none');
+        document.getElementById('section' + n).style.display = 'block';
+
+        document.querySelectorAll('.form-step').forEach(s => {
+            s.classList.toggle('active', parseInt(s.dataset.step) === n);
+            s.classList.toggle('done',   parseInt(s.dataset.step) < n);
         });
-        container.appendChild(div);
+
+        // Scroll al inicio del modal
+        document.getElementById('formBox').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function renumberItems(containerId, label) {
-        document.querySelectorAll(`#${containerId} .form-input`).forEach((inp, i) => {
-            inp.placeholder = `${label} ${i + 1}…`;
-        });
+    /* ════════════════════════════════════════
+       RECOGER DATOS
+       ════════════════════════════════════════ */
+    function val(id) {
+        return document.getElementById(id)?.value?.trim() || '';
     }
 
-    /* ── Razas personalizadas ── */
-    let customRazas = [];
-
-    function addCustomRaza(name) {
-        name = name.trim();
-        if (!name || customRazas.includes(name)) return;
-        customRazas.push(name);
-        renderPills();
-    }
-    function removeCustomRaza(name) {
-        customRazas = customRazas.filter(r => r !== name);
-        renderPills();
-    }
-    function renderPills() {
-        const pills = document.getElementById('razasPills');
-        pills.innerHTML = customRazas.map(r => `
-            <span class="raza-pill">
-                ${r}
-                <button class="raza-pill-remove" type="button" data-raza="${r}" title="Eliminar">✕</button>
-            </span>`).join('');
-        pills.querySelectorAll('.raza-pill-remove').forEach(btn => {
-            btn.addEventListener('click', () => removeCustomRaza(btn.dataset.raza));
-        });
-    }
-
-    /* ── Recoger datos ── */
     function collectData() {
-        const val = id => document.getElementById(id)?.value?.trim() || '';
-
-        // Descripción: cada línea no vacía → párrafo
-        const descripcion = val('f_descripcion')
-            .split('\n')
-            .map(l => l.trim())
-            .filter(Boolean);
-
-        const fundadores = Array.from(document.querySelectorAll('#fundadoresDynamic .form-input'))
-            .map(i => i.value.trim()).filter(Boolean);
-
-        const leyes = Array.from(document.querySelectorAll('#leyesDynamic .form-input'))
-            .map(i => i.value.trim()).filter(Boolean);
-
-        const razasSeleccionadas = [
-            ...Array.from(document.querySelectorAll('input[name="raza_permitida"]:checked')).map(c => c.value),
-            ...customRazas
-        ];
-
-        const religion = val('f_religion');
-
         return {
-            discord:           val('f_discord'),
-            nombre:            val('f_nombre'),
-            subtitulo:         val('f_subtitulo'),
-            forma_gobierno:    val('f_gobierno'),
-            img_banner:        val('f_img_banner'),
-            descripcion_corta: val('f_desc_corta'),
-            descripcion,
-            fundadores,
-            religiones:        religion ? [religion] : [],
-            razas_permitidas:  razasSeleccionadas,
-            leyes
+            // Sección 1
+            nombre:           val('f_nombre'),
+            nombre_corto:     val('f_nombre_corto'),
+            gentilicio: {
+                masc_sg:  val('f_gent_masc_sg'),
+                fem_sg:   val('f_gent_fem_sg'),
+                masc_pl:  val('f_gent_masc_pl'),
+                fem_pl:   val('f_gent_fem_pl'),
+                neutro:   val('f_gent_neutro') || null
+            },
+            // Sección 2
+            descripcion: val('f_descripcion')
+                .split('\n').map(l => l.trim()).filter(Boolean),
+            creencia:    val('f_creencia'),
+            // Sección 3
+            lore:        val('f_lore'),
+            // Sección 4
+            gobierno_desc:    val('f_gobierno_desc'),
+            planificacion:    val('f_planificacion'),
+            politicas_ext:    val('f_politicas_ext'),
+            guerras:          val('f_guerras') || null,
+            por_que_fundador: val('f_por_que_fundador'),
+            comentario:       val('f_comentario') || null,
+            // Meta
+            estado:    'pendiente',
+            creadoEn:  null   // se sustituye por serverTimestamp() al enviar
         };
     }
 
-    /* ── Validación ── */
-    function validate(data) {
-        if (!data.discord)            return 'El nombre de Discord es obligatorio.';
-        if (!data.nombre)             return 'El nombre del territorio es obligatorio.';
-        if (!data.forma_gobierno)     return 'Selecciona una forma de gobierno.';
-        if (!data.descripcion_corta)  return 'La descripción corta es obligatoria.';
-        if (!data.descripcion.length) return 'La descripción del territorio es obligatoria.';
-        if (!data.fundadores.length)  return 'Indica al menos un fundador.';
+    /* ════════════════════════════════════════
+       VALIDACIÓN
+       ════════════════════════════════════════ */
+    const REQUIRED = [
+        ['f_nombre',          'Nombre completo del territorio (sección 1)'],
+        ['f_nombre_corto',    'Nombre corto (sección 1)'],
+        ['f_gent_masc_sg',    'Gentilicio masculino singular (sección 1)'],
+        ['f_gent_fem_sg',     'Gentilicio femenino singular (sección 1)'],
+        ['f_gent_masc_pl',    'Gentilicio masculino plural (sección 1)'],
+        ['f_gent_fem_pl',     'Gentilicio femenino plural (sección 1)'],
+        ['f_descripcion',     'Descripción del territorio (sección 2)'],
+        ['f_creencia',        'Creencia / Religión (sección 2)'],
+        ['f_lore',            'Lore (sección 3)'],
+        ['f_gobierno_desc',   'Forma de gobierno (sección 4)'],
+        ['f_planificacion',   'Planificación (sección 4)'],
+        ['f_politicas_ext',   'Políticas exteriores (sección 4)'],
+        ['f_por_que_fundador','Por qué tu personaje es el fundador (sección 4)']
+    ];
+
+    function validate() {
+        for (const [id, label] of REQUIRED) {
+            if (!val(id)) return `El campo "${label}" es obligatorio.`;
+        }
         return null;
+    }
+
+    /* ════════════════════════════════════════
+       ENVÍO A FIREBASE
+       ════════════════════════════════════════ */
+    async function submitForm() {
+        const error = validate();
+        if (error) {
+            const errEl = document.getElementById('formError');
+            errEl.textContent = '⚠ ' + error;
+            errEl.style.display = 'block';
+            return;
+        }
+
+        const btn = document.getElementById('formSubmit');
+        btn.disabled = true;
+        btn.textContent = 'Enviando…';
+
+        try {
+            const data = collectData();
+            data.creadoEn = serverTimestamp();
+            await addDoc(collection(db, 'solicitudes_territorio'), data);
+            showSuccess();
+        } catch (err) {
+            console.error('[Territorio] Error al guardar:', err);
+            const errEl = document.getElementById('formError');
+            errEl.textContent = '⚠ Error al enviar. Inténtalo de nuevo.';
+            errEl.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = '⚜ Enviar Solicitud';
+        }
     }
 
     /* ── Pantalla de éxito ── */
     function showSuccess() {
-        document.getElementById('formBody').style.display = 'none';
+        document.querySelectorAll('.form-section-panel').forEach(p => p.style.display = 'none');
+        document.getElementById('formSteps').style.display = 'none';
         document.getElementById('formSuccess').classList.add('visible');
     }
 
-    /* ── Init ── */
+    /* ════════════════════════════════════════
+       INIT
+       ════════════════════════════════════════ */
     function init() {
         injectFormModal();
 
-        const overlay        = document.getElementById('formOverlay');
-        const closeBtn       = document.getElementById('formClose');
-        const cancelBtn      = document.getElementById('formCancel');
-        const submitBtn      = document.getElementById('formSubmit');
-        const leyAddBtn      = document.getElementById('leyAddBtn');
-        const fundadorAddBtn = document.getElementById('fundadorAddBtn');
-        const razaAddBtn     = document.getElementById('razaAddBtn');
-        const razaInput      = document.getElementById('razaCustomInput');
+        const overlay = document.getElementById('formOverlay');
 
-        /* Enlazar botón CTA */
+        /* Abrir/cerrar */
+        function openForm()  { overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeForm() { overlay.classList.remove('active'); document.body.style.overflow = ''; }
+
+        document.getElementById('formClose').addEventListener('click', closeForm);
+        document.getElementById('formCancel').addEventListener('click', closeForm);
+        overlay.addEventListener('click', e => { if (e.target === overlay) closeForm(); });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) closeForm();
+        });
+
+        /* CTA de la página */
         const cta = document.querySelector('.intro-cta');
         if (cta) {
             cta.textContent = '⚔ Solicitar territorio';
@@ -286,50 +409,34 @@
             cta.addEventListener('click', e => { e.preventDefault(); openForm(); });
         }
 
-        function openForm() {
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeForm() {
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        closeBtn.addEventListener('click', closeForm);
-        cancelBtn.addEventListener('click', closeForm);
-        overlay.addEventListener('click', e => { if (e.target === overlay) closeForm(); });
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape' && overlay.classList.contains('active')) closeForm();
+        /* Botones de navegación (siguiente / anterior) */
+        document.querySelectorAll('.form-next').forEach(btn => {
+            btn.addEventListener('click', () => goToSection(parseInt(btn.dataset.next)));
+        });
+        document.querySelectorAll('.form-back').forEach(btn => {
+            btn.addEventListener('click', () => goToSection(parseInt(btn.dataset.back)));
         });
 
-        /* Fundadores — empezar con uno */
-        addItem('fundadoresDynamic', 'Fundador');
-        fundadorAddBtn.addEventListener('click', () => addItem('fundadoresDynamic', 'Fundador'));
-
-        /* Leyes — empezar con una */
-        addItem('leyesDynamic', 'Ley');
-        leyAddBtn.addEventListener('click', () => addItem('leyesDynamic', 'Ley'));
-
-        /* Razas personalizadas */
-        razaAddBtn.addEventListener('click', () => {
-            addCustomRaza(razaInput.value);
-            razaInput.value = '';
-        });
-        razaInput.addEventListener('keydown', e => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addCustomRaza(razaInput.value);
-                razaInput.value = '';
-            }
+        /* Tabs de pasos (solo navegación hacia atrás, sin saltar) */
+        document.querySelectorAll('.form-step').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = parseInt(tab.dataset.step);
+                // Solo permite ir a secciones ya visitadas (done) o la actual
+                if (tab.classList.contains('done') || tab.classList.contains('active')) {
+                    goToSection(target);
+                }
+            });
         });
 
         /* Envío */
-        submitBtn.addEventListener('click', () => {
-            const data = collectData();
-            const error = validate(data);
-            if (error) { alert('⚠ ' + error); return; }
-            console.log('[Territorio Solicitud]', JSON.stringify(data, null, 2));
-            showSuccess();
+        document.getElementById('formSubmit').addEventListener('click', submitForm);
+
+        /* Limpiar error al escribir */
+        document.querySelectorAll('.form-input, .form-textarea').forEach(el => {
+            el.addEventListener('input', () => {
+                const errEl = document.getElementById('formError');
+                if (errEl) { errEl.textContent = ''; errEl.style.display = 'none'; }
+            });
         });
     }
 
