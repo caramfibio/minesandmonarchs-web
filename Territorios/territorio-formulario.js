@@ -402,12 +402,8 @@ const db  = getFirestore(app);
         });
 
         /* CTA de la página */
-        const cta = document.querySelector('.intro-cta');
-        if (cta) {
-            cta.textContent = '⚔ Solicitar territorio';
-            cta.href = '#';
-            cta.addEventListener('click', e => { e.preventDefault(); openForm(); });
-        }
+        const cta = document.getElementById('btnCrearTerritorio');
+if (cta) cta.addEventListener('click', () => openForm());
 
         /* Botones de navegación (siguiente / anterior) */
         document.querySelectorAll('.form-next').forEach(btn => {
