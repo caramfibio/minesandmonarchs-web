@@ -43,10 +43,12 @@
     ],
     "detalles": [
       "Infligen más daño de magia del que reciben.",
-      "Si se agachan en la hierba alta, pueden tener visión nocturna.",
+      "Si se agachan en la hierba alta, pueden tener visión nocturna durante unos segundos.",
       "Son ligeramente más altos que un humano.",
       "Tienen menos salud y sus ataques tienen daño reducido.",
-      "Se ralentizan utilizando armadura pesada (tiene un hechizo para solucionarlo) "
+      "Se ralentizan utilizando armadura pesada (tiene un hechizo para solucionarlo). ",
+      "Hacen más daño con el arco.",
+      "Tienen más resisténcia de caída."
     ],
     "habilidades": [
       {
@@ -55,11 +57,11 @@
       },
       {
         "nombre": "ALQUIMIA",
-        "desc": "Los elfos del bosque saben crear y usar alquimia. Son de los pocos que pueden usar calderos alquimistas, yunques arcanos y boticas del botania. "
+        "desc": "Los elfos del bosque saben crear y usar alquimia. Son de los pocos que pueden usar calderos alquimistas, forjas de  pergaminos, yunques arcanos y boticas del botania. "
       },
       {
         "nombre": "ARMAS SUPERIORES",
-        "desc": "No tienen acceso a tal conocimiento. No pueden usar el tinkers, pero pueden utilizar cualquier arco. "
+        "desc": "No tienen acceso a tal conocimiento. No pueden usar el tinkers, pero pueden utilizar cualquier arco y armas botánicas. "
       }
     ],
     "clases": [
@@ -107,7 +109,6 @@
     "clases": [
       "CARTERISTAS",
       "ANGLER",
-      "CAZADOR",
       "ROGUE"
     ]
   },
@@ -147,10 +148,10 @@
       }
     ],
     "clases": [
-      "CARTERISTAS",
+      "CARTERISTA",
       "INGENIERO",
-      "CAZADOR",
-      "ROGUE"
+      "CAZADOR"
+      
     ]
   },
 
@@ -167,7 +168,7 @@
       "No pueden nadar."
     ],
     "detalles": [
-      "Minan piedra sin pico y  lo hacen más rápido que otros.",
+      "Minan piedra sin pico y lo hacen más rápido que otros.",
       "Pueden ver claramente sin una fuente de luz.",
       "El sol los ciega/marea temporalmente. Con un casco y un encantamiento, o un casco de oro, se puede prevenir.",
       "No pueden nadar; al intentarlo, se hunden en el agua. "
@@ -175,7 +176,7 @@
     "habilidades": [
       {
         "nombre": "MAGIA",
-        "desc": "Los enanos desconocen el uso de la magia; prefieren las minas. Aunque se rumorea que pueden lanzar un pequeño hechizo de fuego debido a tanto tiempo en la forja. "
+        "desc": "Los enanos desconocen el uso de la magia; prefieren las minas. Aunque se rumorea que pueden lanzar un pequeño hechizo de fuego debido a tanto tiempo dedicado en la forja. "
       },
       {
         "nombre": "ALQUIMIA",
@@ -197,7 +198,7 @@
   "aracnido": {
     "id": "aracnido",
     "nombre": "Aracnido",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0STuRCM21CgECeMMT6krHoGwMzunvnYhlXnxPundMyQ_9OJ78MVEpbo0563VT_uDZu-8N2DBR-d4svH-bsZQqxuxKWtR_Fe9esk0irEcApV5Ww3dkO-dC45JR0n7Kp_j4tx0MH33Gs333BHUPNY21ug_ce13-uJf1sO_hhUttWmTIp6YgonUs657s5lCk8XvdsBT3kqnSS7ikacB1mb9qtrFziqHIYFOXi0LVyA=w1280",
+    "img": "fotos/Razas/aracnido.jpg",
     "desc": "Los arácnidos son una de las razas más hábiles en cuanto a combate, teniendo a su disposición redes de telaraña para detener a sus enemigos y proteger a sus aliados.",
     "cambios": [
       "Tienen veneno y control de masas.",
@@ -237,7 +238,7 @@
   "yeti": {
     "id": "yeti",
     "nombre": "Yeti",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SRR_tRRfvVJ6g8hJskBSa8LgGgw-6geZQl1WYXwW2mX_K_zFKgJjeDGweCI5hKUHYTu-K0CdSakEWl3GWOPCBjatKSzgUIiKhrg7w4G5b24JTuNZy4as27ECO9Blu5UpVTAdbglQg_9XcOp1zzkX7Z_pbIfxuYo1X5-MVMomMUYdJ2APGjQoQnrWlyv9OKjPzUAK_OdzIFKVOUaC9xltE081EdpDAR2a7V6=w1280",
+    "img": "fotos/Razas/yeti.jpg",
     "desc": "Los Yetis son la segunda raza más grande de Belmaria, teniendo en cuenta su resistencia al frío y su gran fortaleza. Miden 2 metros y necesitan puertas más grandes para poder entrar a los establecimientos.",
     "cambios": [
       "Afin al frio.",
@@ -263,7 +264,7 @@
       },
       {
         "nombre": "ARMAS SUPERIORES: ",
-        "desc": "Los yetis usan armas pesadas, por lo que pueden usar armas superiores mientras sean de hielo o sean hachas/martillos. No pueden usar el tinkers."
+        "desc": "Los yetis usan armas pesadas, por lo que pueden usar armas superiores mientras sean de hielo o sean hachas/martillos/mazas. No pueden usar el tinkers."
       },
       {
         "nombre": "Aura de Escarcha",
@@ -281,7 +282,7 @@
   "demonio": {
     "id": "demonio",
     "nombre": "Demonio",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0STIKz3_11hjCaf_MBaqIzS8-wgbadPunXpBRS-1c3jQrTmXgNU5rshZtDSOPL5zSRJ7DZVDDD70Ou1BwcNOId8nAmgODQz4ydqLp9ZU3tfpaubcH_0CtYd9aj84ld6zPyI4NTrYlY0e6ErXR19hfe07CS-48v5pB1NmdGsjLQsUaxCR5ZEZjZPWT-wxES7Iz-ypDwD4KQqdHukJOXGNMTsNUjyzd_6pbnozDaY=w1280",
+    "img": "fotos/Razas/demonio.jpg",
     "desc": "Los demonios son de las razas más poderosas, contando con la sabiduría del nether y todo lo que conlleva ser habitante natural de dicho submundo.",
     "cambios": [
       "Bonificación en el Nether.",
@@ -294,7 +295,8 @@
       "Pueden lanzar un estallido de llamas a su antojo.",
       "El fuego no inflige daño a los demonios.",
       "Los demonios reciben daño adicional de golpe y efectos revertidos de curación y daño.",
-      "No están acostumbrados a la luz del sol, por lo que son más poderosos en el Nether. (Dónde spawnean)"
+      "No están acostumbrados a la luz del sol, por lo que son más poderosos en el Nether. (Dónde spawnean)",
+      "En el nether, su habitat natural, son capaces de volar."
     ],
     "habilidades": [
       {
@@ -321,7 +323,7 @@
   "sirena": {
     "id": "sirena",
     "nombre": "Sirena",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SRXFyxDXxBhZyUN9kXDcRtudJXepCulR-YW1CgU8BTc250VTu93_LA958BZsJH3J6BmdosZOxuTgx8oH-HhtrxVDty94fqIcqlYkBl5iiBubsaONdcvT01XSm8yaLPiiV8ni8kA_Eyo7mJHWUhhRa51RUiODqls7SZA2E1UJoC_L_i0wGG1kEO6OMxmEVs9D7YcLdgMtO_KFX0rnV5IMN2zD4pwwTpR_bzkweg=w1280",
+    "img": "fotos/Razas/sirena.jpg",
     "desc": "Las sirenas son la única raza acuática que existe, por lo cual son los reyes y reinas del mar. Como es lógico, respiran bajo el agua y mantienen la paz en los océanos.",
     "cambios": [
       "Afin al agua.",
@@ -339,7 +341,7 @@
     "habilidades": [
       {
         "nombre": "MAGIA",
-        "desc": "Al tocar los pergaminos mágicos, los llenan de agua marina. Por lo tanto, no son capaces de lanzar siquiera un hechizo."
+        "desc": "Las sirenas aprendieron a cambiar de estado las aguas por donde nadan para convertirla en hielo, por lo que dominan la magia helada."
       },
       {
         "nombre": "ALQUIMIA",
@@ -353,7 +355,8 @@
     "clases": [
       "ANGLER",
       "GUERRERO DEL MAR",
-      "BARDO"
+      "BARDO",
+      "MAGO DE HIELO"
     ]
   },
 
@@ -361,7 +364,7 @@
   "valquiria": {
     "id": "valquiria",
     "nombre": "Valquiria",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SRc8r_w_5l-BSdNe5vOxGlI_ZwxQzmtA7pyKFWHAi2E-f2U_yl4NFsT9pxA3pQP1JFlUMllKeCVqdcN_W73AZPVhhUYbI3eq2aVoTxeTkhkPNBd7OX4CAg2VFomK_tFJGXRUhHTL_pN5tQotjY379XJTtM-a2ow31QvfB0KZFdnup6MbjTh_MnyJMocUv5rhKfdPt8wdNvGwjI4mg2RNe7exEAotio3wqf6Q7g=w1280",
+    "img": "fotos/Razas/valquiria.jpg",
     "desc": "Las Valquirias son la raza bendita de Belmaria. Sus grandes alas les permiten sobrevolar los cielos de la Capital y vigilar que no haya ningún desperfecto. Aunque al acercarse a los no muertos, tienen una debilidad incomprensible...",
     "cambios": [
       "Tiene curación.",
@@ -400,7 +403,7 @@
   "hadapixie": {
     "id": "hadapixie",
     "nombre": "Hada Pixie",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SQW5aJANn0ha_d8Zgd2qtl-4bQz3XvXvL6qBn6OIgs_OujzeC8AsryT0zwmgbo8Gdp8n0RRs6Vr7k-qHhUVtcrbBBa-qxKWCjDa3UC0cEnrE4R-pXPZse5yMUitgB-zrHxP9WwT2fcAwoqIgvHpAA6g89BawLwI9rU9z0PJKHPT8e6KEEO5Tn08rKRkkSPVgYkJNsGcHphANd1kNF4mefP6JGlAQk87iDawt8A=w1280",
+    "img": "fotos/Razas/pixie.jpg",
     "desc": "Las Hadas Pixie son las hadas problemáticas de Belmaria. Con sus bromas y su picardía, consiguieron tener pase denegado a cualquier comercio con aldeanos.",
     "cambios": [
       "Vuelo único.",
@@ -439,7 +442,7 @@
   "hadafae": {
     "id": "hadafae",
     "nombre": "Hada Fae",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0ST6a1KLvVoE1QACyVKqcExLNwCRuJmSHGNXSBhbllWvhwFbzm6LveieQVArXtqPnh5hhY8zYI7lrz9Y2pyXRE9hNS5GR9nxdgQVBx8eHggZSErPpxZlIn4jWgORnct_IVUTaEAI6c_fhdPFXZ0BpF5M-lC0qSIRs7AVcA38dPnD0Fb3hV2nm2VKg8Is1e9uOBe2QGnsBGANtGIvXbqNCxwAKGxg96ux1o7RoBE=w1280",
+    "img": "fotos/Razas/fae.jpg",
     "desc": "Las hadas Fae son las hadas más tranquilas de Belmaria. Tienen el amor de todos los animales y probablemente de los ciudadanos.",
     "cambios": [
       "Pueden planear.",
@@ -469,7 +472,8 @@
     ],
     "clases": [
       "GUARDABOSQUES ",
-      "CURADOR "
+      "CURADOR",
+      "BARDO"
     ]
   },
 
@@ -477,7 +481,7 @@
   "granelfo": {
     "id": "granelfo",
     "nombre": "Gran Elfo",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SQ7KidggH6BBvWfqbJNq3lbGV_dfyGS3XJ1W1tQkTMa35570NW8FH0OvyR7P11DfZsZGjgrZ7QPmWz2PzttEoRR0JFNQsY7t5qhILGXgv2AIWnCyHN9iq7CsadKTeKifBOZkzhEaS6JNZeEzZH1IAliLpoE12La2wjq5CmT5HaLZATTAcWcy_0FGK2IkTynXR95PWJHMe3pSkYzuGSWcHv-L_UAHCRN4RCIuBM=w1280",
+    "img": "fotos/Razas/granelfo.jpg",
     "desc": "Los grandes Elfos son los mayores portadores de magia pura, conteniendo varios tipos de hechizos en su mano. Son la raza de elfos más poderosa, y quienes son pertenecientes a esta raza se especializan en la magia y dejan de lado las armas debido a sus increíbles habilidades. ",
     "cambios": [
       "Los Grandes Elfos tienen unas habilidades mágicas con objetos.",
@@ -515,7 +519,7 @@
   "gorgona": {
     "id": "gorgona",
     "nombre": "Gorgona",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SSbKKwRtjW4l8kwZDi3Ogtrya433x6ndd5kQzc_CpaFnM-415MaVruTncMC3xLDpBDeVA5szWZpSiAvtghsLk7oSIRDuriYfYa7MNB1OxdlO3u77o34WLByE3d51NEwp5o56ObfvdrCdE01nPqHk_WqbHzQvhGwNbr_PDAj_ImAQJwzXJOwHOyTd2hYvIboA87x7vkPCMZeif6MeJ2ADBsgZg4INNay0ILb1_8=w1280",
+    "img": "fotos/Razas/gorgona.jpg",
     "desc": "Las gorgonas viven en su hábitat natural: las cuevas. O al menos se les aconseja. Hace tiempo, hubo una en Belmaria.",
     "cambios": [
       "Hace más daño con veneno.",
@@ -544,7 +548,8 @@
     ],
     "clases": [
       "HIEDRA VENENOSA",
-      "GUERRERO"
+      "GUERRERO",
+      "CAZADOR"
     ]
   },
 
@@ -552,7 +557,7 @@
   "victimapeste": {
     "id": "victimapeste",
     "nombre": "Víctima de la Peste",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SSM-zKZ5T36_XOz0YvyuUDRJwpPhdjKzgkj9euV95zTsuAEPCw2QTV3J0AAZloxmwd0B-A4H7V6-Bqa7rjQI2CU_cXjcp9fuvw8Jv86DLbrdTfYZOkSRIKD4oYxah9MIdJTJPmNCSS6LkzwsFaEQxyk-_Mqu_X5VcA7UgpGqvzIH0SrrNDth5aAhGJSlh6ER9Nga9yhkja0En6juDzwbbyRKIwPK5fXC-N-bFA=w1280",
+    "img": "fotos/Razas/victima.jpg",
     "desc": "Las personas que nacen siendo de esta raza tienen más inconvenientes que todas las demás. Una víctima de la peste no puede mantener contacto físico con otro ser, ya que lo puede llegar a matar por culpa de su infección. Las víctimas de la peste están condenadas a morir lentamente por culpa de la trágica vida que les ha tocado.",
     "cambios": [
       "Efecto de Wither.",
@@ -585,7 +590,8 @@
     ],
     "clases": [
       "MAGO DE SANGRE",
-      "ANGLER"
+      "ANGLER",
+      "BARDO"
     ]
   },
 
@@ -593,7 +599,7 @@
   "banshee": {
     "id": "banshee",
     "nombre": "Banshee",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SQtsXY0k8TcoFBCeJ-7MM8ry7fQ80rFzZmB2Kh1D9ImJyEB5wyAymkFL8ZsaBqkaALsCcCHstZEBlsSrgfqnTz8PlwPi0gfBfK9659vG4v007E86ULwCTJVXtYxjm2XXBiHkcUYySCviQCSVqAG6ICf8XTQlDn9QWcNvNpxVE2TsW8m4fbThyUamYVypCxyUVOHVvdSs7y0ZCN-eELFDSTgYLHnRvpUN3o_=w1280",
+    "img": "fotos/Razas/banshee.jpg",
     "desc": "Las banshees son espíritus que rondan por Belmaria en busca de paz. Son sabias en cuanto a magia del Ender y Eldritch, pero dependiendo de a cuál te encuentres, sabrá más de un tipo u otro de magia.",
     "cambios": [
       "Vuelo.",
@@ -626,7 +632,8 @@
     ],
     "clases": [
       "MAGO DEL ENDER",
-      "MAGO DEL ELDRITCH"
+      "ROGUE", 
+      "BARDO"
     ]
   },
 
@@ -634,7 +641,7 @@
   "elfolunar": {
     "id": "elfolunar",
     "nombre": "Elfo Lunar",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SS3_jfNHc78BZ3Na8Lf1RUUGhop6FPYOHZ98Q3N5xP08hpkZZYy9bK7xyKm6H5vAqc_i4X03DxAQEcw734m6aBbnVWfxKUB12iJus3mo2ci-Pt_BHrE-Z2ToKaGlEsy_q6_mw6tAMrmwr3TlXuDCUBZ5o0dhZw9-oJa8SkMqZLv-gcvLK5ftdQwju3sQWAlZoSoR-4RjFN4QTf6DzYHSF0nvMAHgKP7=w1280",
+    "img": "fotos/Razas/elfolunar.jpg",
     "desc": "Los elfos lunares son amantes de la noche. Además de ser sigilosos y hábiles, tienen más habilidad con dagas y cuchillos. ",
     "cambios": [
       "Es sigiloso.",
@@ -665,7 +672,7 @@
     "clases": [
       "MAGO DEL ENDER",
       "ROGUE",
-      "BARDO"
+      "CAZADOR"
     ]
   },
 
@@ -673,7 +680,7 @@
   "ogro": {
     "id": "ogro",
     "nombre": "Ogro",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SQGS7ox9wN8wiMu06LC_zEHC0KxQrutrDt81qjr_f3oXms28SU8npUcHvV5r0mnHzsGy9oLVKvX2qFj69ZOXMkxhtCChMJ5mm4fcfGtWNHc0JaIoqDEhUQSdKpBH3xbMZtFS6CvbwPWcNbhECRsIKwb921sxxIw_IDa_BkZPdtyjVNE_RvDemHjSEwIzD2p_fxPgiWYppkcOshcBGLEVmznC7cKF7JYhLQY584=w1280",
+    "img": "fotos/Razas/ogro.jpg",
     "desc": "Los ogros son la raza más grande que existe en Belmaria. Son temidos por los ciudadanos debido a que miden 268 cm de altura y son tan anchos que tienen que pasar por puertas dobles de 3 bloques. Además, son formidables y tienen más resistencia que otros. ",
     "cambios": [
       "Tienen bonificaciones con el hacha y tienen más defensa.",
@@ -701,15 +708,16 @@
       }
     ],
     "clases": [
-      "MAGO DE SANGRE ",
-      "ANGLER"
+      "BERSERKER",
+      "BESTIA SALVAJE",
+      "TANQUE"
     ]
   },
 
   "revenant": {
     "id": "revenant",
     "nombre": "Revenant",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SRrMlXb3gAp7uSyO1Be8aIZ_DvvdAZgpFDisYwW02d3MH-8xlbpfdQTL3MZSDYlIsps8BSOHMraBuquPvkDhHq1giXuZhdYRhCpl8kD4hn5kQXp2KIWfJhk-vC-k5CEsOXELtcsoSfVBfCQcD0mC84C5afsRcIC6KjrYoCMo3OfoX5BlbCLppkF_lk007G-heSI9ydev0v60NJVJPeNomBpnZyJ0V9APU0b6cQ=w1280",
+    "img": "fotos/Razas/revenant.jpg",
     "desc": "Los Revenants son el equivalente a los Grandes Elfos, pero en versión nigromántica. Son los maestros de las artes oscuras y considerados los mejores en la categoría de los no-muertos.",
     "cambios": [
       "Invocador.",
@@ -742,8 +750,7 @@
     "clases": [
       "GRAN MAGO OSCURO",
       "MAGO INVOCADOR",
-      "MAGO DE SANGRE",
-      "MAGO DEL ENDER"
+      "MAGO DE SANGRE"
     ]
   }
 }
