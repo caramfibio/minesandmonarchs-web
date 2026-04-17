@@ -159,7 +159,7 @@
   "enano": {
     "id": "enano",
     "nombre": "Enano",
-    "img": "enano/Razas/enano.jpg",
+    "img": "fotos/Razas/enano.jpg",
     "desc": "A pesar de su pequeño tamaño, los enanos son de los mejores en crear armas y caminos subterráneos con raíles. ",
     "cambios": [
       "Minan y cavan más rápido.",
