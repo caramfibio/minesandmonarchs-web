@@ -288,6 +288,7 @@ const db  = getFirestore(app);
     }
 
     function collectData() {
+        const sesion = getSesion();
         return {
             // Sección 1
             nombre:           val('f_nombre'),
@@ -313,6 +314,11 @@ const db  = getFirestore(app);
             por_que_fundador: val('f_por_que_fundador'),
             comentario:       val('f_comentario') || null,
             // Meta
+            fundador: sesion ? {
+                uid:        sesion.uid,
+                nombreRol:  sesion.nombreRol,
+                id:         sesion.id
+            } : null,
             estado:    'pendiente',
             creadoEn:  null   // se sustituye por serverTimestamp() al enviar
         };
@@ -383,12 +389,27 @@ const db  = getFirestore(app);
     }
 
     /* ════════════════════════════════════════
+       SESIÓN
+       ════════════════════════════════════════ */
+    function getSesion() {
+        try {
+            const raw = sessionStorage.getItem('mm_usuario');
+            return raw ? JSON.parse(raw) : null;
+        } catch { return null; }
+    }
+
+    /* ════════════════════════════════════════
        INIT
        ════════════════════════════════════════ */
     function init() {
         injectFormModal();
 
         const overlay = document.getElementById('formOverlay');
+        const sesion  = getSesion();
+
+        /* Mostrar el botón solo si hay sesión activa */
+        const cta = document.getElementById('btnCrearTerritorio');
+        if (cta) cta.style.display = sesion ? '' : 'none';
 
         /* Abrir/cerrar */
         function openForm()  { overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
@@ -402,8 +423,7 @@ const db  = getFirestore(app);
         });
 
         /* CTA de la página */
-        const cta = document.getElementById('btnCrearTerritorio');
-if (cta) cta.addEventListener('click', () => openForm());
+        if (cta) cta.addEventListener('click', () => openForm());
 
         /* Botones de navegación (siguiente / anterior) */
         document.querySelectorAll('.form-next').forEach(btn => {
