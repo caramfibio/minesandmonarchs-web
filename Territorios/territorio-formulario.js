@@ -153,22 +153,6 @@ const db  = getFirestore(app);
                 <!-- ─────────────────────────────── -->
                 <div class="form-body form-section-panel" id="section3" style="display:none">
 
-                    <p class="form-section-label">Miembro antes de empezar</p>
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label class="form-label">
-                                ¿Cuántos miembros necesitas antes de abrir el territorio?
-                                <span class="form-badge-optional">Editable más tarde</span>
-                            </label>
-                            <input class="form-input" type="text" id="f_miembros_previos"
-                                placeholder="Ej: 3 miembros fundadores confirmados"
-                                disabled style="opacity:0.5;cursor:not-allowed">
-                            <span class="form-note" style="margin-top:5px;display:block">
-                                Este campo se habilitará en una actualización próxima.
-                            </span>
-                        </div>
-                    </div>
-
                     <p class="form-section-label">Lore</p>
                     <div class="form-row full">
                         <div class="form-group">
