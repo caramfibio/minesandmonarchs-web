@@ -2,7 +2,7 @@
   "humano": {
     "id": "humano",
     "nombre": "Humano",
-    "img": "images/Razas/Humano.jpg",
+    "img": "fotos/Razas/Humano.jpg",
     "desc": "Los humanos llegaron a Belmaria pensándose que eran los únicos que habitaban esas tierras, pero al descubrir que no, decidieron no entrar en guerra y colaborar con el resto de razas que existían. \nLos humanos no son realmente buenos en nada de este mundo. Su manera de vivir es un tanto... Aburrida. ",
     "cambios": [
       "Ninguno"
@@ -33,7 +33,7 @@
   "elfobosque": {
     "id": "elfobosque",
     "nombre": "Elfo del Bosque",
-    "img": "images/Razas/ElfoBosque.jpg",
+    "img": "fotos/Razas/ElfoBosque.jpg",
     "desc": "Los Elfos del Bosque, también conocidos como Elfos Silvanos, son unos amantes de la naturaleza y de los animales. Viven rodeados de plantas y siguen una dieta estricta. Aun así, disfrutan enormemente de la comida.",
     "cambios": [
       "Reciben bonificaciones a distancia.",
@@ -73,7 +73,7 @@
   "alfiq": {
     "id": "alfiq",
     "nombre": "Alfiq",
-    "img": "images/Razas/Alfiq.png",
+    "img": "fotos/Razas/Alfiq.png",
     "desc": "Los Alfiqs son una de las razas más pícaras que existen en Belmaria. Se les considera salvajes y no son de fiar en la mayoría de los casos. Hasta los aldeanos los quieren lejos de ellos. Tienen comportamientos gatunos y los creepers huyen de ellos.",
     "cambios": [
       "Reciben bonificaciones estando desarmados.",
@@ -116,7 +116,7 @@
   "goblin": {
     "id": "goblin",
     "nombre": "Goblin",
-    "img": "images/Razas/goblin.jpg",
+    "img": "fotos/Razas/goblin.jpg",
     "desc": "Los Goblins son reconocidos por su rapidez y por su suerte al encontrar oro. Se dice que si tienen lingotes a mano, se mantendrán en mejor estado y estarán en mejores condiciones.",
     "cambios": [
       "Bonificación de armadura de oro.",
@@ -158,7 +158,7 @@
   "enano": {
     "id": "enano",
     "nombre": "Enano",
-    "img": "https://lh3.googleusercontent.com/sitesv/APaQ0SQn2E6Gcbdbt4FaQUkMNBcv1RKTkIjmLyPqenIJdRfeZON49Dv82whQAXXG1z4X-r1ssO93zbstsdX4ulbVWzxxo1RdMPHlrWp-L6NeQumy4mmHq6dntBY57FcDUX7rbAo7XO9xsehBZH1-tXEKHdB271y2atcQWU2q4Z0iUcWxGBl1CGRwMGtf36keDsZAl49AM5JfIbnyz8KpbxM31WMSfBzuPO7Zpp_22lk=w1280",
+    "img": "enano/Razas/enano.jpg",
     "desc": "A pesar de su pequeño tamaño, los enanos son de los mejores en crear armas y caminos subterráneos con raíles. ",
     "cambios": [
       "Minan y cavan más rápido.",
