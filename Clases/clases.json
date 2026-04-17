@@ -5,7 +5,7 @@
     "img": "fotos/Clases/cazador.jpg",
     "desc": "Utiliza el poder de tu arco y tus flechas para derrotar a tus enemigos.",
     "habilidades": [
-      "Comienzas con una armadura de cuero, un arco y flechas.",
+      "Comienzas con un arco y flechas.",
       "Tienes una maestría de +25%.",
       "Inflinges +50% de daño con arcos.",
       "Puedes saltar más alto.",
@@ -185,7 +185,7 @@
     "desc": "Las Valquirias decidieron traspasar los hechizos benditos otorgados por los dioses a un libro útil y poderoso.",
     "habilidades": [
       "Aunque sepas utilizar magia, te especializas más en armas melee.",
-      "Comienzas con una armadura de cota de malla, un libro de hechizos benditos y una alabarda cóncava plateada bendecida.",
+      "Comienzas con un libro de hechizos benditos y una alabarda cóncava plateada bendecida.",
       "El daño de tu flecha se reduce un 50%",
       "Inflige +50% más de daño crítico"
     ],
@@ -216,7 +216,7 @@
     "img": "fotos/Clases/rogue.jpg",
     "desc": "El sigilo ayuda a estas criaturas a fomentar su caos y a conseguir todo lo que buscan en las noches oscuras de Belmaria.",
     "habilidades": [
-      "Comienzas con 2 dagas, una armadura de cuero y un poco de comida.",
+      "Comienzas con 2 dagas",
       "Lidia con más de 50% de daño con estas armas: Chakram, Scythe, Warglaive, Twinblade, Dagger, Rapier y Sai. ",
       "Cuando toda el área esta oscura, te vuelves invisible. Solo la luz puede revelarte. ",
       "Tus pasos no hacen ruido. ",
@@ -236,7 +236,7 @@
     "img": "fotos/Clases/tanque.jpg",
     "desc": "Ser tanque es un gran esfuerzo y una gran responsabilidad. Solamente las razas con más salud y resistencia podrán asumir ese rol.",
     "habilidades": [
-      "Comienzas con una espada, un escudo y una armadura de cota de malla.",
+      "Comienzas con un escudo. ",
       "Ignora el dolor: cuando lidias con daño, ganas vida de mitigación, lo que hace que sobrevivas más tiempo en batalla. ",
       "Tienes 50% más de tu salud. ",
       "Cuando utilizas escudo, tu armadura vale x2. ",
@@ -255,7 +255,7 @@
     "img": "fotos/Clases/berserker.jpg",
     "desc": "Las  hachas de los berserkers son sorprendemente fuertes y poderosas si se usan bien.",
     "habilidades": [
-    "Comienzas con un hacha de batalla, armadura de cota de malla y comida. ",
+    "Comienzas con un hacha de batalla.",
     "Tienes maestria con las armas: Claymore, greataxe, halberd, longsword, warglaive y hachas. La maestria de armas incrementa el daño infligido por estas armas en un 50%. ",
     "Tu sed de sangre en la batalla te otorga +10% de vida en todos los ataques. ",
     "Tienes +30% de probabilidad de golpe critico. ",
@@ -276,7 +276,7 @@
     "img": "fotos/Clases/guerrero.jpg",
     "desc": "La clase más básica y tipica, pero no por eso la menos útil.",
     "habilidades": [
-    "Comienzas con una espada, una armadura de cota de malla y carne. ",
+    "Comienzas con una espada.",
     "Tienes maestría en todas las armas melee. Haces un 25% más de daño con ellas. ",
     "Haces un 50% más de daño critico. ",
     "Tu poder de magia se reduce a un 50%. "
@@ -293,7 +293,7 @@
     "img": "fotos/Clases/bardo.jpg",
     "desc": "Las melodias que se crean en Belmaria, obtienen un poder inigualable. Cada nota es una habilidad que otorga fuerza y poder.",
     "habilidades": [
-    "Comienzas con un cuerno",
+    "Comienzas con un cuerno.",
     "Con ese mismo cuerno, obtendrás habilidades al tocarlo.",
     "Cuando tienes poca salud corres más rápido.",
     "Te da hambre más rápido. ",
@@ -326,7 +326,7 @@
     "desc": "Los Carteristas son odiados en todos los planetas, incluido Belmaria. Son unos ladrones impolutos que no dejan verse en sus crímenes.",
     "habilidades": [
     "Eres más suertudo por la noche. ",
-    "Los villagers no quieren ser vistos mientras tradean contigo, pero tienen un trato para que no les robes  "
+    "Los villagers no quieren ser vistos mientras tradean contigo, pero tienen un trato para que no les robes."
     ],
     "razas": [
        "Goblin",
@@ -339,7 +339,7 @@
     "img": "fotos/Clases/paladin.jpg",
     "desc": "Las Valquirias es de las razas más poderosas junto con esta clase. Se podria decir que son invencibles con un buen equipamiento.",
     "habilidades": [
-      "Comienzas con una armadura de cota de malla, un escudo, una espada y un libro de hechizos de bendición.",
+      "Comienzas con un libro de hechizos de bendición.",
       "Gana un 25% más de poder bendito.",
       "Tiene un 50% más de salud.",
       "Cuando sujetes un escudo en la mano izquierda, tu armadura aumentará su protección un 50%.",
