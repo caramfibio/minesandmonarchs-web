@@ -349,3 +349,71 @@
     .adm-row { grid-template-columns: 1fr; }
     .admin-tabla th, .admin-tabla td { padding: 8px 10px; }
 }
+
+/* ── Tabs de navegación ── */
+.admin-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid rgba(255,215,0,0.12);
+    padding-bottom: 0;
+}
+.admin-tab {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: rgba(168,144,96,0.5);
+    font-family: "MedievalSharp", cursive;
+    font-size: 0.88em;
+    padding: 10px 20px 8px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    margin-bottom: -1px;
+}
+.admin-tab:hover { color: rgba(255,215,0,0.7); }
+.admin-tab.active {
+    color: #ffd700;
+    border-bottom-color: #ffd700;
+}
+
+/* ── Badges extra ── */
+.badge-pendiente { background: rgba(230,180,0,0.12); color: #f0c040; border: 1px solid rgba(230,180,0,0.3); }
+.badge-rechazado { background: rgba(192,57,43,0.12);  color: #e74c3c; border: 1px solid rgba(192,57,43,0.3); }
+
+/* ── Modal detalle solicitud ── */
+.sol-seccion-title {
+    font-family: "MedievalSharp", cursive;
+    color: #ffd700;
+    font-size: 0.82em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,215,0,0.15);
+}
+.sol-seccion-title:first-child { margin-top: 0; }
+
+.sol-fila {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+}
+.sol-label {
+    font-family: Georgia, serif;
+    color: #8a7850;
+    font-size: 0.8em;
+    min-width: 140px;
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+.sol-val {
+    font-family: Georgia, serif;
+    color: #c8b88a;
+    font-size: 0.88em;
+    line-height: 1.6;
+}
+.sol-parrafos {
+    display: block;
+    margin-bottom: 10px;
+}

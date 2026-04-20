@@ -313,3 +313,171 @@ document.getElementById('deleteConfirm').addEventListener('click', async () => {
         console.error('Error al eliminar:', err);
     }
 });
+
+/* ════════════════════════════════════════════
+   TABS DE NAVEGACIÓN
+   ════════════════════════════════════════════ */
+document.querySelectorAll('.admin-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.admin-section').forEach(s => s.style.display = 'none');
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).style.display = '';
+        if (tab.dataset.tab === 'territorios' && !window._territoriosCargados) {
+            cargarSolicitudesTerritorios();
+        }
+    });
+});
+
+/* ════════════════════════════════════════════
+   SOLICITUDES DE TERRITORIO
+   ════════════════════════════════════════════ */
+let todasLasSolicitudes = [];
+window._territoriosCargados = false;
+
+async function cargarSolicitudesTerritorios() {
+    const loading = document.getElementById('loadingTerritorios');
+    const tabla   = document.getElementById('tablaTerritorios');
+    try {
+        const snap = await getDocs(collection(db, 'solicitudes_territorio'));
+        todasLasSolicitudes = [];
+        snap.forEach(d => todasLasSolicitudes.push({ docId: d.id, ...d.data() }));
+
+        // Ordenar: pendientes primero
+        todasLasSolicitudes.sort((a, b) => {
+            const orden = { pendiente: 0, aprobado: 1, rechazado: 2 };
+            return (orden[a.estado] ?? 3) - (orden[b.estado] ?? 3);
+        });
+
+        actualizarStatsTerritorios();
+        loading.style.display = 'none';
+        tabla.style.display = '';
+        renderTablaTerritorios(todasLasSolicitudes);
+        window._territoriosCargados = true;
+    } catch (err) {
+        loading.textContent = 'Error al cargar las solicitudes.';
+        console.error(err);
+    }
+}
+
+function actualizarStatsTerritorios() {
+    document.getElementById('totalPendientes').textContent  = todasLasSolicitudes.filter(s => s.estado === 'pendiente').length;
+    document.getElementById('totalAprobados').textContent   = todasLasSolicitudes.filter(s => s.estado === 'aprobado').length;
+    document.getElementById('totalRechazados').textContent  = todasLasSolicitudes.filter(s => s.estado === 'rechazado').length;
+}
+
+function renderTablaTerritorios(lista) {
+    const tbody = document.getElementById('tbodyTerritorios');
+    if (!lista.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#6a5a3a;padding:32px">No hay solicitudes.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = lista.map(s => {
+        const badgeClass = s.estado === 'aprobado' ? 'badge-admin' : s.estado === 'rechazado' ? 'badge-rechazado' : 'badge-pendiente';
+        const fecha = s.creadoEn?.toDate ? s.creadoEn.toDate().toLocaleDateString('es-ES') : '—';
+        const fundador = s.fundador?.nombreRol || '—';
+        return `<tr>
+            <td><strong>${s.nombre || '—'}</strong></td>
+            <td>${s.nombre_corto || '—'}</td>
+            <td>${fundador}</td>
+            <td><span class="badge ${badgeClass}">${s.estado}</span></td>
+            <td>${fecha}</td>
+            <td>
+                <button class="btn-editar btn-ver-solicitud" data-id="${s.docId}">🔍 Ver</button>
+            </td>
+        </tr>`;
+    }).join('');
+
+    tbody.querySelectorAll('.btn-ver-solicitud').forEach(btn =>
+        btn.addEventListener('click', () => abrirDetalleSolicitud(btn.dataset.id))
+    );
+}
+
+/* ── Modal detalle ── */
+let _solicitudActual = null;
+
+function abrirDetalleSolicitud(docId) {
+    const s = todasLasSolicitudes.find(x => x.docId === docId);
+    if (!s) return;
+    _solicitudActual = s;
+
+    document.getElementById('territorioModalTitle').textContent = `📜 ${s.nombre || 'Solicitud'}`;
+
+    const fila = (label, val) => val
+        ? `<div class="sol-fila"><span class="sol-label">${label}</span><span class="sol-val">${val}</span></div>`
+        : '';
+    const parrafos = arr => Array.isArray(arr) ? arr.map(p => `<p style="margin:0 0 8px">${p}</p>`).join('') : arr || '—';
+
+    const gent = s.gentilicio || {};
+    const gentStr = [
+        gent.masc_sg && `♂ sg: ${gent.masc_sg}`,
+        gent.fem_sg  && `♀ sg: ${gent.fem_sg}`,
+        gent.masc_pl && `♂ pl: ${gent.masc_pl}`,
+        gent.fem_pl  && `♀ pl: ${gent.fem_pl}`,
+        gent.neutro  && `⚧ : ${gent.neutro}`
+    ].filter(Boolean).join(' · ');
+
+    document.getElementById('territorioModalBody').innerHTML = `
+        <div class="sol-seccion-title">General</div>
+        ${fila('Nombre completo', s.nombre)}
+        ${fila('Nombre corto', s.nombre_corto)}
+        ${fila('Gentilicio', gentStr)}
+        ${fila('Fundador', s.fundador?.nombreRol)}
+
+        <div class="sol-seccion-title">Descripción</div>
+        <div class="sol-label">Descripción</div>
+        <div class="sol-val sol-parrafos">${parrafos(s.descripcion)}</div>
+        ${fila('Creencia', s.creencia)}
+
+        <div class="sol-seccion-title">Lore</div>
+        <div class="sol-label">Lore</div>
+        <div class="sol-val sol-parrafos">${parrafos(s.lore)}</div>
+
+        <div class="sol-seccion-title">Gobierno</div>
+        ${fila('Forma de gobierno', s.gobierno_desc)}
+        ${fila('Planificación', s.planificacion)}
+        ${fila('Políticas exteriores', s.politicas_ext)}
+        ${s.guerras ? fila('Posibles guerras', s.guerras) : ''}
+        ${fila('¿Por qué es fundador?', s.por_que_fundador)}
+        ${s.comentario ? fila('Comentario', s.comentario) : ''}
+    `;
+
+    // Mostrar/ocultar botones según estado
+    const yaDecidido = s.estado !== 'pendiente';
+    document.getElementById('territorioAprobar').style.display  = yaDecidido ? 'none' : '';
+    document.getElementById('territorioRechazar').style.display = yaDecidido ? 'none' : '';
+
+    document.getElementById('territorioOverlay').classList.add('active');
+}
+
+// Cerrar modal
+['territorioClose','territorioCerrar'].forEach(id =>
+    document.getElementById(id).addEventListener('click', () =>
+        document.getElementById('territorioOverlay').classList.remove('active')
+    )
+);
+
+// Aprobar
+document.getElementById('territorioAprobar').addEventListener('click', async () => {
+    await cambiarEstadoSolicitud(_solicitudActual.docId, 'aprobado');
+});
+
+// Rechazar
+document.getElementById('territorioRechazar').addEventListener('click', async () => {
+    await cambiarEstadoSolicitud(_solicitudActual.docId, 'rechazado');
+});
+
+async function cambiarEstadoSolicitud(docId, nuevoEstado) {
+    try {
+        await updateDoc(doc(db, 'solicitudes_territorio', docId), { estado: nuevoEstado });
+        // Actualizar caché local
+        const idx = todasLasSolicitudes.findIndex(s => s.docId === docId);
+        if (idx !== -1) todasLasSolicitudes[idx].estado = nuevoEstado;
+        actualizarStatsTerritorios();
+        renderTablaTerritorios(todasLasSolicitudes);
+        document.getElementById('territorioOverlay').classList.remove('active');
+    } catch (err) {
+        console.error('Error al actualizar estado:', err);
+    }
+}

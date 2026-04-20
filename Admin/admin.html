@@ -31,6 +31,13 @@
             <p class="admin-sub">Gestión de personajes del reino</p>
         </div>
 
+        
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="personajes">⚔ Personajes</button>
+            <button class="admin-tab" data-tab="territorios">🏰 Solicitudes de Territorio</button>
+        </div>
+
+        <div class="admin-section" id="tab-personajes">
         <div class="admin-stats" id="adminStats">
             <div class="stat-card">
                 <span class="stat-num" id="totalPersonajes">—</span>
@@ -70,6 +77,44 @@
             </table>
         </div>
     </main>
+
+
+        </div><!-- /tab-personajes -->
+
+        <!-- ══ SECCIÓN TERRITORIOS ══ -->
+        <div class="admin-section" id="tab-territorios" style="display:none">
+            <div class="admin-stats" id="statsTerritorios">
+                <div class="stat-card">
+                    <span class="stat-num" id="totalPendientes">—</span>
+                    <span class="stat-label">Pendientes</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="totalAprobados">—</span>
+                    <span class="stat-label">Aprobados</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="totalRechazados">—</span>
+                    <span class="stat-label">Rechazados</span>
+                </div>
+            </div>
+
+            <div class="admin-tabla-wrap">
+                <div id="loadingTerritorios" class="admin-loading">Cargando solicitudes…</div>
+                <table class="admin-tabla" id="tablaTerritorios" style="display:none">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Nombre corto</th>
+                            <th>Fundador</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTerritorios"></tbody>
+                </table>
+            </div>
+        </div>
 
     <!-- MODAL EDITAR -->
     <div class="adm-overlay" id="editOverlay">
@@ -137,6 +182,24 @@
             <div class="adm-modal-footer">
                 <button class="adm-btn-cancel" id="deleteCancel">Cancelar</button>
                 <button class="adm-btn-delete" id="deleteConfirm">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL DETALLE TERRITORIO -->
+    <div class="adm-overlay" id="territorioOverlay">
+        <div class="adm-modal" style="max-width:720px;max-height:90vh;overflow-y:auto">
+            <div class="adm-modal-header">
+                <h3 id="territorioModalTitle">📜 Solicitud de Territorio</h3>
+                <button class="adm-close" id="territorioClose">✕</button>
+            </div>
+            <div class="adm-modal-body" id="territorioModalBody">
+            </div>
+            <div class="adm-modal-footer">
+                <button class="adm-btn-cancel" id="territorioCerrar">Cerrar</button>
+                <button class="adm-btn-delete" id="territorioRechazar">✕ Rechazar</button>
+                <button class="adm-btn-save"   id="territorioAprobar">⚜ Aprobar</button>
             </div>
         </div>
     </div>
