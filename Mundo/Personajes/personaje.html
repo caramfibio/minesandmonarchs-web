@@ -1,7 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <base href="/minesandmonarchs-web/">
+    <base href="./">
+    <script>
+    (function(){
+        try{
+            var b = document.querySelector('base');
+            var host = location.hostname;
+            var isLocal = host === 'localhost' || host === '127.0.0.1';
+            if (isLocal) {
+                b.setAttribute('href','/');
+            } else {
+                b.setAttribute('href','/minesandmonarchs-web/');
+            }
+        }catch(e){}
+    })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personaje – Mines & Monarchs</title>

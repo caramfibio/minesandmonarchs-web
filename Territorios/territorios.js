@@ -218,3 +218,13 @@ function renderDetalle(t) {
         </section>
     </div>`;
 }
+
+/* ── Auto-inicialización: usa el JSON local en lugar de Firebase ── */
+document.addEventListener('DOMContentLoaded', () => {
+    const jsonPath = 'Territorios/territorios.json';
+    if (document.getElementById('territoriosGrid')) {
+        initTerritorios(jsonPath).catch(err => console.error('[InitTerritorios]', err));
+    } else if (document.getElementById('territorioDetalle')) {
+        initTerritorioDetalle(jsonPath).catch(err => console.error('[InitTerritorioDetalle]', err));
+    }
+});
