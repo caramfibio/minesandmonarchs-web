@@ -14,9 +14,8 @@ parrafo con modal con lores de las personas
 
 Falta configurar el nav
 
-git add .
-git commit -m "Actualizacion apuntes"
-git push
 
+imagen de atras bibliotecas
+abrir libros que selecion 
 
-git pull
+base figuras
