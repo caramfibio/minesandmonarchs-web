@@ -2,32 +2,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ── Mobile menu toggle ── */
     const menuToggle = document.getElementById('menu-toggle');
-    const navList    = document.querySelector('.header-right ul');
-    if (menuToggle) {
+    const navList = document.querySelector('.header-right ul');
+    if (menuToggle && navList) {
         menuToggle.addEventListener('click', () => navList.classList.toggle('show'));
     }
 
     /* ── Dropdowns ── */
-    const dropdowns = document.querySelectorAll('.dropdown');
-    dropdowns.forEach(dropdown => {
-        const btn     = dropdown.querySelector('.dropbtn');
-        const content = dropdown.querySelector('.dropdown-content');
-        if (btn) btn.addEventListener('click', e => { e.preventDefault(); content.classList.toggle('show'); });
-    });
-    document.addEventListener('click', e => {
-        dropdowns.forEach(d => {
-            if (!d.contains(e.target)) d.querySelector('.dropdown-content').classList.remove('show');
+    const initDropdowns = () => {
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            const btn = dropdown.querySelector('.dropbtn');
+            const content = dropdown.querySelector('.dropdown-content');
+            if (!btn || !content) return;
+
+            btn.addEventListener('click', e => {
+                e.preventDefault();
+                content.classList.toggle('show');
+            });
         });
+    };
+
+    const closeDropdowns = () => {
+        document.querySelectorAll('.dropdown .dropdown-content.show').forEach(content => {
+            content.classList.remove('show');
+        });
+    };
+
+    initDropdowns();
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.dropdown')) closeDropdowns();
     });
 
     /* ── Botón de cuenta en el nav ── */
     const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
     const btnNav = document.getElementById('nav-cuenta-btn');
-    const liNav  = document.getElementById('nav-cuenta-li');
+    const liNav = document.getElementById('nav-cuenta-li');
 
-    if (btnNav && liNav) {
+    if (liNav) {
         if (sesion) {
-            /* Con sesión — reemplazar con nombre + dropdown */
             const esAdmin = sesion.rol === 'admin';
             liNav.classList.add('dropdown');
             liNav.innerHTML = `
@@ -41,18 +52,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
                 </ul>`;
 
-            liNav.querySelector('.dropbtn').addEventListener('click', e => {
-                e.preventDefault();
-                liNav.querySelector('.dropdown-content').classList.toggle('show');
-            });
-            document.getElementById('btnCerrarSesion').addEventListener('click', e => {
-                e.preventDefault();
-                sessionStorage.removeItem('mm_usuario');
-                location.reload();
-            });
+            initDropdowns();
 
-        } else {
-            /* Sin sesión — el botón ya está en el HTML, solo enlazamos el clic */
+            const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+            if (btnCerrarSesion) {
+                btnCerrarSesion.addEventListener('click', e => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('mm_usuario');
+                    location.reload();
+                });
+            }
+        } else if (btnNav) {
             btnNav.addEventListener('click', e => {
                 e.preventDefault();
                 if (typeof window.abrirModalCuenta === 'function') {

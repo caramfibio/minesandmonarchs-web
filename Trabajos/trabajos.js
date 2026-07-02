@@ -73,16 +73,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    /* ── Dropdown ── */
-    document.querySelectorAll('.dropdown').forEach(dropdown => {
-        const btn     = dropdown.querySelector('.dropbtn');
-        const content = dropdown.querySelector('.dropdown-content');
-        if (btn) btn.addEventListener('click', e => { e.preventDefault(); content.classList.toggle('show'); });
-    });
-    document.addEventListener('click', e => {
-        document.querySelectorAll('.dropdown').forEach(d => {
-            if (!d.contains(e.target)) d.querySelector('.dropdown-content').classList.remove('show');
-        });
-    });
-
 });

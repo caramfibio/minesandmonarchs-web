@@ -4,32 +4,6 @@
    Uso: cada HTML llama a initGuia('/ruta/al.json')
    ============================================================ */
 
-// Dropdown functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const dropdowns = document.querySelectorAll('.dropdown');
-    
-    dropdowns.forEach(dropdown => {
-        const dropbtn = dropdown.querySelector('.dropbtn');
-        const dropdownContent = dropdown.querySelector('.dropdown-content');
-        
-        if (dropbtn) {
-            dropbtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                dropdownContent.classList.toggle('show');
-            });
-        }
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-        dropdowns.forEach(dropdown => {
-            if (!dropdown.contains(e.target)) {
-                dropdown.querySelector('.dropdown-content').classList.remove('show');
-            }
-        });
-    });
-});
-
 async function initGuia(jsonPath, containerId = 'guiasContainer', overlayId = 'modalOverlay') {
     const container = document.getElementById(containerId);
     const overlay   = document.getElementById(overlayId);

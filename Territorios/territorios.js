@@ -2,25 +2,6 @@
    territorios.js – Mines & Monarch · Sistema de Territorios
    ============================================================ */
 
-/* ── Dropdown (compartido) ── */
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.dropdown').forEach(dropdown => {
-        const btn = dropdown.querySelector('.dropbtn');
-        const content = dropdown.querySelector('.dropdown-content');
-        if (btn) {
-            btn.addEventListener('click', e => {
-                e.preventDefault();
-                content.classList.toggle('show');
-            });
-        }
-    });
-    document.addEventListener('click', e => {
-        document.querySelectorAll('.dropdown').forEach(d => {
-            if (!d.contains(e.target)) d.querySelector('.dropdown-content').classList.remove('show');
-        });
-    });
-});
-
 /* ════════════════════════════════════════
    PÁGINA ÍNDICE
    ════════════════════════════════════════ */
