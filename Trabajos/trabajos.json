@@ -1,32 +1,12 @@
 {
-  "constructor": {
-    "id": "constructor",
-    "nombre": "Constructor",
-    "img": "fotos/Trabajos/constructor.jpg",
-    "desc": "Este trabajo está en proceso, puedes elegirlo pero no aseguramos una mejora alta. Ideal para jugadores que disfrutan de la construcción y el diseño.",
-    "habilidades": [
-      "Al ser constructor, no te vas a hacer daño de caida hasta 20 bloques.",
-      "Si continuas de manera correcta tu árbol de progresión, podrás tener en tus manos unas varitas especiales que te ayudarán en tu trabajo."
-    ]
-  },
-  "inutilerrante": {
-    "id": "inutilerrante",
+
+  "nini": {
+    "id": "nini",
     "nombre": "Inútil Errante",
     "img": "fotos/Trabajos/inutil.jpg",
     "desc": "Personas que quieran jugar en un nivel de dificultad alto. No podrás valerte por ti mismo, y si lo haces, te costará.",
     "habilidades": [
       "Tu gameplay no cambiará. No tendrás bonificaciones. No serás bueno en ningún campo concreto."
-    ]
-  },
-  "explorador": {
-    "id": "explorador",
-    "nombre": "Explorador",
-    "img": "fotos/Trabajos/explorador.jpg",
-    "desc": "TRABAJO IDEAL PARA: Personas que disfruten de la exploración y quieran tener dificultades para la supervivencia.",
-    "habilidades": [
-      "Empieza el juego con una brújula, un reloj y nueve mapas vacíos.",
-      "Sprintar no te agota y te regeneras si estás cerca de una hoguera.",
-      "puedes ponerte un spawnpoint en hogueras."
     ]
   },
   "clerigo": {
@@ -39,9 +19,9 @@
       "Eres el único que puede crear pociones en el soporte de pociones y el unico que puede hacer vinos (aparte del cocinero)."
     ]
   },
-  "mercader": {
-    "id": "mercader",
-    "nombre": "Mercader",
+  "minero": {
+    "id": "minero",
+    "nombre": "Minero",
     "img": "fotos/Trabajos/mercader.jpg",
     "desc": "TRABAJO IDEAL PARA: Personas que les guste comerciar y quieran tener muchos aldeanos.",
     "habilidades": [
@@ -50,9 +30,9 @@
       "Los mercaderes sois los únicos en poder comerciar con aldeanos."
     ]
   },
-  "metalurgico": {
-    "id": "metalurgico",
-    "nombre": "Metalúrgico",
+  "herrero": {
+    "id": "herrero",
+    "nombre": "Herrero",
     "img": "fotos/Trabajos/metalurgico.jpg",
     "desc": "TRABAJO IDEAL PARA: Personas que les encante la mina.",
     "habilidades": [
