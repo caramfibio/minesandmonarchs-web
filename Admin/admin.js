@@ -1,5 +1,5 @@
 /* ============================================================
-   admin.js – Mines & Monarch · Panel de Administración
+   admin.js – Mines & Monarchs · Panel de Administración
    Solo accesible para usuarios con rol 'admin'
    ============================================================ */
 

@@ -1,5 +1,5 @@
 /* ============================================================
-   guia-simple.js  –  Mines & Monarch · Sección simple (solo título + párrafos)
+   guia-simple.js  –  Mines & Monarchs · Sección simple (solo título + párrafos)
    ============================================================
    Uso: initGuiaSimple('ruta/al.json', 'idContenedor', 'idModal')
    ============================================================ */

@@ -1,5 +1,5 @@
 /* ============================================================
-   raza.js  –  Mines & Monarch · Página de Razas
+   raza.js  –  Mines & Monarchs · Página de Razas
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', async () => {

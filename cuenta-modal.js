@@ -1,5 +1,5 @@
 /* ============================================================
-   cuenta-modal.js – Mines & Monarch · Modal de Cuenta
+   cuenta-modal.js – Mines & Monarchs · Modal de Cuenta
    Flujo:
      1. Botón "Entrar con Google" → popup OAuth
      2a. Nuevo usuario  → paso 2: formulario con sección Datos + Rol

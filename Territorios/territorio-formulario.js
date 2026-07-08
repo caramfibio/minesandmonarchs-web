@@ -1,5 +1,5 @@
 /* ============================================================
-   territorio-formulario.js – Mines & Monarch · Formulario de Territorio
+   territorio-formulario.js – Mines & Monarchs · Formulario de Territorio
    4 secciones: General · Descripción · Lore · Gobierno
    Guarda en Firebase Firestore → colección "solicitudes_territorio"
    ============================================================ */
