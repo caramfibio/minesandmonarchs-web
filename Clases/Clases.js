@@ -60,6 +60,10 @@ function openModal(clase) {
     document.getElementById('modalRazas').innerHTML =
         clase.razas.map(r => `<li>${r}</li>`).join('');
 
+/* armas */
+    document.getElementById('modalArmas').innerHTML =
+        clase.armas.map(h => `<li>${h}</li>`).join('');
+
     /* habilidades */
     document.getElementById('modalHabilidades').innerHTML =
         clase.habilidades.map(h => `<li>${h}</li>`).join('');
