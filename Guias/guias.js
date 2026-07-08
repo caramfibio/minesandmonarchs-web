@@ -1,5 +1,5 @@
 /* ============================================================
-   guias.js  –  Mines & Monarch · Páginas de Guías (compartido)
+   guias.js  –  Mines & Monarchs · Páginas de Guías (compartido)
    ============================================================
    Uso: cada HTML llama a initGuia('/ruta/al.json')
    ============================================================ */

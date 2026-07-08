@@ -1,5 +1,5 @@
 /* ============================================================
-   territorios.js – Mines & Monarch · Sistema de Territorios
+   territorios.js – Mines & Monarchs · Sistema de Territorios
    ============================================================ */
 
 /* ════════════════════════════════════════
@@ -123,7 +123,7 @@ async function initTerritorioDetalle(jsonPath) {
     }
 
     // Actualizar título de la pestaña
-    document.title = `${territorio.nombre} – Mines & Monarch`;
+    document.title = `${territorio.nombre} – Mines & Monarchs`;
 
     // Renderizar
     main.innerHTML = renderDetalle(territorio);

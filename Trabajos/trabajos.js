@@ -1,5 +1,5 @@
 /* ============================================================
-   trabajos.js  –  Mines & Monarch · Página de Trabajos
+   trabajos.js  –  Mines & Monarchs · Página de Trabajos
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', async () => {

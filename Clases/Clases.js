@@ -1,5 +1,5 @@
 /* ============================================================
-   Clases.js  –  Mines & Monarch · Página de Clases
+   Clases.js  –  Mines & Monarchs · Página de Clases
    ============================================================
    Flujo:
      1. Al cargar la página se hace fetch de clases.json
