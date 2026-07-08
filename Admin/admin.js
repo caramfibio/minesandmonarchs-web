@@ -24,53 +24,38 @@ const db   = getFirestore(app);
 
 /* ── Datos de referencia ── */
 const RAZAS = {
-    humano:"Humano", elfobosque:"Elfo del Bosque", alfiq:"Alfiq",
-    goblin:"Goblin", enano:"Enano", aracnido:"Arácnido", yeti:"Yeti",
+    humano:"Humano", elfo:"Elfo", goblin:"Goblin", enano:"Enano",
     demonio:"Demonio", sirena:"Sirena", valquiria:"Valquiria",
-    hadapixie:"Hada Pixie", hadafae:"Hada Fae", granelfo:"Gran Elfo",
-    gorgona:"Gorgona", victimapeste:"Víctima de la Peste",
-    banshee:"Banshee", elfolunar:"Elfo Lunar", ogro:"Ogro", revenant:"Revenant",
-    ribbit:"Ribbit"
+    hada:"Hada", ogro:"Ogro", revenant:"Revenant"
 };
 const CLASES = {
-    cazador:"Cazador", guardabosques:"Guardabosques", curador:"Curador",
     magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico",
     magosangre:"Mago de Sangre", magohelado:"Mago Helado",
     magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego",
-    granmago:"Gran Mago", granmagooscuro:"Gran Mago Oscuro",
-    guerrerobendito:"Guerrero Bendito", hiedravenenosa:"Hiedra Venenosa",
-    rogue:"Rogue", tanque:"Tanque", berserker:"Berserker",
-    guerrero:"Guerrero", bardo:"Bardo", guerrerodelmar:"Guerrero del Mar",
-    carterista:"Carterista", paladin:"Paladín", ingeniero:"Ingeniero",
-    bestiasalvaje:"Bestia Salvaje", angler:"Angler",
-    magoeldritch:"Mago del Eldritch", niceGuy:"Nice Guy"
+    magoeldritch:"Mago del Eldritch", magoViento:"Mago de Viento", 
+    magotierra:"Mago de Tierra", support:"Support", magoBendito:"Mago Bendito",
+    tanque:"Tanque",
+    ingeniero:"Ingeniero", guerrero:"Guerrero",
+    carterista:"Carterista", soldadoDorado:"Soldado Dorado",
+    guerreroInfernal:"Guerrero Infernal", support:"Support",
+    tritonisa:"Tritonisa", guerreroBendito:"Guerrero Bendito", berserker:"Berserker", bestiaSalvaje:"Bestia Salvaje"
 };
 const CLASES_POR_RAZA = {
-    humano:       ['cazador','guerrero','tanque'],
-    elfobosque:   ['cazador','guardabosques','curador'],
-    alfiq:        ['carterista','angler','cazador','rogue'],
-    goblin:       ['carterista','ingeniero','cazador','rogue'],
-    enano:        ['berserker','ingeniero','tanque'],
-    aracnido:     ['berserker','ingeniero','tanque'],
-    yeti:         ['magohelado','bestiasalvaje','berserker'],
-    demonio:      ['magofuego','berserker','bestiasalvaje'],
-    sirena:       ['angler','guerrerodelmar','bardo'],
-    valquiria:    ['guerrerobendito','guerrero','paladin'],
-    hadapixie:    ['guardabosques','curador'],
-    hadafae:      ['guardabosques','curador'],
-    granelfo:     ['granmago','magoelectrico','guardabosques'],
-    gorgona:      ['hiedravenenosa','guerrero'],
-    victimapeste: ['magosangre','angler'],
-    banshee:      ['magoender','magoeldritch'],
-    elfolunar:    ['magoender','rogue','bardo'],
-    ogro:         ['magosangre','angler'],
-    revenant:     ['granmagooscuro','magoinvocador','magosangre','magoender'],
-    ribbit:       ['niceGuy']
+    humano:       ['guerrero','tanque','ingeniero'],
+    elfo:         ['magohelado','magoelectrico','magotierra','support'],
+    goblin:       ['carterista','soldadoDorado','ingeniero'],
+    enano:        ['guerrero','tanque','ingeniero'],
+    demonio:      ['guerreroInfernal','magosangre','magofuego'],
+    sirena:       ['magohelado','tritonisa','magotierra'],
+    valquiria:    ['guerreroBendito','magoViento','magoBendito','magoelectrico'],
+    hada:         ['carterista','magoViento','support'],
+    ogro:         ['berserker','bestiaSalvaje','tanque'],
+    revenant:     ['magoeldritch','magoinvocador','magosangre','magoender'],
 };
 const TRABAJOS = {
-    constructor:"Constructor", inutilerrante:"Inútil Errante",
-    explorador:"Explorador", clerigo:"Clérigo", mercader:"Mercader",
-    metalurgico:"Metalúrgico", agricultor:"Agricultor",
+    inutilerrante:"Inútil",
+    herrero:"Herrero", clerigo:"Clérigo",
+    minero:"Minero", agricultor:"Agricultor",
     granjero:"Granjero", cocinero:"Cocinero"
 };
 
