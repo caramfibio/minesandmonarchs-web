@@ -3,7 +3,7 @@
     "id": "humano",
     "nombre": "Humano",
     "img": "fotos/Razas/Humano.jpg",
-    "desc": "Los humanos llegaron a Belmaria pensándose que eran los únicos que habitaban esas tierras, pero al descubrir que no, decidieron no entrar en guerra y colaborar con el resto de razas que existían. \nLos humanos no son realmente buenos en nada de este mundo. Su manera de vivir es un tanto... Aburrida. ",
+    "desc": "Los humanos son la raza más básica y poblada de todo el continente. No tienen desventajas, pero tampoco pueden conseguir poderes. Su manera de vivir es un tanto... Aburrida. ",
     "cambios": [
       "Ninguno"
     ],
@@ -13,19 +13,15 @@
     "habilidades": [
       {
         "nombre": "MAGIA",
-        "desc": "Los humanos no son capaces de dominar la magia del iron's and spells, pero se rumorea que tienen acceso a un hechizo de prisa minera."
+        "desc": "Los humanos no son capaces de dominar la magia y se centran más en usar armas. "
       },
       {
         "nombre": "ALQUIMIA",
         "desc": "Los humanos no saben leer los libros educativos alquimistas, por lo que nunca aprendieron a usarla. "
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": " Debido a que las armas superiores (Armas de mods) son el único campo que los humanos dominan, pueden usarlas todas. (Menos las que emanen algún elemento) Y son los unicos a parte de los Enanos en poder usar el tinkers (mod de herreria avanzada)"
       }
     ],
     "clases": [
-      "CAZADOR",
+      "INGENIERO",
       "GUERRERO",
       "TANQUE"
     ]
@@ -34,21 +30,18 @@
     "id": "elfo",
     "nombre": "Elfo",
     "img": "fotos/Razas/ElfoBosque.jpg",
-    "desc": "Los Elfos del Bosque, también conocidos como Elfos Silvanos, son unos amantes de la naturaleza y de los animales. Viven rodeados de plantas y siguen una dieta estricta. Aun así, disfrutan enormemente de la comida.",
+    "desc": "Los Elfos son de las razas más mágicas que existen. No son muy hábiles con las armas pero pueden llegar a dominar magias únicas.",
     "cambios": [
-      "Reciben bonificaciones a distancia.",
-      "Son más veloces y sigilosos.",
-      "Son vegetarianos.",
-      "Causa menos daño cuerpo a cuerpo y tiene menos defensa."
+      "Los elfos son ligeramente más altos que un humano promedio."
     ],
     "detalles": [
-      "Infligen más daño de magia del que reciben.",
-      "Si se agachan en la hierba alta, pueden tener visión nocturna durante unos segundos.",
-      "Son ligeramente más altos que un humano.",
-      "Tienen menos salud y sus ataques tienen daño reducido.",
-      "Se ralentizan utilizando armadura pesada (tiene un hechizo para solucionarlo). ",
-      "Hacen más daño con el arco.",
-      "Tienen más resisténcia de caída."
+      "Tienen naturalmente más maná.",
+      "Son más susceptibles al daño físico debido a su poca salud.",
+      "Se ralentizan al usar armadura, pero se puede prevenir con encantamientos.",
+      "Son expertos manipuladores de energía arcana. Infligen más daño.",
+      "Tiene un bonus en la magia que domine.",
+      "Tiene menos daño melé.",
+      "Tiene menos defensa."
     ],
     "habilidades": [
       {
@@ -58,36 +51,32 @@
       {
         "nombre": "ALQUIMIA",
         "desc": "Los elfos del bosque saben crear y usar alquimia. Son de los pocos que pueden usar calderos alquimistas, forjas de  pergaminos, yunques arcanos y boticas del botania. "
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": "No tienen acceso a tal conocimiento. No pueden usar el tinkers, pero pueden utilizar cualquier arco y armas botánicas. "
       }
     ],
     "clases": [
-      "CAZADOR",
-      "GUARDABOSQUES",
-      "CURADOR"
+      "SUPPORT",
+      "MAGO DE HIELO",
+      "MAGO ELÉCTRICO",
+      "MAGO DE TIERRA" 
     ]
   },
   "goblin": {
     "id": "goblin",
     "nombre": "Goblin",
     "img": "fotos/Razas/goblin.jpg",
-    "desc": "Los Goblins son reconocidos por su rapidez y por su suerte al encontrar oro. Se dice que si tienen lingotes a mano, se mantendrán en mejor estado y estarán en mejores condiciones.",
+    "desc": "Los Goblins son reconocidos por su rapidez y por su suerte al encontrar oro. Se dice que si tienen utensilios de oro en las manos durarán mucho más.",
     "cambios": [
-      "Bonificación de armadura de oro.",
-      "Tienen más suerte y más velocidad.",
       "Miden 92 cm.",
-      "Tienen menos salud.",
-      "Tienen menos defensa." 
+      "Sea del color que sea un goblin, siempre va a tener un tono verdoso."
     ],
     "detalles": [
       "Tienden a encontrar más botín.",
       "Si llevan equipamiento de oro, tienen más bonificaciones.",
       "El oro en las manos de un Goblin dura más.",
       "Son rápidos y astutos.",
-      "Tienen menos salud y son propensos a salir dañados." 
+      "Tienen menos salud y son propensos a salir dañados.",
+      "Bonificación de armadura de oro.",
+      "Tienen menos defensa."
     ],
     "habilidades": [
       {
@@ -97,16 +86,12 @@
       {
         "nombre": "ALQUIMIA",
         "desc": "La alquimia tampoco ha despertado ningún interés en los goblins."
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": "Las armas superiores que pueden usar los goblins, son las dagas. No pueden usar el tinkers."
       }
     ],
     "clases": [
       "CARTERISTA",
       "INGENIERO",
-      "CAZADOR"
+      "SOLDADO DORADO"
       
     ]
   },
@@ -118,16 +103,15 @@
     "img": "fotos/Razas/enano.jpg",
     "desc": "A pesar de su pequeño tamaño, los enanos son de los mejores en crear armas y caminos subterráneos con raíles. ",
     "cambios": [
-      "Minan y cavan más rápido.",
       "Miden 102 cm.",
-      "Sensibles al sol.",
-      "No pueden nadar."
+      "Son ligeramente anchos."
+  
     ],
     "detalles": [
       "Minan piedra sin pico y lo hacen más rápido que otros.",
       "Pueden ver claramente sin una fuente de luz.",
       "El sol los ciega/marea temporalmente. Con un casco y un encantamiento, o un casco de oro, se puede prevenir.",
-      "No pueden nadar; al intentarlo, se hunden en el agua. "
+      "No pueden nadar; al intentarlo, se hunden en el agua."
     ],
     "habilidades": [
       {
@@ -137,14 +121,10 @@
       {
         "nombre": "ALQUIMIA",
         "desc": "El idioma en los libros de alquimia nunca fue descifrado por ningún enano. No saben usar alquimia."
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": "Los enanos pueden usar cualquier arma, ya que no pueden usar ni magia ni alquimia. "
       }
     ],
     "clases": [
-      "BERSERKER",
+      "GUERRERO",
       "INGENIERO",
       "TANQUE"
     ]
@@ -156,37 +136,34 @@
     "img": "fotos/Razas/demonio.jpg",
     "desc": "Los demonios son de las razas más poderosas, contando con la sabiduría del nether y todo lo que conlleva ser habitante natural de dicho submundo.",
     "cambios": [
-      "Bonificación en el Nether.",
-      "Afín al fuego.",
-      "Carnívoro.",
-      "Débil en el OverWorld.",
-      "Se daña con el agua."
+     "Obtiene alas en el nether.",
+     "Obtiene un tono rojizo sea del color que sea."
     ],
     "detalles": [
       "Pueden lanzar un estallido de llamas a su antojo.",
       "El fuego no inflige daño a los demonios.",
       "Los demonios reciben daño adicional de golpe y efectos revertidos de curación y daño.",
       "No están acostumbrados a la luz del sol, por lo que son más poderosos en el Nether. (Dónde spawnean)",
-      "En el nether, su habitat natural, son capaces de volar."
+      "En el nether, su habitat natural, son capaces de volar.",
+      "Bonificación en el Nether.",
+      "Afín al fuego.",
+      "Débil en el OverWorld.",
+      "Se daña con el agua."
     ],
     "habilidades": [
       {
         "nombre": "MAGIA",
-        "desc": "Al vivir en el Nether, pueden dominar el fuego."
+        "desc": "Al vivir en el Nether, pueden dominar la magia de fuego o la magia de sangre."
       },
       {
         "nombre": "ALQUIMIA",
         "desc": "Los demonios intentaron aprender alquimia, pero quemaron los libros al tocarlos. "
-      },
-      {
-        "nombre": "Aura de Miedo",
-        "desc": "No tienen acceso a tal conocimiento. No pueden usar el tinkers, pero pueden utilizarlas."
       }
     ],
     "clases": [
       "MAGO DE FUEGO",
-      "BERSERKER",
-      "BESTIA SALVAJE "
+      "MAGO DE SANGRE",
+      "GUERRERO INFERNAL"
     ]
   },
 
@@ -197,37 +174,32 @@
     "img": "fotos/Razas/sirena.jpg",
     "desc": "Las sirenas son la única raza acuática que existe, por lo cual son los reyes y reinas del mar. Como es lógico, respiran bajo el agua y mantienen la paz en los océanos.",
     "cambios": [
+    "Obtiene una cola de sirena al sumergirse al agua."
+    ],
+    "detalles": [
+      "Bajo el agua, las sirenas respiran y ven con naturalidad.",
+      "Tienen una habilidad para abrumar a los enemigos en un área amplia.",
+      "Tienen regeneración si están sumergidas.",
+      "Los aldeanos son más considerados con ellas.",
+      "Solo se pueden sanar fuera del agua con pociones.",
       "Afin al agua.",
       "Vulnerable en tierra.",
       "Débil al fuego."
     ],
-    "detalles": [
-      "Bajo el agua, las sirenas respiran y ven con naturalidad.",
-      "Las sirenas reciben un collar con el que pueden obtener una cola de sirena y nadar de manera más inmersiva.",
-      "Tienen una habilidad para abrumar a los enemigos en un área amplia.",
-      "Tienen regeneración si están sumergidas.",
-      "Los aldeanos son más considerados contigo.",
-      "Solo se pueden sanar fuera del agua con pociones."
-    ],
     "habilidades": [
       {
         "nombre": "MAGIA",
-        "desc": "Las sirenas aprendieron a cambiar de estado las aguas por donde nadan para convertirla en hielo, por lo que dominan la magia helada."
+        "desc": "Las sirenas aprendieron a cambiar de estado las aguas por donde nadan para convertirla en hielo, por lo que dominan la magia helada. También aprendieron a usar la magia que controlaba las tierras."
       },
       {
         "nombre": "ALQUIMIA",
         "desc": "Las sirenas tampoco pueden agarrar los libros de alquimia, por lo cual no son capaces de aprender."
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": "No pueden usar armas superiores, a excepción de las lanzas. No pueden usar el tinkers."
       }
     ],
     "clases": [
-      "ANGLER",
-      "GUERRERO DEL MAR",
-      "BARDO",
-      "MAGO DE HIELO"
+      "MAGO DE TIERRA",
+      "MAGO DE HIELO",
+      "TRITONISA"
     ]
   },
 
@@ -236,18 +208,19 @@
     "id": "valquiria",
     "nombre": "Valquiria",
     "img": "fotos/Razas/valquiria.jpg",
-    "desc": "Las Valquirias son la raza bendita de Belmaria. Sus grandes alas les permiten sobrevolar los cielos de la Capital y vigilar que no haya ningún desperfecto. Aunque al acercarse a los no muertos, tienen una debilidad incomprensible...",
+    "desc": "Las Valquirias son conocidas por ser la raza bendita. Sus grandes alas les permiten sobrevolar los cielos de todos los continentes habitables. Aunque al acercarse a los no muertos, tienen una debilidad incomprensible...",
     "cambios": [
-      "Tiene curación.",
-      "Tiene alas.",
-      "Muy débil a los no muertos."
+      "Tienen alas."
+     
     ],
     "detalles": [
       "Poseen masivas alas con plumas.",
-      "Cada tercer ataque produce más daño a enemigos cercanos.",
-      "Salta hacia los cielos o dashea hacia delante si ya estás volando.",
+      "Cada tercer ataque producen más daño a enemigos cercanos.",
+      "Saltan hacia los cielos o dashean hacia delante si ya están volando.",
       "Son más fuertes con las lanzas.",
-      "Los no muertos te ralentizan."
+      "Los no muertos las ralentizan.",
+      "Muy débil a los no muertos.",
+      "Tienen curación."
     ],
     "habilidades": [
       {
@@ -257,16 +230,13 @@
       {
         "nombre": "ALQUIMIA",
         "desc": "Las Valquirias no quieren experimentar el esfuerzo que conlleva tener que aprender el alfabeto de Alquimia. "
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": "No tienen acceso a tal conocimiento. No pueden usar el tinkers, pero tienen acceso a las lanzas. "
       }
     ],
     "clases": [
-      "GUERRERO BENDITO",
-      "GUERRERO",
-      "PALADÍN"
+      "MAGO BENDITO",
+      "MAGO ELÉCTRICO",
+      "MAGO DE VIENTO",
+      "SKJALDMÖ"
     ]
   },
 
@@ -274,18 +244,18 @@
     "id": "hada",
     "nombre": "Hada",
     "img": "fotos/Razas/pixie.jpg",
-    "desc": "Las Hadas Pixie son las hadas problemáticas de Belmaria. Con sus bromas y su picardía, consiguieron tener pase denegado a cualquier comercio con aldeanos.",
+    "desc": "Las hadas son la raza más bromista y pícara que existe en el continente, tanto que consiguieron tener pase denegado a cualquier comercio con aldeanos.",
     "cambios": [
-      "Vuelo único.",
-      "Miden 22 cm.",
-      "Tienen menos defensa y menos reputación."
+      "Tienen alas minúsculas",
+      "Miden 22 cm."
     ],
     "detalles": [
       "Pueden volar y hacer dashes.",
       "No reciben daño de caída.",
       "Pueden sentarse en la cabeza de otros.",
       "Pueden crear explosiones falsas para asustar.",
-      "Los aldeanos no comercian con las pixies debido a su baja reputación."
+      "Los aldeanos no comercian con las hadas debido a su baja reputación.",
+      "Tienen menos defensa y menos reputación."
     ],
     "habilidades": [
       {
@@ -295,16 +265,12 @@
       {
         "nombre": "ALQUIMIA",
         "desc": "Las hadas pixie pueden crear y usar alquimia. Además, son de las pocas que pueden hacer pociones en calderos de alquimista. "
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": "Las pixies no pueden usar ninguna arma superior. No pueden usar el tinkers."
       }
     ],
     "clases": [
-      "GUARDABOSQUES ",
-      "CURADOR ",
-      "ROGUE "
+      "SUPPORT",
+      "MAGO DE VIENTO",
+      "CARTERISTA"
     ]
   },
 
@@ -312,17 +278,18 @@
     "id": "ogro",
     "nombre": "Ogro",
     "img": "fotos/Razas/ogro.jpg",
-    "desc": "Los ogros son la raza más grande que existe en Belmaria. Son temidos por los ciudadanos debido a que miden 268 cm de altura y son tan anchos que tienen que pasar por puertas dobles de 3 bloques. Además, son formidables y tienen más resistencia que otros. ",
+    "desc": "Los ogros son la raza más grande que existe. Son temidos por los ciudadanos debido a que miden 268 cm de altura y son tan anchos que tienen que pasar por puertas dobles de 3 bloques. Además, son formidables y tienen más resistencia que otros. ",
     "cambios": [
-      "Tienen bonificaciones con el hacha y tienen más defensa.",
-      "Miden 268 cm.",
-      "Tienen menos velocidad y están más hambrientos."
+    
+      "Miden 268 cm."
     ],
     "detalles": [
       "Atacan mejor con hachas.",
       "No sufren veneno.",
       "Más resistente a los golpes.",
-      "Son lentos."
+      "Son lentos.",
+      "Tienen bonificaciones con el hacha y tienen más defensa.",
+      "Tienen menos velocidad y están más hambrientos."
     ],
     "habilidades": [
       {
@@ -332,10 +299,6 @@
       {
         "nombre": "ALQUIMIA",
         "desc": "Los ogros ni siquiera saben leer correctamente, así que leer los libros de alquimia les es imposible. "
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": "No tienen acceso a tal conocimiento. No pueden usar el tinkers. Pueden usar hachas, martillos y armas superiores pesadas."
       }
     ],
     "clases": [
@@ -349,20 +312,19 @@
     "id": "revenant",
     "nombre": "Revenant",
     "img": "fotos/Razas/revenant.jpg",
-    "desc": "Los Revenants son el equivalente a los Grandes Elfos, pero en versión nigromántica. Son los maestros de las artes oscuras y considerados los mejores en la categoría de los no-muertos.",
+    "desc": "Los Revenants son los maestros de las artes oscuras y considerados los mejores en la categoría de los no-muertos.",
     "cambios": [
-      "Invocador.",
-      "Amistoso con los Illagers.",
-      "Es un no muerto",
-      "No pueden dormir",
-      "Menos reputación."
+      "Ninguno"
     ],
     "detalles": [
       "Pueden reconstruir las criaturas de la noche.",
       "Puede levantar un círculo de esqueletos.",
       "Absorben la vida de sus adversarios.",
       "Inmunes al Wither, veneno y regeneración.",
-      "Los aldeanos no querrán comerciar con ellos."
+      "Los aldeanos no querrán comerciar con ellos.",
+      "Invocador.",
+      "Amistoso con los Illagers.",
+      "No pueden dormir"
     ],
    "habilidades": [
       {
@@ -372,16 +334,13 @@
       {
         "nombre": "ALQUIMIA",
         "desc": "Los Revenants no ponen nada de interés en la alquimia."
-      },
-      {
-        "nombre": "ARMAS SUPERIORES",
-        "desc": "No tienen acceso a tal conocimiento. No pueden usar el tinkers. Pueden usar armas oscuras como guadañas. "
       }
     ],
     "clases": [
-      "GRAN MAGO OSCURO",
+      "MAGO DE ENDER",
       "MAGO INVOCADOR",
-      "MAGO DE SANGRE"
+      "MAGO DE SANGRE",
+      "MAGO DE ELDRITCH"
     ]
   }
 }

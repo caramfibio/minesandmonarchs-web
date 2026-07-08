@@ -13,32 +13,31 @@
     "id": "clerigo",
     "nombre": "Clérigo",
     "img": "fotos/Trabajos/clerigo.jpg",
-    "desc": "TRABAJO IDEAL PARA: Personas que sepan y disfruten de la creación de pociones. ",
+    "desc": "TRABAJO IDEAL PARA: Personas que sepan y disfruten de la creación de pociones, vinos, whiskeys, cervezas... ",
     "habilidades": [
-      "Puedes alcanzar niveles más altos de encantamiento en una mesa de encantamientos y eres el unico que puede usarla. ",
-      "Eres el único que puede crear pociones en el soporte de pociones y el unico que puede hacer vinos (aparte del cocinero)."
+      "Puedes alcanzar niveles más altos de encantamiento en una mesa de encantamientos y eres el unico que puede usarla.",
+      "Eres el único que puede crear pociones en el soporte de pociones.",
+      "Eres el único aparte del cocinero que puede crear bebidas alcohólicas."
     ]
   },
   "minero": {
     "id": "minero",
     "nombre": "Minero",
     "img": "fotos/Trabajos/mercader.jpg",
-    "desc": "TRABAJO IDEAL PARA: Personas que les guste comerciar y quieran tener muchos aldeanos.",
+    "desc": "TRABAJO IDEAL PARA: Personas que les guste vivir solamente de minar bloques y minerales.",
     "habilidades": [
-      "Los aldeanos nunca se quedarán sin recursos para comerciar con los mercaderes.",
-      "Puedes convencer a los comerciantes errantes que ofrezcan objetos raros.",
-      "Los mercaderes sois los únicos en poder comerciar con aldeanos."
+      "Tendrás de manera permanente prisa minera.",
+      "No les agota minar bloques como al resto."
     ]
   },
   "herrero": {
     "id": "herrero",
     "nombre": "Herrero",
     "img": "fotos/Trabajos/metalurgico.jpg",
-    "desc": "TRABAJO IDEAL PARA: Personas que les encante la mina.",
+    "desc": "TRABAJO IDEAL PARA: Personas que les encante el proceso de creación de armas y armaduras.",
     "habilidades": [
-      "El trabajo de metalúrgico da ventajas en el ambito de mineria y herreria.",
-      "Podrás obtener el 100% de los minerales minados y usar altos hornos.",
-      "Eres el único que puede usar la mesa de herrería."
+      "Eres el único que puede usar la mesa de herrería.",
+      "Podrás crear armaduras y armas de todo tipo y te podrán salir mejor o peor dependiendo de tus habilidades de herrería."
     ]
   },
   "agricultor": {
@@ -70,7 +69,7 @@
     "habilidades": [
       "La comida hecha por ti sacia más y solo tú sabes hacer platos elaborados.",
       "Recibes más experiencia con el ahumador y eres el único que puede usarlo.",
-      "Puedes hacer vino."
+      "Puedes hacer diferentes tipos de bebidas como refrescos, café, vino, cerveza..."
     ]
   }
 }
