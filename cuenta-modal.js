@@ -35,9 +35,9 @@ const provider = new GoogleAuthProvider();
 const ROL = { admin: 'admin', escriba: 'escriba', ciudadano: 'ciudadano' };
 
 const RAZAS = {
-    humano:"Humano", elfo:"Elfo", goblin:"Goblin", enano:"Enano",
-    demonio:"Demonio", sirena:"Sirena", valquiria:"Valquiria",
-    hada:"Hada", ogro:"Ogro", revenant:"Revenant"
+    Humano:"Humano", Elfo:"Elfo", Goblin:"Goblin", Enano:"Enano",
+    Demonio:"Demonio", Sirena:"Sirena", Valquiria:"Valquiria",
+    Hada:"Hada", Ogro:"Ogro", Revenant:"Revenant"
 };
 const CLASES = {
     magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico",
@@ -48,7 +48,7 @@ const CLASES = {
     tanque:"Tanque",
     ingeniero:"Ingeniero", guerrero:"Guerrero",
     carterista:"Carterista", soldadoDorado:"Soldado Dorado",
-    guerreroInfernal:"Guerrero Infernal", support:"Support",
+    guerreroInfernal:"Guerrero Infernal",
     tritonisa:"Tritonisa", guerreroBendito:"Guerrero Bendito", berserker:"Berserker", bestiaSalvaje:"Bestia Salvaje"
 };
 const CLASES_POR_RAZA = {
@@ -164,8 +164,8 @@ function inyectar() {
           </div>
           <p class="cm-error" id="pError"></p>
           <div class="cm-form-footer">
-            <button class="cm-btn-volver" id="pCancelar">Cancelar</button>
-            <button class="cm-btn-submit" id="pGuardar">⚜ Crear personaje</button>
+            <button type="button" class="cm-btn-volver" id="pCancelar">Cancelar</button>
+            <button type="button" class="cm-btn-submit" id="pGuardar">⚜ Crear personaje</button>
           </div>
         </div>
 
@@ -255,8 +255,11 @@ async function loginGoogle() {
     try {
         const result = await signInWithPopup(auth, provider);
         const user   = result.user;
+        _googleUser = user;
+        _creandoPersonaje = true;
         const snap   = await getDoc(doc(db, 'usuarios', user.uid));
         if (snap.exists() && snap.data().personaje) {
+            _creandoPersonaje = false;
             const datos = snap.data();
             guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
             document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
@@ -266,7 +269,6 @@ async function loginGoogle() {
             mostrar('cmExito');
             setTimeout(() => redirigirSegunRol(datos.rol, user.uid), 1800);
         } else {
-            _creandoPersonaje = true;
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
         }
     } catch (err) {
@@ -293,7 +295,7 @@ async function guardarPersonaje() {
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
 
-    const user = auth.currentUser;
+    const user = auth.currentUser || _googleUser;
     if (!user) {
         setError('pError', 'No hay sesión activa. Vuelve a iniciar sesión.');
         return;
@@ -314,6 +316,7 @@ async function guardarPersonaje() {
         });
 
         _creandoPersonaje = false;
+        _googleUser = null;
         sessionStorage.removeItem('mm_uid_pendiente');
         guardarSesion({ uid, nombreRol, id, rol });
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
@@ -398,10 +401,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('pRaza').addEventListener('change', function () {
         const select = document.getElementById('pClase');
-        const clases = CLASES_POR_RAZA[this.value] || [];
+        const razaKey = this.value.toLowerCase();
+        const clases = CLASES_POR_RAZA[razaKey] || [];
         select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
             clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
-        select.value = ''; select.disabled = false;
+        select.value = '';
+        select.disabled = clases.length === 0;
     });
 
     onAuthStateChanged(auth, async user => {
