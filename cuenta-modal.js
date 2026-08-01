@@ -113,7 +113,7 @@ function inyectar() {
                 </svg>
               </span>
               <span>Entrar con Google
-                <span class="cm-opcion-desc">Login y registro en un solo paso</span>
+                <span class="cm-opcion-desc">Inicia sesión con Google</span>
               </span>
             </button>
             <button class="cm-opcion-btn secundario" id="optVolver">
@@ -256,21 +256,18 @@ async function loginGoogle() {
         const result = await signInWithPopup(auth, provider);
         const user   = result.user;
         _googleUser = user;
-        _creandoPersonaje = true;
-        const snap   = await getDoc(doc(db, 'usuarios', user.uid));
-        if (snap.exists() && snap.data().personaje) {
-            _creandoPersonaje = false;
-            const datos = snap.data();
-            guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
-            document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
-            document.getElementById('exitoTexto').textContent  = datos.rol === 'admin'
-                ? 'Redirigiendo al panel de administración…'
-                : 'Sesión iniciada correctamente.';
-            mostrar('cmExito');
-            setTimeout(() => redirigirSegunRol(datos.rol, user.uid), 1800);
-        } else {
-            mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
-        }
+        _creandoPersonaje = false;
+
+        sessionStorage.setItem('mm_usuario', JSON.stringify({
+            uid: user.uid,
+            nombreRol: user.displayName || user.email || 'Usuario',
+            rol: 'ciudadano'
+        }));
+
+        document.getElementById('exitoTitulo').textContent = '¡Sesión iniciada!';
+        document.getElementById('exitoTexto').textContent  = 'Has iniciado sesión correctamente.';
+        mostrar('cmExito');
+        setTimeout(() => cerrar(), 1200);
     } catch (err) {
         if (err.code !== 'auth/popup-closed-by-user') {
             setError('googleError', errMsg(err.code));
@@ -342,17 +339,6 @@ async function cancelarPersonaje() {
 }
 
 function cerrar() {
-    const user = _googleUser || auth.currentUser;
-    if (user) {
-        getDoc(doc(db, 'usuarios', user.uid)).then(snap => {
-            if (!snap.exists() || !snap.data().personaje) {
-                _creandoPersonaje = false;
-                signOut(auth);
-                sessionStorage.removeItem('mm_usuario');
-                _googleUser = null;
-            }
-        });
-    }
     document.getElementById('cmOverlay').classList.remove('active');
     document.body.style.overflow = '';
 }
@@ -396,18 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('optGoogle').addEventListener('click', loginGoogle);
     document.getElementById('optVolver').addEventListener('click', cerrar);
-    document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
-    document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
-
-    document.getElementById('pRaza').addEventListener('change', function () {
-        const select = document.getElementById('pClase');
-        const razaKey = this.value.toLowerCase();
-        const clases = CLASES_POR_RAZA[razaKey] || [];
-        select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
-            clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
-        select.value = '';
-        select.disabled = clases.length === 0;
-    });
 
     onAuthStateChanged(auth, async user => {
         if (!user) return;
@@ -416,8 +390,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (snap.exists() && snap.data().personaje) {
                 const datos = snap.data();
                 guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
-            } else if (!snap.data()?.personaje && !_creandoPersonaje) {
-                await signOut(auth);
+            } else {
+                sessionStorage.setItem('mm_usuario', JSON.stringify({
+                    uid: user.uid,
+                    nombreRol: user.displayName || user.email || 'Usuario',
+                    rol: 'ciudadano'
+                }));
             }
         } catch (_) {}
     });

@@ -23,7 +23,7 @@
   "minero": {
     "id": "minero",
     "nombre": "Minero",
-    "img": "fotos/Trabajos/mercader.jpg",
+    "img": "fotos/Trabajos/minero.jpg",
     "desc": "TRABAJO IDEAL PARA: Personas que les guste vivir solamente de minar bloques y minerales.",
     "habilidades": [
       "Tendrás de manera permanente prisa minera.",
@@ -33,7 +33,7 @@
   "herrero": {
     "id": "herrero",
     "nombre": "Herrero",
-    "img": "fotos/Trabajos/metalurgico.jpg",
+    "img": "fotos/Trabajos/herrero.jpg",
     "desc": "TRABAJO IDEAL PARA: Personas que les encante el proceso de creación de armas y armaduras.",
     "habilidades": [
       "Eres el único que puede usar la mesa de herrería.",
