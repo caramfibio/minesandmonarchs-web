@@ -23,7 +23,7 @@
         "titulo": "¿Como me uno a un territorio?",
         "secciones": [
           { "titulo": "¿Que es lo primero que debo hacer?", "texto": "Mira primero todos y cada uno de los territorios en el canal de Territorios y observa sus normas, sus estructuras y sus preferencias, ya que en varios reinos, no pueden acceder todas las razas o las formas de gobierno son incompatibles con el pensamiento de algunos personajes.", "lista": [] },
-          { "titulo": "Contacta con el líder", "texto": "Una vez hayas escogido tu territorio, habla con alguno de sus fundadores y solicita unirte. En cuanto tengas un pasaporte de ese territorio, serás oficialmente ciudadano. ", "lista": [] },
+          { "titulo": "Contacta con el líder", "texto": "Una vez hayas escogido tu territorio, habla con alguno de sus fundadores y solicita unirte.", "lista": [] },
           { "titulo": "IMPORTANTE:", "texto": "¡No puedes unirte al territorio de alguien porque sí! Tendréis que rolear un mínimo para que sea justificable.", "lista": [] }
         ]
       }
@@ -36,9 +36,9 @@
         "img": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=720&h=360&fit=crop",
         "titulo": "¿Como puedo enviar/recibir cartas? y...  ¿Dónde las envio?",
         "secciones": [
-          { "titulo": "SnailBox", "texto": "Con el mod de SnailBox se pueden enviar tanto cartas como paquetes de grandes cantidades. Es preferible que veáis la guía corta de este mod en el apartado de guías.", "lista": [] },
-          { "titulo": "¿Como Funciona?", "texto": "Las cartas las puedes enviar a distintos territorios, pero cartas especiales como lo puede ser una solicitud de documentación (pasaportes, documento oficial de territorio, documento diplomatico) lo tendrás que enviar al ayuntamiento. ", "lista": [] },
-          { "titulo": "IMPORTANTE:", "texto": "Por otro caso, las denuncias se envian a los juzgados.", "lista": [] }
+          { "titulo": "Snail Mail", "texto": "Con el mod de Snail Mail se pueden enviar tanto cartas como paquetes de grandes cantidades.", "lista": [] },
+          { "titulo": "¿Como Funciona?", "texto": "Con el SnailBox podrás enviar cartas usando sobres y sellos.", "lista": [] },
+          { "titulo": "IMPORTANTE:", "texto": "Dependiendo del peso y distancia, tardará más o menos en llegar.", "lista": [] }
         ]
 
       }
@@ -58,8 +58,7 @@
             "No hay que abusar de cambios, ya que hay un registro de cuántas personas se han cambiado de raza/trabajo/clase.",
             "Solamente se permite el cambio por:",
             "1. Lore bien elaborado.",
-            "2. Desconformidad en menos de dos semanas de tener esa raza/trabajo/clase.",
-            "En caso de cambio, tendréis que devolver lo que esa raza/trabajo/clase os ha dado como kit inicial."
+            "2. Desconformidad en menos de dos semanas de tener esa raza/trabajo/clase."
           ]
         }
         ]
@@ -74,7 +73,8 @@
         "titulo": "¿Como evito el frio/calor?  ",
         "secciones": [
           { "titulo": "Evitar el Frio", "texto": "Escóndete en lugares cerrados, preferiblemente rodeados de madera y cerca de un horno. También puedes hacerte abrigos y estufas específicamente para poder mantener el calor. ",
-          "lista": [] }
+          "lista": [] },
+          { "titulo": "Evitar la calor", "texto": "Lánzate al agua, bebe bebidas frías, hazte un traje desértido..."}
         ]
       }
     },
