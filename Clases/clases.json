@@ -5,13 +5,10 @@
     "img": "fotos/Clases/tanque.jpg",
     "desc": "Ser tanque es un gran esfuerzo y una gran responsabilidad. Solamente las razas con más salud y resistencia podrán asumir ese rol.",
     "armas":[
-      "Espadas",
-      "Hachas"
+      "Los tanques son capaces de usar cualquier arma sin ventajas o beneficios."
     ],
     "habilidades": [
-      "Comienzas con un escudo. ",
-      "Ignora el dolor: cuando lidias con daño, ganas vida de mitigación, lo que hace que sobrevivas más tiempo en batalla. ",
-      "Tienes 50% más de tu salud. ",
+      "Ignora el dolor: cuando infliges daño ganas vida de mitigación, lo que hace que sobrevivas más tiempo en batalla. ",
       "Cuando utilizas escudo, tu armadura vale x2. ",
       "Tu poder de magia es reducido por un 50% ",
       "El daño que puedes hacer con flechas se ve reducido por un 50%. "
@@ -21,5 +18,337 @@
       "Enano",
       "Humano"
     ]
+  },
+  "ingeniero": {
+    "id": "ingeniero",
+    "nombre": "Ingeniero",
+    "img": "fotos/Clases/ingeniero.jpg",
+    "desc": "Los ingenieros siempre tienen debajo de su manga un poco de redstone de sobra para crear nuevos mecanismos.",
+    "armas":[
+      "Los ingenieros se centran en su propio trabajo, asi que no tienen ni ventajas ni desventajas en armas."
+    ],
+    "habilidades": [
+    "Años de trabajar con explosivos te deja crear TNT con papel en lugar de arena.",
+    "Reparación con redstone: puedes reparar picos de hierro gracias a tus conocimientos de ingeniero",
+    "Como ingeniero, puedes fabricar raíles usando palos y redstone en lugar de hierro."
+    ],
+    "razas": [
+      "Goblin",
+      "Enano",
+      "Humano"
+    ]
+  }, 
+  "guerrero": {
+    "id": "guerrero",
+    "nombre": "Guerrero",
+    "img": "fotos/Clases/guerrero.jpg",
+    "desc": "Un especialista en armas, maestro de la guerra y el combate melé.",
+    "armas":[
+      "Puedes usar todas las armas y tendrás más porcentaje de daño en todas las espadas."
+    ],
+    "habilidades": [
+    "Tienes maestría con todas las armas melé, infligiendo un 25% más de daño con todas ellas.",
+    "Infliges un 50% más de daño crítico."
+    ],
+    "razas": [
+      "Enano",
+      "Humano"
+    ]
+  },
+  "carterista": {
+    "id": "carterista",
+    "nombre": "Carterista",
+    "img": "fotos/Clases/carterista.jpg",
+    "desc": "Un acechador nato, ocultándose en las sombras para eliminar enemigos con sigilo.",
+    "armas":[
+      "Un carterista está más centrado en ser sigiloso que en las armas, por lo que no tiene ventajas o desventajas."
+    ],
+    "habilidades": [
+    "Al entrar en un área oscura, te vuelves completamente invisible -- solo la luz puede revelarte.",
+    "Maestro del sigilo, tus pasos no producen sonido alguno.",
+    "Trato comercial: Hace tiempo hiciste un trato con los aldeanos para que a cambio de no robarles, te hicieran ofertas nocturnas."
+    ],
+    "razas": [
+      "Goblin",
+      "Hada"
+    ]
+  },
+  "soldado_dorado": {
+    "id": "soldado_dorado",
+    "nombre": "Soldado Dorado",
+    "img": "fotos/Clases/soldado.jpg",
+    "desc": "Eres de los pocos goblins que pueden sujetar tantas armas a la vez y de tantos tipos, pero... solo puedes usar las armas de oro y serán las únicas que harán el doble de daño en tus manos.",
+    "armas":[
+      "Haces el doble de daño con armas de oro."
+    ],
+    "habilidades": [
+    "Debido a que solo te dedicas a las armas, tu entrenamiento te ha permitido ser más hábil. Haces +20% de daño con armas melé."
+    ],
+    "razas": [
+      "Goblin"
+    ]
+  },
+  "support": {
+    "id": "support",
+    "nombre": "Support",
+    "img": "fotos/Clases/support.jpg",
+    "desc": "Usa magia de naturaleza para defender y hechizos de curación para sanar a tus compañeros en comabte.",
+    "armas":[
+      "Haces menos daño con armás en general, pues tu trabajo es hacer de soporte, no de atacante."
+    ],
+    "habilidades": [
+    "Tienes +50% de maná máximo.",
+    "Tu daño de flechas se reduce en un 50%",
+    "Usas magia de naturaleza y hechizos de curación."
+    ],
+    "razas": [
+      "Elfo",
+      "Hada"
+    ]
+  },
+  "geomancer": {
+    "id": "geomancer",
+    "nombre": "Geomancer",
+    "img": "fotos/Clases/geomancer.jpg",
+    "desc": "Usa una magia de  naturaleza avanzada: la geomancia. Esta magia es más ofensiva que defensiva y se centra más en atacar que en defender.",
+    "armas":[
+      "Haces la mitad de daño con todas las armas, pues quieres centrarte más en la magia."
+    ],
+    "habilidades": [
+    "Tienes +50% de maná máximo.",
+    "Tu daño de flechas se reduce en un 50%",
+    "Usas geomancia."
+    ],
+    "razas": [
+      "Elfo",
+      "Sirena"
+    ]
+  },
+"mago_electrico": {
+    "id": "mago_electrico",
+    "nombre": "Mago eléctrico",
+    "img": "fotos/Clases/lightning.jpg",
+    "desc": "Usa magia eléctrica para fulminar a tus enemigos.",
+    "armas":[
+      "Haces MUY poco daño con armas."
+    ],
+    "habilidades": [
+    "Tienes +50% de maná máximo.",
+    "Usas magia eléctrica."
+    ],
+    "razas": [
+      "Elfo",
+      "Valquiria"
+    ]
+  },
+  "mago_hielo": {
+    "id": "mago_hielo",
+    "nombre": "Mago Helado",
+    "img": "fotos/Clases/frost.jpg",
+    "desc": "Usa magia helada para congelar y hacer añicos a tus enemigos.",
+    "armas":[
+      "Haces poco daño con armas."
+    ],
+    "habilidades": [
+    "Tienes +50% de maná máximo.",
+    "Usas magia de hielo."
+    ],
+    "razas": [
+      "Elfo",
+      "Sirena"
+    ]
+  },
+  "mago_viento": {
+    "id": "mago_viento",
+    "nombre": "Mago de viento",
+    "img": "fotos/Clases/viento.jpg",
+    "desc": "Usa el viento a tu favor y haz magia con él. Domina el aire a tu antojo para poder atacar o defenderte.",
+    "armas":[
+      "Haces menos daño con armas, pero lo suficiente para defenderte."
+    ],
+    "habilidades": [
+    "Tienes +50% de maná máximo.",
+    "Usas magia de viento."
+    ],
+    "razas": [
+      "Hada",
+      "Valquiria"
+    ]
+  },
+   "tritonisa": {
+    "id": "tritonisa",
+    "nombre": "Tritonisa",
+    "img": "fotos/Clases/tritonisa.jpg",
+    "desc": "Una sirena (o un tritón) dedicado a las armas le da un poder que se diferencia  gratamente con el  uso de cualquier lanza o alabarda.",
+    "armas":[
+      "Haces el doble de daño con lanzas y con el tridente."
+    ],
+    "habilidades": [
+    "Tienes +20% de daño con armas."
+    ],
+    "razas": [
+      "Sirena"
+    ]
+  },
+  "mago_bendito": {
+    "id": "mago_bendito",
+    "nombre": "Mago Bendito",
+    "img": "fotos/Clases/magobendito.jpg",
+    "desc": "Usa magia sagrada para protegerte a ti mismo y a tus aliados, despejando el camino hacia delante.",
+    "armas":[
+      "Haces menos daño con todas las armas, pues te dedicas a usar magia bendita."
+    ],
+    "habilidades": [
+    "Tu daño con flechas se reduce en un 50%",
+    "Usas magia bendita."
+    ],
+    "razas": [
+      "Valquiria"
+    ]
+  },
+   "Skjaldmo": {
+    "id": "skjaldmo",
+    "nombre": "Skjaldmo (Esquialmo)",
+    "img": "fotos/Clases/skjaldmo.jpg",
+    "desc": "Eres la clase guerrera de las valquirias. Tu devoción en las armas hace que olvides completamente la magia y la apartes de tu camino.",
+    "armas":[
+      "Dominas las lanzas y haces el doble de daño con ellas."
+    ],
+    "habilidades": [
+    "Tienes +20% de daño con armas."
+    ],
+    "razas": [
+      "Sirena"
+    ]
+  },
+  "infernal": {
+    "id": "infernal",
+    "nombre": "Guerrero Infernal",
+    "img": "fotos/Clases/infernal.jpg",
+    "desc": "Eres de los pocos demonios que no se dejaron llevar por las magias del infierno. En cambio, te dejaste llevar por las armas.",
+    "armas":[
+      "Haces el doble de daño con todas las espadas."
+    ],
+    "habilidades": [
+    "Tienes +20% de daño con armas."
+    ],
+    "razas": [
+      "Demonio"
+    ]
+  },
+  "mago_sangre": {
+    "id": "mago_sangre",
+    "nombre": "Mago de sangre",
+    "img": "fotos/Clases/magosangre.jpg",
+    "desc": "Usa magia de sangre para derrotar enemigos.",
+    "armas":[
+      "Haces la mitad de daño con todas las armas."
+    ],
+    "habilidades": [
+    "Tienes +50% de maná máximo."
+    ],
+    "razas": [
+      "Demonio",
+      "Revenant"
+    ]
+  },
+  "mago_fuego": {
+    "id": "mago_fuego",
+    "nombre": "Mago de Fuego",
+    "img": "fotos/Clases/magofuego.jpg",
+    "desc": "Usa magia de fuego para quemar a tus enemigos.",
+    "armas":[
+      "Haces la mitad de daño con todas las armas."
+    ],
+    "habilidades": [
+    "Tienes +50% de maná máximo."
+    ],
+    "razas": [
+      "Demonio"
+    ]
+  },
+  "mago_eldritch": {
+    "id": "mago_eldritch",
+    "nombre": "Mago de Eldritch",
+    "img": "fotos/Clases/eldritch.jpg",
+    "desc": "Un mago con una afición complicada. Esta magia es la más difícil de dominar y no va a ser fácil para ti descifrar los hechizos.",
+    "armas":[
+      "Haces MUY poco daño con armas."
+    ],
+    "habilidades": [
+    "Tu daño con flechas se ve reducido en un 50%.",
+    "Usas magia de eldritch."
+    ],
+    "razas": [
+      "Revenant"
+    ]
+  },
+  "mago_end": {
+    "id": "mago_end",
+    "nombre": "Mago del End",
+    "img": "fotos/Clases/magoender.jpg",
+    "desc": "Usa magia del End para derrotar enemigos.",
+    "armas":[
+      "Haces MUY poco daño con armas."
+    ],
+    "habilidades": [
+    "Tu daño con flechas se ve reducido en un 50%.",
+    "Usas magia de ender."
+    ],
+    "razas": [
+      "Revenant"
+    ]
+  },
+  "mago_invocacion": {
+    "id": "mago_invocacion",
+    "nombre": "Mago de Invocación",
+    "img": "fotos/Clases/magoinvocador.jpg",
+    "desc": "Usa magia de invocación para derrotar enemigos.",
+    "armas":[
+      "Haces MUY poco daño con armas."
+    ],
+    "habilidades": [
+    "Tu daño con flechas se ve reducido en un 50%.",
+    "Usas magia de invocación."
+    ],
+    "razas": [
+      "Revenant"
+    ]
+  },
+  "bestia": {
+    "id": "bestia",
+    "nombre": "Bestia Salvaje",
+    "img": "fotos/Clases/bestiasalvaje.jpg",
+    "desc": "Las bestias salvajes se enfurecen al ser atacadas y son muy agresivas.",
+    "armas":[
+      "Puedes usar todas las armas sin ventajas ni desventajas. O eso dicen..."
+    ],
+    "habilidades": [
+    "Cuanta menos vida tengas, más daño proporcionarás a tu rival.",
+    "Sobrevives más tiempo en combate."
+    ],
+    "razas": [
+      "Ogro"
+    ]
+  },
+  "berserker": {
+    "id": "berserker",
+    "nombre": "berserker",
+    "img": "fotos/Clases/berserker.jpg",
+    "desc": "Sediento de sangre y brutal, empuñas armas pesadas para destruir a tus enemigos.",
+    "armas":[
+      "Haces el doble de daño con hachas."
+    ],
+    "habilidades": [
+    "Tu sed de sangre te otorga +10% de robo de vida en tus ataques.",
+    "Debido a tu ira incontrolable, tienes +30% de probabilidad de golpe crítico."
+    ],
+    "razas": [
+      "Ogro"
+    ]
   }
 }
+
+
+
+  
