@@ -16,7 +16,15 @@ import { getAuth,
 import { getFirestore,
          doc, setDoc, getDoc,
          runTransaction, collection, query, where, getDocs }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import * as bcrypt from 'https://esm.sh/bcryptjs@2.4.3';
+import bcryptModule from 'https://esm.sh/bcryptjs@2.4.3';
+// esm.sh a veces envuelve el export por defecto de forma distinta según el
+// paquete. Nos quedamos con la primera versión que realmente tenga los
+// métodos que necesitamos, en vez de asumir una forma fija.
+const bcrypt = (bcryptModule && typeof bcryptModule.compareSync === 'function')
+    ? bcryptModule
+    : (bcryptModule?.default && typeof bcryptModule.default.compareSync === 'function')
+        ? bcryptModule.default
+        : bcryptModule;
 
 const firebaseConfig = {
     apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
@@ -34,7 +42,10 @@ const db       = getFirestore(app);
 const ROL = { admin: 'admin', escriba: 'escriba', ciudadano: 'ciudadano' };
 
 function normalizeDiscordTag(tag) {
-    return String(tag || '').trim().toLowerCase().replace(/[#\s]/g, '_');
+    // Mismo criterio que normalizeDiscordUsername: minúsculas, sin '@' ni
+    // '#discriminador'. Se define aquí arriba porque discordTagToEmail se
+    // usa antes de declarar normalizeDiscordUsername más abajo.
+    return String(tag || '').trim().toLowerCase().replace(/^@/, '').replace(/#\d+$/, '').replace(/[#\s]/g, '_');
 }
 
 function discordTagToEmail(tag) {
@@ -69,16 +80,16 @@ function inyectar() {
             <div class="cm-box">
                 <div class="cm-header">
                     <div class="cm-header-deco"></div>
-                    <button class="cm-close" id="cmClose">✕</button>
+                    <button type="button" class="cm-close" id="cmClose">✕</button>
                     <h2 class="cm-titulo" id="cmTitulo">Cuenta</h2>
                     <p class="cm-subtitulo" id="cmSub">Accede con tu usuario y contraseña</p>
                 </div>
 
                 <div class="cm-body" id="vistaGoogle">
                     <div class="cm-opciones">
-                        <div class="cm-field"><label class="cm-label">Discord Tag</label><input class="cm-input" type="text" id="loginDiscordTag" placeholder="usuario#1234"></div>
+                        <div class="cm-field"><label class="cm-label">Nombre de usuario de Discord</label><input class="cm-input" type="text" id="loginDiscordTag" placeholder="tu_usuario_discord"></div>
                         <div class="cm-field"><label class="cm-label">Contraseña</label><input class="cm-input" type="password" id="loginPassword" placeholder="Contraseña"></div>
-                        <div style="display:flex;gap:8px;margin-top:8px;"><button class="cm-opcion-btn" id="optLogin">Entrar</button><button class="cm-opcion-btn secundario" id="optVolver">← Volver</button></div>
+                        <div style="display:flex;gap:8px;margin-top:8px;"><button type="button" class="cm-opcion-btn" id="optLogin">Entrar</button><button type="button" class="cm-opcion-btn secundario" id="optVolver">← Volver</button></div>
                     </div>
                     <p class="cm-error" id="loginError"></p>
                 </div>
@@ -185,23 +196,66 @@ function guardarSesion(datos) {
     }
 }
 
+function normalizeDiscordUsername(raw) {
+    // Los nombres de usuario de Discord son siempre en minúsculas y ya no
+    // llevan discriminador (#1234). Quitamos espacios, '@' inicial y
+    // cualquier '#xxxx' residual por si el usuario lo escribe a la antigua.
+    return String(raw || '')
+        .trim()
+        .toLowerCase()
+        .replace(/^@/, '')
+        .replace(/#\d+$/, '');
+}
+
 async function fetchVerificacionByDiscordIdOrTag(identifier) {
     if (!identifier) return null;
-    try { const ref = doc(db, 'verificaciones', identifier); const snap = await getDoc(ref); if (snap.exists()) return snap.data(); } catch (_) {}
-    try { const q = query(collection(db, 'verificaciones'), where('discordTag', '==', identifier)); const snaps = await getDocs(q); if (!snaps.empty) return snaps.docs[0].data(); } catch (_) {}
+
+    // 1) Si lo que nos pasan ya es un ID numérico de Discord (snowflake),
+    //    probamos a leerlo directamente como ID de documento.
+    if (/^\d{5,}$/.test(identifier.trim())) {
+        try {
+            const ref = doc(db, 'verificaciones', identifier.trim());
+            const snap = await getDoc(ref);
+            if (snap.exists()) return snap.data();
+        } catch (e) {
+            console.error('[cuenta-modal] Error leyendo verificaciones por ID:', e.code || '', e.message || e);
+        }
+    }
+
+    // 2) Caso normal: el usuario escribe su nombre de usuario de Discord
+    //    (sin '#discriminador', tal y como lo guarda el bot en discordTag).
+    const tagNormalizado = normalizeDiscordUsername(identifier);
+    try {
+        const q = query(collection(db, 'verificaciones'), where('discordTag', '==', tagNormalizado));
+        const snaps = await getDocs(q);
+        if (!snaps.empty) return snaps.docs[0].data();
+    } catch (e) {
+        console.error('[cuenta-modal] Error leyendo verificaciones por tag:', e.code || '', e.message || e);
+    }
+
+    console.warn('[cuenta-modal] No se encontró verificación para:', identifier, '(normalizado:', tagNormalizado + ')');
     return null;
 }
 
 async function loginManual() {
+    console.log('[cuenta-modal] loginManual() disparado');
     setError('loginError', '');
     const discordTag = (document.getElementById('loginDiscordTag')?.value || '').trim();
     const password = (document.getElementById('loginPassword')?.value || '').trim();
     if (!discordTag || !password) return setError('loginError', 'Introduce Discord Tag y contraseña.');
 
     // Paso obligatorio: comprobar que este Discord ya se verificó por el bot.
-    const ver = await fetchVerificacionByDiscordIdOrTag(discordTag);
+    let ver;
+    try {
+        ver = await fetchVerificacionByDiscordIdOrTag(discordTag);
+    } catch (e) {
+        console.error('[cuenta-modal] Excepción inesperada buscando verificación:', e);
+        setError('loginError', 'Error de conexión con la base de datos. Revisa la consola.');
+        return;
+    }
     if (!ver) {
-        return setError('loginError', 'Ese Discord no está verificado. Verifícate primero en el servidor de Discord.');
+        setError('loginError', 'Ese Discord no está verificado, o no se pudo comprobar (revisa la consola / reglas de Firestore).');
+        return;
     }
 
     const email = discordTagToEmail(discordTag);
@@ -232,32 +286,56 @@ async function loginManual() {
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
         }
     } catch (err) {
+        console.error('[cuenta-modal] Error en signInWithEmailAndPassword:', err.code, err.message);
         if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+            console.log('[cuenta-modal] Rama primera vez: comparando contraseña contra passwordHash del bot');
             // Primera vez entrando por la web: todavía no existe cuenta de Firebase Auth.
             // Antes de crearla, comprobamos que la contraseña coincide con la que
             // el bot de Discord guardó (hasheada) durante la verificación.
-            const passwordValida = bcrypt.compareSync(password, ver.passwordHash || '');
+            if (!ver.passwordHash) {
+                console.error('[cuenta-modal] El documento de verificación no tiene passwordHash:', ver);
+                setError('loginError', 'Tu verificación no tiene contraseña guardada. Vuelve a verificarte en Discord.');
+                return;
+            }
+            console.log('[cuenta-modal] passwordHash presente:', ver.passwordHash);
+            if (typeof bcrypt.compareSync !== 'function') {
+                console.error('[cuenta-modal] bcrypt.compareSync no está disponible. Objeto bcrypt recibido:', bcrypt);
+                setError('loginError', 'Error interno cargando el módulo de contraseñas. Revisa la consola.');
+                return;
+            }
+            let passwordValida = false;
+            try {
+                passwordValida = bcrypt.compareSync(password, ver.passwordHash);
+                console.log('[cuenta-modal] Resultado de bcrypt.compareSync:', passwordValida);
+            } catch (e) {
+                console.error('[cuenta-modal] Error comparando hash de contraseña:', e);
+                setError('loginError', 'Error comprobando la contraseña. Revisa la consola.');
+                return;
+            }
             if (!passwordValida) {
+                console.warn('[cuenta-modal] Contraseña no coincide con el hash guardado.');
                 setError('loginError', 'Contraseña incorrecta.');
                 return;
             }
+            console.log('[cuenta-modal] Contraseña válida, creando cuenta en Firebase Auth para', email);
             try {
                 const reg = await createUserWithEmailAndPassword(auth, email, password);
+                console.log('[cuenta-modal] Cuenta creada correctamente, uid:', reg.user.uid);
                 const user = reg.user; _googleUser = user; _creandoPersonaje = true; _currentPassword = password;
                 mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
                 return;
             } catch (regErr) {
+                console.error('[cuenta-modal] Error en createUserWithEmailAndPassword:', regErr.code, regErr.message);
                 if (regErr.code === 'auth/email-already-in-use') {
                     setError('loginError', 'Contraseña incorrecta.');
                 } else {
                     setError('loginError', regErr.message || 'Error al crear la cuenta.');
                 }
-                console.error(regErr);
                 return;
             }
         }
+        console.log('[cuenta-modal] Error no manejado por las ramas anteriores, código:', err.code);
         setError('loginError', err.message || errMsg(err.code));
-        console.error(err);
     }
 }
 
@@ -301,11 +379,12 @@ async function guardarPersonaje() {
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`; mostrar('cmExito'); setTimeout(() => redirigirSegunRol(rol, uid), 2000);
     } catch (err) {
+        console.error('[cuenta-modal] Error en guardarPersonaje:', err.code, err.message);
         if (esErrorPermisosFirestore(err)) {
             guardarPersonajeLocalmente({ uid, email: user.email, discord, rol, creadoEn: new Date().toISOString(), personaje: { nombreRol, nombreMC, raza, clase, trabajo }, guardadoLocal: true, error: err?.message || '' });
             setError('pError', 'No se pudo guardar en Firestore por permisos. El personaje quedó guardado localmente.'); console.warn('Firestore permission denied', err); return;
         }
-        setError('pError', 'Error al guardar. Inténtalo de nuevo.'); console.error(err);
+        setError('pError', 'Error al guardar. Inténtalo de nuevo.'); return;
     }
 }
 
@@ -346,20 +425,37 @@ window.abrirModalCuenta = function () {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('[cuenta-modal] DOMContentLoaded: inicializando modal');
     inyectar();
-    document.getElementById('cmClose').addEventListener('click', cerrar);
-    document.getElementById('cmOverlay').addEventListener('click', e => {
+
+    const cmClose = document.getElementById('cmClose');
+    const cmOverlay = document.getElementById('cmOverlay');
+    const optLogin = document.getElementById('optLogin');
+    const optVolver = document.getElementById('optVolver');
+    const pCancelar = document.getElementById('pCancelar');
+    const pGuardar = document.getElementById('pGuardar');
+    const pRaza = document.getElementById('pRaza');
+
+    // Comprobación defensiva: si algún elemento clave no existe, lo decimos
+    // fuerte y claro en vez de fallar en silencio.
+    const elementosClave = { cmClose, cmOverlay, optLogin, optVolver, pCancelar, pGuardar, pRaza };
+    for (const [nombre, el] of Object.entries(elementosClave)) {
+        if (!el) console.error(`[cuenta-modal] No se encontró el elemento "${nombre}" tras inyectar el modal.`);
+    }
+
+    cmClose?.addEventListener('click', cerrar);
+    cmOverlay?.addEventListener('click', e => {
         if (e.target.id === 'cmOverlay') cerrar();
     });
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && document.getElementById('cmOverlay').classList.contains('active')) cerrar();
+        if (e.key === 'Escape' && document.getElementById('cmOverlay')?.classList.contains('active')) cerrar();
     });
 
-    document.getElementById('optLogin').addEventListener('click', loginManual);
-    document.getElementById('optVolver').addEventListener('click', cerrar);
-    document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
-    document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
-    document.getElementById('pRaza').addEventListener('change', function () {
+    optLogin?.addEventListener('click', loginManual);
+    optVolver?.addEventListener('click', cerrar);
+    pCancelar?.addEventListener('click', cancelarPersonaje);
+    pGuardar?.addEventListener('click', guardarPersonaje);
+    pRaza?.addEventListener('change', function () {
         const select = document.getElementById('pClase'); const razaKey = this.value.toLowerCase(); const clases = CLASES_POR_RAZA[razaKey] || [];
         select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' + clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join(''); select.value = ''; select.disabled = clases.length === 0;
     });
