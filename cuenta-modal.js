@@ -31,6 +31,22 @@ const db       = getFirestore(app);
 
 const ROL = { admin: 'admin', escriba: 'escriba', ciudadano: 'ciudadano' };
 
+function normalizeDiscordTag(tag) {
+    return String(tag || '').trim().toLowerCase().replace(/[#\s]/g, '_');
+}
+
+function discordTagToEmail(tag) {
+    const normalized = normalizeDiscordTag(tag);
+    return `${normalized}@discord.minasymonarcas.local`;
+}
+
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 const RAZAS = { Humano:"Humano", Elfo:"Elfo", Goblin:"Goblin", Enano:"Enano", Demonio:"Demonio", Sirena:"Sirena", Valquiria:"Valquiria", Hada:"Hada", Ogro:"Ogro", Revenant:"Revenant" };
 const CLASES = { magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico", magosangre:"Mago de Sangre", magohelado:"Mago Helado", magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego", magoeldritch:"Mago del Eldritch", magoViento:"Mago de Viento", magotierra:"Mago de Tierra", support:"Support", magoBendito:"Mago Bendito", tanque:"Tanque", ingeniero:"Ingeniero", guerrero:"Guerrero", carterista:"Carterista", soldadoDorado:"Soldado Dorado", guerreroInfernal:"Guerrero Infernal", tritonisa:"Tritonisa", guerreroBendito:"Guerrero Bendito", berserker:"Berserker", bestiaSalvaje:"Bestia Salvaje" };
 const CLASES_POR_RAZA = { humano: ['guerrero','tanque','ingeniero'], elfo: ['magohelado','magoelectrico','magotierra','support'], goblin: ['carterista','soldadoDorado','ingeniero'], enano: ['guerrero','tanque','ingeniero'], demonio: ['guerreroInfernal','magosangre','magofuego'], sirena: ['magohelado','tritonisa','magotierra'], valquiria: ['guerreroBendito','magoViento','magoBendito','magoelectrico'], hada: ['carterista','magoViento','support'], ogro: ['berserker','bestiaSalvaje','tanque'], revenant: ['magoeldritch','magoinvocador','magosangre','magoender'] };
@@ -40,6 +56,7 @@ const opts = obj => Object.entries(obj).map(([v,l]) => `<option value="${v}">${l
 
 let _googleUser = null;
 let _creandoPersonaje = false;
+let _currentPassword = '';
 
 function redirigirSegunRol(rol, uid) {
     if (rol === 'admin') window.location.href = `/minesandmonarchs-web/Admin/admin.html`;
@@ -59,7 +76,7 @@ function inyectar() {
 
                 <div class="cm-body" id="vistaGoogle">
                     <div class="cm-opciones">
-                        <div class="cm-field"><label class="cm-label">Email</label><input class="cm-input" type="email" id="loginEmail" placeholder="tu@ejemplo.com"></div>
+                        <div class="cm-field"><label class="cm-label">Discord Tag</label><input class="cm-input" type="text" id="loginDiscordTag" placeholder="usuario#1234"></div>
                         <div class="cm-field"><label class="cm-label">Contraseña</label><input class="cm-input" type="password" id="loginPassword" placeholder="Contraseña"></div>
                         <div style="display:flex;gap:8px;margin-top:8px;"><button class="cm-opcion-btn" id="optLogin">Entrar</button><button class="cm-opcion-btn secundario" id="optVolver">← Volver</button></div>
                     </div>
@@ -169,9 +186,10 @@ async function fetchVerificacionByDiscordIdOrTag(identifier) {
 
 async function loginManual() {
     setError('loginError', '');
-    const email = (document.getElementById('loginEmail')?.value || '').trim();
+    const discordTag = (document.getElementById('loginDiscordTag')?.value || '').trim();
     const password = (document.getElementById('loginPassword')?.value || '').trim();
-    if (!email || !password) return setError('loginError', 'Introduce email y contraseña.');
+    if (!discordTag || !password) return setError('loginError', 'Introduce Discord Tag y contraseña.');
+    const email = discordTagToEmail(discordTag);
     try {
         const cred = await signInWithEmailAndPassword(auth, email, password);
         const user = cred.user; _googleUser = user; _creandoPersonaje = false;
@@ -189,21 +207,20 @@ async function loginManual() {
                 document.getElementById('exitoTexto').textContent  = datos.rol === 'admin' ? 'Redirigiendo al panel de administración…' : 'Sesión iniciada correctamente.';
                 mostrar('cmExito'); setTimeout(() => redirigirSegunRol(datos.rol, user.uid), 1800);
             } else {
-                // User exists but no personaje/verif -> show creation
                 _creandoPersonaje = true;
+                _currentPassword = password;
                 mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
             }
         } else {
-            // No usuarios doc — treat as new user flow
             _creandoPersonaje = true;
+            _currentPassword = password;
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
         }
     } catch (err) {
         if (err.code === 'auth/user-not-found') {
-            // register new user
             try {
                 const reg = await createUserWithEmailAndPassword(auth, email, password);
-                const user = reg.user; _googleUser = user; _creandoPersonaje = true;
+                const user = reg.user; _googleUser = user; _creandoPersonaje = true; _currentPassword = password;
                 mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
                 return;
             } catch (regErr) {
@@ -234,9 +251,23 @@ async function guardarPersonaje() {
     const verifId = discord.replace(/[#\s]/g, '_');
     try {
         const id = await nextId();
-        await setDoc(doc(db, 'verificaciones', verifId), { discordId: verifId, discordTag: discord, nombreMinecraft: nombreMC, nombreRol, raza, clase, trabajo, verificadoEn: new Date() });
+        const verifData = {
+            discordId: verifId,
+            discordTag: discord,
+            nombreMinecraft: nombreMC,
+            nombreRol,
+            raza,
+            clase,
+            trabajo,
+            verificadoEn: new Date()
+        };
+        if (_currentPassword) {
+            verifData.passwordHash = await hashPassword(_currentPassword);
+        }
+        await setDoc(doc(db, 'verificaciones', verifId), verifData);
         await setDoc(doc(db, 'usuarios', uid), { id, email: user.email, discord, discordId: verifId, rol, creadoEn: new Date() }, { merge: true });
-        _creandoPersonaje = false; _googleUser = null; sessionStorage.removeItem('mm_uid_pendiente'); guardarSesion({ uid, nombreRol, id, rol });
+        _creandoPersonaje = false; _googleUser = null; _currentPassword = '';
+        sessionStorage.removeItem('mm_uid_pendiente'); guardarSesion({ uid, nombreRol, id, rol });
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`; mostrar('cmExito'); setTimeout(() => redirigirSegunRol(rol, uid), 2000);
     } catch (err) {
@@ -252,7 +283,7 @@ async function cancelarPersonaje() { _creandoPersonaje = false; const user = _go
 
 function cerrar() { const user = _googleUser || auth.currentUser; if (user) { getDoc(doc(db, 'usuarios', user.uid)).then(snap => { if (!snap.exists() || !snap.data().personaje) { _creandoPersonaje = false; signOut(auth); sessionStorage.removeItem('mm_usuario'); _googleUser = null; } }); } document.getElementById('cmOverlay').classList.remove('active'); document.body.style.overflow = ''; }
 
-function resetForm() { ['pDiscord','pNombreRol','pNombreMC'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); ['pRaza','pTrabajo'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); const pClase = document.getElementById('pClase'); if (pClase) { pClase.innerHTML = '<option value="" disabled selected>Selecciona primero la raza…</option>'; pClase.value = ''; pClase.disabled = true; } setError('loginError', ''); setError('pError', ''); }
+function resetForm() { ['loginDiscordTag','loginPassword','pDiscord','pNombreRol','pNombreMC'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); ['pRaza','pTrabajo'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); const pClase = document.getElementById('pClase'); if (pClase) { pClase.innerHTML = '<option value="" disabled selected>Selecciona primero la raza…</option>'; pClase.value = ''; pClase.disabled = true; } setError('loginError', ''); setError('pError', ''); }
 
 window.abrirModalCuenta = async function () {
     resetForm();
