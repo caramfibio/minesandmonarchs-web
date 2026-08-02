@@ -197,6 +197,13 @@ async function loginManual() {
     const discordTag = (document.getElementById('loginDiscordTag')?.value || '').trim();
     const password = (document.getElementById('loginPassword')?.value || '').trim();
     if (!discordTag || !password) return setError('loginError', 'Introduce Discord Tag y contraseña.');
+
+    // Paso obligatorio: comprobar que este Discord ya se verificó por el bot.
+    const ver = await fetchVerificacionByDiscordIdOrTag(discordTag);
+    if (!ver) {
+        return setError('loginError', 'Ese Discord no está verificado. Verifícate primero en el servidor de Discord.');
+    }
+
     const email = discordTagToEmail(discordTag);
     try {
         const cred = await signInWithEmailAndPassword(auth, email, password);
@@ -225,14 +232,26 @@ async function loginManual() {
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
         }
     } catch (err) {
-        if (err.code === 'auth/user-not-found') {
+        if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+            // Primera vez entrando por la web: todavía no existe cuenta de Firebase Auth.
+            // Antes de crearla, comprobamos que la contraseña coincide con la que
+            // el bot de Discord guardó (hasheada) durante la verificación.
+            const passwordValida = bcrypt.compareSync(password, ver.passwordHash || '');
+            if (!passwordValida) {
+                setError('loginError', 'Contraseña incorrecta.');
+                return;
+            }
             try {
                 const reg = await createUserWithEmailAndPassword(auth, email, password);
                 const user = reg.user; _googleUser = user; _creandoPersonaje = true; _currentPassword = password;
                 mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
                 return;
             } catch (regErr) {
-                setError('loginError', regErr.message || 'Error al crear la cuenta.');
+                if (regErr.code === 'auth/email-already-in-use') {
+                    setError('loginError', 'Contraseña incorrecta.');
+                } else {
+                    setError('loginError', regErr.message || 'Error al crear la cuenta.');
+                }
                 console.error(regErr);
                 return;
             }
