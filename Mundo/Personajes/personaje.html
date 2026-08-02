@@ -291,9 +291,12 @@
     <script type="module">
         import { initializeApp, getApp, getApps }
             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-        
+
         import { getFirestore, doc, getDoc, updateDoc }
             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+        import { getAuth, onAuthStateChanged }
+            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
         const firebaseConfig = {
             apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
@@ -306,6 +309,7 @@
 
         const app  = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
         const db   = getFirestore(app);
+        const auth = getAuth(app);
 
         const RAZAS = {
             humano:"Humano", elfobosque:"Elfo del Bosque", alfiq:"Alfiq",
@@ -351,13 +355,39 @@
         const page   = document.getElementById('pjPage');
         const estado = document.getElementById('pjEstado');
 
+        console.log('[personaje] uid de la URL:', uid);
+
         if (!uid) {
+            console.warn('[personaje] No hay parámetro ?uid= en la URL');
             estado.textContent = 'No se especificó ningún personaje.';
         } else {
-            (async () => {
+            // Aviso de seguridad: si tus reglas de Firestore exigen estar
+            // autenticado para leer 'usuarios', y Firebase Auth aún no ha
+            // restaurado la sesión guardada, la lectura puede fallar con
+            // permission-denied justo después de recargar la página o
+            // entrar aquí directamente por URL. Por eso esperamos a que
+            // onAuthStateChanged confirme el estado antes de leer.
+            onAuthStateChanged(auth, (user) => {
+                console.log('[personaje] onAuthStateChanged, usuario:', user ? user.uid : null);
+                cargarPersonaje();
+            }, (err) => {
+                console.error('[personaje] Error en onAuthStateChanged:', err);
+                cargarPersonaje();
+            });
+
+            let yaCargado = false;
+
+            async function cargarPersonaje() {
+                if (yaCargado) return; // evita doble carga si onAuthStateChanged dispara más de una vez
+                yaCargado = true;
+                console.log('[personaje] Iniciando carga de usuarios/' + uid);
                 try {
                     const snap = await getDoc(doc(db, 'usuarios', uid));
+                    console.log('[personaje] Documento existe:', snap.exists());
+                    if (snap.exists()) console.log('[personaje] Datos del documento:', snap.data());
+
                     if (!snap.exists() || !snap.data().personaje) {
+                        console.warn('[personaje] El documento no existe o no tiene el campo "personaje".');
                         estado.textContent = 'Este personaje no existe aún.';
                         return;
                     }
@@ -598,10 +628,10 @@
                     });
 
                 } catch (err) {
+                    console.error('[personaje] Error al cargar el personaje:', err.code, err.message, err);
                     estado.textContent = 'Error al cargar el personaje.';
-                    console.error(err);
                 }
-            });
+            }
         }
     </script>
     <script type="module" src="cuenta-modal.js"></script>

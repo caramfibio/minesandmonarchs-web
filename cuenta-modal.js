@@ -373,7 +373,21 @@ async function guardarPersonaje() {
             verifData.passwordHash = await hashPassword(_currentPassword);
         }
         await setDoc(doc(db, 'verificaciones', verifId), verifData);
-        await setDoc(doc(db, 'usuarios', uid), { id, email: user.email, discord, discordId: verifId, rol, creadoEn: new Date() }, { merge: true });
+        await setDoc(doc(db, 'usuarios', uid), {
+            id,
+            email: user.email,
+            discord,
+            discordId: verifId,
+            rol,
+            creadoEn: new Date(),
+            personaje: {
+                nombreRol,
+                nombreMC,
+                raza,
+                clase,
+                trabajo
+            }
+        }, { merge: true });
         _creandoPersonaje = false; _googleUser = null; _currentPassword = '';
         sessionStorage.removeItem('mm_uid_pendiente'); guardarSesion({ uid, nombreRol, id, rol });
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
