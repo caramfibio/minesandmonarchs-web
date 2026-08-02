@@ -15,6 +15,7 @@ import { getAuth,
 import { getFirestore,
          doc, setDoc, getDoc,
          runTransaction, getDocs, collection, query, where }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import * as bcrypt from 'https://esm.sh/bcryptjs@2.4.3';
 
 const firebaseConfig = {
     apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
@@ -41,10 +42,7 @@ function discordTagToEmail(tag) {
 }
 
 async function hashPassword(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hash = await crypto.subtle.digest('SHA-256', data);
-    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    return await bcrypt.hash(password, 10);
 }
 
 const RAZAS = { Humano:"Humano", Elfo:"Elfo", Goblin:"Goblin", Enano:"Enano", Demonio:"Demonio", Sirena:"Sirena", Valquiria:"Valquiria", Hada:"Hada", Ogro:"Ogro", Revenant:"Revenant" };
