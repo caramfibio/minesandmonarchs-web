@@ -1,22 +1,20 @@
 /* ============================================================
    cuenta-modal.js – Mines & Monarchs · Modal de Cuenta
-   Flujo:
-     1. Botón "Entrar con Google" → popup OAuth
-     2a. Nuevo usuario  → paso 2: formulario con sección Datos + Rol
-     2b. Usuario existe → entra directamente
-        - Si es admin → redirige al panel de admin
-        - Si es ciudadano/escriba → redirige a su cartilla
+   Implementación: vinculación `usuarios` ↔ `verificaciones`
+   - Guarda datos de personaje en `verificaciones/{discordId}`
+   - Guarda en `usuarios/{uid}` solo la referencia `discordId`
+   - Al abrir modal combina `usuarios` + `verificaciones` para mostrar
    ============================================================ */
 
 import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth,
-         signInWithPopup,
-         GoogleAuthProvider,
+         signInWithEmailAndPassword,
+         createUserWithEmailAndPassword,
          onAuthStateChanged,
          signOut }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
          doc, setDoc, getDoc,
-         runTransaction }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         runTransaction, getDocs, collection, query, where }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
     apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
@@ -30,100 +28,44 @@ const firebaseConfig = {
 const app      = initializeApp(firebaseConfig);
 const auth     = getAuth(app);
 const db       = getFirestore(app);
-const provider = new GoogleAuthProvider();
 
 const ROL = { admin: 'admin', escriba: 'escriba', ciudadano: 'ciudadano' };
 
-const RAZAS = {
-    Humano:"Humano", Elfo:"Elfo", Goblin:"Goblin", Enano:"Enano",
-    Demonio:"Demonio", Sirena:"Sirena", Valquiria:"Valquiria",
-    Hada:"Hada", Ogro:"Ogro", Revenant:"Revenant"
-};
-const CLASES = {
-    magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico",
-    magosangre:"Mago de Sangre", magohelado:"Mago Helado",
-    magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego",
-    magoeldritch:"Mago del Eldritch", magoViento:"Mago de Viento", 
-    magotierra:"Mago de Tierra", support:"Support", magoBendito:"Mago Bendito",
-    tanque:"Tanque",
-    ingeniero:"Ingeniero", guerrero:"Guerrero",
-    carterista:"Carterista", soldadoDorado:"Soldado Dorado",
-    guerreroInfernal:"Guerrero Infernal",
-    tritonisa:"Tritonisa", guerreroBendito:"Guerrero Bendito", berserker:"Berserker", bestiaSalvaje:"Bestia Salvaje"
-};
-const CLASES_POR_RAZA = {
-    humano:       ['guerrero','tanque','ingeniero'],
-    elfo:         ['magohelado','magoelectrico','magotierra','support'],
-    goblin:       ['carterista','soldadoDorado','ingeniero'],
-    enano:        ['guerrero','tanque','ingeniero'],
-    demonio:      ['guerreroInfernal','magosangre','magofuego'],
-    sirena:       ['magohelado','tritonisa','magotierra'],
-    valquiria:    ['guerreroBendito','magoViento','magoBendito','magoelectrico'],
-    hada:         ['carterista','magoViento','support'],
-    ogro:         ['berserker','bestiaSalvaje','tanque'],
-    revenant:     ['magoeldritch','magoinvocador','magosangre','magoender'],
-};
-const TRABAJOS = {
-    inutilerrante:"Inútil",
-    herrero:"Herrero", clerigo:"Clérigo",
-    minero:"Minero", agricultor:"Agricultor",
-    granjero:"Granjero", cocinero:"Cocinero"
-};
+const RAZAS = { Humano:"Humano", Elfo:"Elfo", Goblin:"Goblin", Enano:"Enano", Demonio:"Demonio", Sirena:"Sirena", Valquiria:"Valquiria", Hada:"Hada", Ogro:"Ogro", Revenant:"Revenant" };
+const CLASES = { magoender:"Mago del Ender", magoelectrico:"Mago Eléctrico", magosangre:"Mago de Sangre", magohelado:"Mago Helado", magoinvocador:"Mago Invocador", magofuego:"Mago de Fuego", magoeldritch:"Mago del Eldritch", magoViento:"Mago de Viento", magotierra:"Mago de Tierra", support:"Support", magoBendito:"Mago Bendito", tanque:"Tanque", ingeniero:"Ingeniero", guerrero:"Guerrero", carterista:"Carterista", soldadoDorado:"Soldado Dorado", guerreroInfernal:"Guerrero Infernal", tritonisa:"Tritonisa", guerreroBendito:"Guerrero Bendito", berserker:"Berserker", bestiaSalvaje:"Bestia Salvaje" };
+const CLASES_POR_RAZA = { humano: ['guerrero','tanque','ingeniero'], elfo: ['magohelado','magoelectrico','magotierra','support'], goblin: ['carterista','soldadoDorado','ingeniero'], enano: ['guerrero','tanque','ingeniero'], demonio: ['guerreroInfernal','magosangre','magofuego'], sirena: ['magohelado','tritonisa','magotierra'], valquiria: ['guerreroBendito','magoViento','magoBendito','magoelectrico'], hada: ['carterista','magoViento','support'], ogro: ['berserker','bestiaSalvaje','tanque'], revenant: ['magoeldritch','magoinvocador','magosangre','magoender'] };
+const TRABAJOS = { inutilerrante:"Inútil", herrero:"Herrero", clerigo:"Clérigo", minero:"Minero", agricultor:"Agricultor", granjero:"Granjero", cocinero:"Cocinero" };
 
-const opts = obj => Object.entries(obj)
-    .map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+const opts = obj => Object.entries(obj).map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
 
-/* ── Estado ── */
-let _googleUser       = null;
+let _googleUser = null;
 let _creandoPersonaje = false;
 
-/* ── Redirección según rol ── */
 function redirigirSegunRol(rol, uid) {
-    if (rol === 'admin') {
-        window.location.href = `/minesandmonarchs-web/Admin/admin.html`;
-    } else {
-        window.location.href = `/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${uid}`;
-    }
+    if (rol === 'admin') window.location.href = `/minesandmonarchs-web/Admin/admin.html`;
+    else window.location.href = `/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${uid}`;
 }
 
-/* ════════════════════════════════════════
-   HTML
-   ════════════════════════════════════════ */
 function inyectar() {
-    document.body.insertAdjacentHTML('beforeend', `
-    <div class="cm-overlay" id="cmOverlay">
-      <div class="cm-box">
-        <div class="cm-header">
-          <div class="cm-header-deco"></div>
-          <button class="cm-close" id="cmClose">✕</button>
-          <h2 class="cm-titulo" id="cmTitulo">Cuenta</h2>
-          <p class="cm-subtitulo" id="cmSub">Accede con tu cuenta de Google</p>
-        </div>
+        document.body.insertAdjacentHTML('beforeend', `
+        <div class="cm-overlay" id="cmOverlay">
+            <div class="cm-box">
+                <div class="cm-header">
+                    <div class="cm-header-deco"></div>
+                    <button class="cm-close" id="cmClose">✕</button>
+                    <h2 class="cm-titulo" id="cmTitulo">Cuenta</h2>
+                    <p class="cm-subtitulo" id="cmSub">Accede con tu usuario y contraseña</p>
+                </div>
 
-        <!-- VISTA 1: botón Google -->
-        <div class="cm-body" id="vistaGoogle">
-          <div class="cm-opciones">
-            <button class="cm-opcion-btn" id="optGoogle">
-              <span class="cm-opcion-icono">
-                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
-              </span>
-              <span>Entrar con Google
-                <span class="cm-opcion-desc">Login y registro en un solo paso</span>
-              </span>
-            </button>
-            <button class="cm-opcion-btn secundario" id="optVolver">
-              <span class="cm-opcion-icono">←</span>Volver
-            </button>
-          </div>
-          <p class="cm-error" id="googleError"></p>
-        </div>
+                <div class="cm-body" id="vistaGoogle">
+                    <div class="cm-opciones">
+                        <div class="cm-field"><label class="cm-label">Email</label><input class="cm-input" type="email" id="loginEmail" placeholder="tu@ejemplo.com"></div>
+                        <div class="cm-field"><label class="cm-label">Contraseña</label><input class="cm-input" type="password" id="loginPassword" placeholder="Contraseña"></div>
+                        <div style="display:flex;gap:8px;margin-top:8px;"><button class="cm-opcion-btn" id="optLogin">Entrar</button><button class="cm-opcion-btn secundario" id="optVolver">← Volver</button></div>
+                    </div>
+                    <p class="cm-error" id="loginError"></p>
+                </div>
 
-        <!-- VISTA 2: formulario -->
         <div class="cm-body" id="vistaPersonaje" style="display:none">
           <p class="cm-section">Datos</p>
           <div class="cm-field">
@@ -142,34 +84,25 @@ function inyectar() {
           </div>
           <div class="cm-field">
             <label class="cm-label">Raza <span>*</span></label>
-            <select class="cm-select" id="pRaza">
-              <option value="" disabled selected>Selecciona…</option>
-              ${opts(RAZAS)}
-            </select>
+            <select class="cm-select" id="pRaza"><option value="" disabled selected>Selecciona…</option>${opts(RAZAS)}</select>
           </div>
           <div class="cm-row">
             <div class="cm-field">
               <label class="cm-label">Clase <span>*</span></label>
-              <select class="cm-select" id="pClase" disabled>
-                <option value="" disabled selected>Selecciona primero la raza…</option>
-              </select>
+              <select class="cm-select" id="pClase" disabled><option value="" disabled selected>Selecciona primero la raza…</option></select>
             </div>
             <div class="cm-field">
               <label class="cm-label">Trabajo <span>*</span></label>
-              <select class="cm-select" id="pTrabajo">
-                <option value="" disabled selected>Selecciona…</option>
-                ${opts(TRABAJOS)}
-              </select>
+              <select class="cm-select" id="pTrabajo"><option value="" disabled selected>Selecciona…</option>${opts(TRABAJOS)}</select>
             </div>
           </div>
           <p class="cm-error" id="pError"></p>
           <div class="cm-form-footer">
             <button type="button" class="cm-btn-volver" id="pCancelar">Cancelar</button>
-            <button type="button" class="cm-btn-submit" id="pGuardar">⚜ Crear personaje</button>
+            <button type="button" class="cm-btn-submit" id="pGuardar">⚜ Guardar</button>
           </div>
         </div>
 
-        <!-- ÉXITO -->
         <div class="cm-exito" id="cmExito">
           <div class="cm-exito-icono">⚜</div>
           <h3 id="exitoTitulo">¡Hecho!</h3>
@@ -179,124 +112,111 @@ function inyectar() {
     </div>`);
 }
 
-/* ════════════════════════════════════════
-   NAVEGACIÓN
-   ════════════════════════════════════════ */
-const VISTAS = ['vistaGoogle', 'vistaPersonaje', 'cmExito'];
-
 function mostrar(id, titulo, sub) {
-    VISTAS.forEach(v => {
-        const el = document.getElementById(v);
-        if (!el) return;
-        if (v === 'cmExito') {
-            el.classList.toggle('visible', v === id);
-        } else {
-            el.style.display = v === id ? '' : 'none';
-        }
+    ['vistaGoogle','vistaPersonaje','cmExito'].forEach(v => {
+        const el = document.getElementById(v); if (!el) return;
+        if (v === 'cmExito') el.classList.toggle('visible', v === id);
+        else el.style.display = v === id ? '' : 'none';
     });
     if (titulo !== undefined) document.getElementById('cmTitulo').textContent = titulo;
-    if (sub    !== undefined) document.getElementById('cmSub').textContent    = sub;
+    if (sub !== undefined) document.getElementById('cmSub').textContent = sub;
 }
 
 function setError(id, msg) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent   = msg;
-    el.style.display = msg ? '' : 'none';
+    const el = document.getElementById(id); if (!el) return; el.textContent = msg; el.style.display = msg ? '' : 'none';
 }
 
 function esErrorPermisosFirestore(err) {
     const texto = `${err?.code || ''} ${err?.message || ''}`.toLowerCase();
-    return err?.code === 'permission-denied' ||
-           err?.code === 'unavailable' ||
-           texto.includes('permission') ||
-           texto.includes('insufficient permissions');
+    return err?.code === 'permission-denied' || err?.code === 'unavailable' || texto.includes('permission') || texto.includes('insufficient permissions');
 }
 
 function guardarPersonajeLocalmente(datos) {
-    try {
-        const prev = JSON.parse(localStorage.getItem('mm_personajes_pendientes') || '[]');
-        prev.push(datos);
-        localStorage.setItem('mm_personajes_pendientes', JSON.stringify(prev));
-    } catch (_) {}
+    try { const prev = JSON.parse(localStorage.getItem('mm_personajes_pendientes') || '[]'); prev.push(datos); localStorage.setItem('mm_personajes_pendientes', JSON.stringify(prev)); } catch (_) {}
 }
 
-/* ════════════════════════════════════════
-   FIRESTORE
-   ════════════════════════════════════════ */
 async function nextId() {
-    const ref = doc(db, 'meta', 'contador_usuarios');
-    let id;
-    await runTransaction(db, async tx => {
-        const snap = await tx.get(ref);
-        id = snap.exists() ? snap.data().total + 1 : 1;
-        tx.set(ref, { total: id });
-    });
+    const ref = doc(db, 'meta', 'contador_usuarios'); let id;
+    await runTransaction(db, async tx => { const snap = await tx.get(ref); id = snap.exists() ? snap.data().total + 1 : 1; tx.set(ref, { total: id }); });
     return id;
 }
 
 function guardarSesion(datos) {
     sessionStorage.setItem('mm_usuario', JSON.stringify(datos));
     const li = document.getElementById('nav-cuenta-li');
-    if (li && !li.classList.contains('dropdown')) {
+    if (!li) return;
+    if (!li.classList.contains('dropdown')) {
         const esAdmin = datos.rol === 'admin';
         li.classList.add('dropdown');
         li.innerHTML = `
-            <button class="dropbtn" style="font-weight:bold;color:#ffd700;display:flex;align-items:center;gap:6px">
-                ⚜ ${datos.nombreRol}
-            </button>
+            <button class="dropbtn" style="font-weight:bold;color:#ffd700;display:flex;align-items:center;gap:6px">⚜ ${datos.nombreRol}</button>
             <ul class="dropdown-content" style="right:0;left:auto;min-width:160px;">
                 <li><a href="/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${datos.uid}">Mi cartilla</a></li>
                 ${esAdmin ? `<li><a href="/minesandmonarchs-web/Admin/admin.html" style="color:#ffd700">⚙️ Panel Admin</a></li>` : ''}
                 <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
             </ul>`;
-        li.querySelector('.dropbtn').addEventListener('click', e => {
-            e.preventDefault();
-            li.querySelector('.dropdown-content').classList.toggle('show');
-        });
-        document.getElementById('btnCerrarSesion').addEventListener('click', async e => {
-            e.preventDefault();
-            await signOut(auth);
-            sessionStorage.removeItem('mm_usuario');
-            location.reload();
-        });
+        li.querySelector('.dropbtn').addEventListener('click', e => { e.preventDefault(); li.querySelector('.dropdown-content').classList.toggle('show'); });
+        document.getElementById('btnCerrarSesion').addEventListener('click', async e => { e.preventDefault(); await signOut(auth); sessionStorage.removeItem('mm_usuario'); location.reload(); });
     }
 }
 
-/* ════════════════════════════════════════
-   LOGIN CON GOOGLE
-   ════════════════════════════════════════ */
-async function loginGoogle() {
-    setError('googleError', '');
+async function fetchVerificacionByDiscordIdOrTag(identifier) {
+    if (!identifier) return null;
+    try { const ref = doc(db, 'verificaciones', identifier); const snap = await getDoc(ref); if (snap.exists()) return snap.data(); } catch (_) {}
+    try { const q = query(collection(db, 'verificaciones'), where('discordTag', '==', identifier)); const snaps = await getDocs(q); if (!snaps.empty) return snaps.docs[0].data(); } catch (_) {}
+    return null;
+}
+
+async function loginManual() {
+    setError('loginError', '');
+    const email = (document.getElementById('loginEmail')?.value || '').trim();
+    const password = (document.getElementById('loginPassword')?.value || '').trim();
+    if (!email || !password) return setError('loginError', 'Introduce email y contraseña.');
     try {
-        const result = await signInWithPopup(auth, provider);
-        const user   = result.user;
-        _googleUser = user;
-        _creandoPersonaje = true;
-        const snap   = await getDoc(doc(db, 'usuarios', user.uid));
-        if (snap.exists() && snap.data().personaje) {
-            _creandoPersonaje = false;
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const user = cred.user; _googleUser = user; _creandoPersonaje = false;
+        const snap = await getDoc(doc(db, 'usuarios', user.uid));
+        if (snap.exists()) {
             const datos = snap.data();
-            guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
-            document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${datos.personaje.nombreRol}!`;
-            document.getElementById('exitoTexto').textContent  = datos.rol === 'admin'
-                ? 'Redirigiendo al panel de administración…'
-                : 'Sesión iniciada correctamente.';
-            mostrar('cmExito');
-            setTimeout(() => redirigirSegunRol(datos.rol, user.uid), 1800);
+            let nombreRolGuardado = datos.personaje?.nombreRol || null;
+            if (!nombreRolGuardado && (datos.discordId || datos.discord)) {
+                const verif = await fetchVerificacionByDiscordIdOrTag(datos.discordId || datos.discord);
+                if (verif && verif.nombreRol) nombreRolGuardado = verif.nombreRol;
+            }
+            if (nombreRolGuardado) {
+                guardarSesion({ uid: user.uid, nombreRol: nombreRolGuardado, id: datos.id, rol: datos.rol });
+                document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${nombreRolGuardado}!`;
+                document.getElementById('exitoTexto').textContent  = datos.rol === 'admin' ? 'Redirigiendo al panel de administración…' : 'Sesión iniciada correctamente.';
+                mostrar('cmExito'); setTimeout(() => redirigirSegunRol(datos.rol, user.uid), 1800);
+            } else {
+                // User exists but no personaje/verif -> show creation
+                _creandoPersonaje = true;
+                mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
+            }
         } else {
+            // No usuarios doc — treat as new user flow
+            _creandoPersonaje = true;
             mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
         }
     } catch (err) {
-        if (err.code !== 'auth/popup-closed-by-user') {
-            setError('googleError', errMsg(err.code));
+        if (err.code === 'auth/user-not-found') {
+            // register new user
+            try {
+                const reg = await createUserWithEmailAndPassword(auth, email, password);
+                const user = reg.user; _googleUser = user; _creandoPersonaje = true;
+                mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
+                return;
+            } catch (regErr) {
+                setError('loginError', regErr.message || 'Error al crear la cuenta.');
+                console.error(regErr);
+                return;
+            }
         }
+        setError('loginError', err.message || errMsg(err.code));
+        console.error(err);
     }
 }
 
-/* ════════════════════════════════════════
-   GUARDAR PERSONAJE
-   ════════════════════════════════════════ */
 async function guardarPersonaje() {
     const discord   = document.getElementById('pDiscord').value.trim();
     const nombreMC  = document.getElementById('pNombreMC').value.trim();
@@ -304,166 +224,100 @@ async function guardarPersonaje() {
     const raza      = document.getElementById('pRaza').value;
     const clase     = document.getElementById('pClase').value;
     const trabajo   = document.getElementById('pTrabajo').value;
-
-    if (!discord)                    return setError('pError', 'El nombre de Discord es obligatorio.');
-    if (!nombreMC)                   return setError('pError', 'El nombre de Minecraft es obligatorio.');
-    if (!nombreRol)                  return setError('pError', 'El nombre de rol es obligatorio.');
+    if (!discord) return setError('pError', 'El nombre de Discord es obligatorio.');
+    if (!nombreMC) return setError('pError', 'El nombre de Minecraft es obligatorio.');
+    if (!nombreRol) return setError('pError', 'El nombre de rol es obligatorio.');
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
     setError('pError', '');
+    const user = auth.currentUser || _googleUser; if (!user) { setError('pError', 'No hay sesión activa. Vuelve a iniciar sesión.'); return; }
+    const uid = user.uid; const rol = nombreRol.toLowerCase() === 'skyroft' ? ROL.admin : ROL.ciudadano;
+    const verifId = discord.replace(/[#\s]/g, '_');
+    try {
+        const id = await nextId();
+        await setDoc(doc(db, 'verificaciones', verifId), { discordId: verifId, discordTag: discord, nombreMinecraft: nombreMC, nombreRol, raza, clase, trabajo, verificadoEn: new Date() });
+        await setDoc(doc(db, 'usuarios', uid), { id, email: user.email, discord, discordId: verifId, rol, creadoEn: new Date() }, { merge: true });
+        _creandoPersonaje = false; _googleUser = null; sessionStorage.removeItem('mm_uid_pendiente'); guardarSesion({ uid, nombreRol, id, rol });
+        document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
+        document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`; mostrar('cmExito'); setTimeout(() => redirigirSegunRol(rol, uid), 2000);
+    } catch (err) {
+        if (esErrorPermisosFirestore(err)) {
+            guardarPersonajeLocalmente({ uid, email: user.email, discord, rol, creadoEn: new Date().toISOString(), personaje: { nombreRol, nombreMC, raza, clase, trabajo }, guardadoLocal: true, error: err?.message || '' });
+            setError('pError', 'No se pudo guardar en Firestore por permisos. El personaje quedó guardado localmente.'); console.warn('Firestore permission denied', err); return;
+        }
+        setError('pError', 'Error al guardar. Inténtalo de nuevo.'); console.error(err);
+    }
+}
 
-    const user = auth.currentUser || _googleUser;
+async function cancelarPersonaje() { _creandoPersonaje = false; const user = _googleUser || auth.currentUser; if (user) await signOut(auth); _googleUser = null; sessionStorage.removeItem('mm_usuario'); cerrar(); }
+
+function cerrar() { const user = _googleUser || auth.currentUser; if (user) { getDoc(doc(db, 'usuarios', user.uid)).then(snap => { if (!snap.exists() || !snap.data().personaje) { _creandoPersonaje = false; signOut(auth); sessionStorage.removeItem('mm_usuario'); _googleUser = null; } }); } document.getElementById('cmOverlay').classList.remove('active'); document.body.style.overflow = ''; }
+
+function resetForm() { ['pDiscord','pNombreRol','pNombreMC'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); ['pRaza','pTrabajo'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); const pClase = document.getElementById('pClase'); if (pClase) { pClase.innerHTML = '<option value="" disabled selected>Selecciona primero la raza…</option>'; pClase.value = ''; pClase.disabled = true; } setError('loginError', ''); setError('pError', ''); }
+
+window.abrirModalCuenta = async function () {
+    resetForm();
+    document.getElementById('cmOverlay')?.classList.add('active'); document.body.style.overflow = 'hidden';
+    const user = auth.currentUser;
     if (!user) {
-        setError('pError', 'No hay sesión activa. Vuelve a iniciar sesión.');
+        mostrar('vistaGoogle', 'Cuenta', 'Accede con tu usuario y contraseña');
         return;
     }
 
-    const uid = user.uid;
-    const rol = nombreRol.toLowerCase() === 'skyroft' ? ROL.admin : ROL.ciudadano;
-
     try {
-        const id = await nextId();
-
-        await setDoc(doc(db, 'usuarios', uid), {
-            id,
-            email: user.email,
-            discord,
-            rol,
-            creadoEn: new Date(),
-            personaje: { nombreRol, nombreMC, raza, clase, trabajo }
-        });
-
-        _creandoPersonaje = false;
-        _googleUser = null;
-        sessionStorage.removeItem('mm_uid_pendiente');
-        guardarSesion({ uid, nombreRol, id, rol });
-
-        document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
-        document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
-        mostrar('cmExito');
-        setTimeout(() => redirigirSegunRol(rol, uid), 2000);
-    } catch (err) {
-        if (esErrorPermisosFirestore(err)) {
-            guardarPersonajeLocalmente({
-                uid,
-                email: user.email,
-                discord,
-                rol,
-                creadoEn: new Date().toISOString(),
-                personaje: { nombreRol, nombreMC, raza, clase, trabajo },
-                guardadoLocal: true,
-                error: err?.message || ''
-            });
-
-            setError('pError', 'No se pudo guardar en Firestore por permisos. El personaje quedó guardado localmente.');
-            console.warn('Firestore permission denied', err);
-            return;
+        const snap = await getDoc(doc(db, 'usuarios', user.uid));
+        const datos = snap.exists() ? snap.data() : {};
+        // Try to fetch verification
+        const idOrTag = datos.discordId || datos.discord || null;
+        const verif = idOrTag ? await fetchVerificacionByDiscordIdOrTag(idOrTag) : null;
+        // Prefill form from verification (preferred) or usuarios.personaje (legacy)
+        const fuente = verif || datos.personaje || {};
+        document.getElementById('pDiscord').value = verif?.discordTag || datos.discord || '';
+        document.getElementById('pNombreMC').value = verif?.nombreMinecraft || fuente.nombreMC || '';
+        document.getElementById('pNombreRol').value = verif?.nombreRol || fuente.nombreRol || '';
+        if (verif?.raza || fuente.raza) {
+            const r = (verif?.raza || fuente.raza);
+            const select = document.getElementById('pRaza'); if (select) { select.value = r; select.dispatchEvent(new Event('change')); }
+            setTimeout(() => { const pClase = document.getElementById('pClase'); if (pClase && (verif?.clase || fuente.clase)) pClase.value = verif?.clase || fuente.clase; }, 50);
         }
-
-        setError('pError', 'Error al guardar. Inténtalo de nuevo.');
-        console.error(err);
+        if (verif?.trabajo || fuente.trabajo) { const t = verif?.trabajo || fuente.trabajo; const sel = document.getElementById('pTrabajo'); if (sel) sel.value = t; }
+        mostrar('vistaPersonaje', 'Tu cuenta', 'Edita tu personaje');
+    } catch (err) {
+        setError('pError', 'No se pudieron cargar los datos de la cuenta.');
+        mostrar('vistaGoogle', 'Cuenta', 'Accede con tu usuario y contraseña');
     }
-}
-
-/* ════════════════════════════════════════
-   CANCELAR / CERRAR
-   ════════════════════════════════════════ */
-async function cancelarPersonaje() {
-    _creandoPersonaje = false;
-    const user = _googleUser || auth.currentUser;
-    if (user) await signOut(auth);
-    _googleUser = null;
-    sessionStorage.removeItem('mm_usuario');
-    cerrar();
-}
-
-function cerrar() {
-    const user = _googleUser || auth.currentUser;
-    if (user) {
-        getDoc(doc(db, 'usuarios', user.uid)).then(snap => {
-            if (!snap.exists() || !snap.data().personaje) {
-                _creandoPersonaje = false;
-                signOut(auth);
-                sessionStorage.removeItem('mm_usuario');
-                _googleUser = null;
-            }
-        });
-    }
-    document.getElementById('cmOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function resetForm() {
-    ['pDiscord','pNombreRol','pNombreMC'].forEach(id => {
-        const el = document.getElementById(id); if (el) el.value = '';
-    });
-    ['pRaza','pTrabajo'].forEach(id => {
-        const el = document.getElementById(id); if (el) el.value = '';
-    });
-    const pClase = document.getElementById('pClase');
-    if (pClase) {
-        pClase.innerHTML = '<option value="" disabled selected>Selecciona primero la raza…</option>';
-        pClase.value = ''; pClase.disabled = true;
-    }
-    setError('googleError', '');
-    setError('pError', '');
-}
-
-window.abrirModalCuenta = function () {
-    resetForm();
-    mostrar('vistaGoogle', 'Cuenta', 'Accede con tu cuenta de Google');
-    document.getElementById('cmOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
 };
 
-/* ════════════════════════════════════════
-   INIT
-   ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
     inyectar();
-
     document.getElementById('cmClose').addEventListener('click', cerrar);
-    document.getElementById('cmOverlay').addEventListener('click', e => {
-        if (e.target.id === 'cmOverlay') cerrar();
-    });
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && document.getElementById('cmOverlay').classList.contains('active')) cerrar();
-    });
-
-    document.getElementById('optGoogle').addEventListener('click', loginGoogle);
+    document.getElementById('cmOverlay').addEventListener('click', e => { if (e.target.id === 'cmOverlay') cerrar(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('cmOverlay').classList.contains('active')) cerrar(); });
+    const optLoginBtn = document.getElementById('optLogin'); if (optLoginBtn) optLoginBtn.addEventListener('click', loginManual);
     document.getElementById('optVolver').addEventListener('click', cerrar);
     document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
     document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
-
     document.getElementById('pRaza').addEventListener('change', function () {
-        const select = document.getElementById('pClase');
-        const razaKey = this.value.toLowerCase();
-        const clases = CLASES_POR_RAZA[razaKey] || [];
-        select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' +
-            clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join('');
-        select.value = '';
-        select.disabled = clases.length === 0;
+        const select = document.getElementById('pClase'); const razaKey = this.value.toLowerCase(); const clases = CLASES_POR_RAZA[razaKey] || [];
+        select.innerHTML = '<option value="" disabled selected>Selecciona…</option>' + clases.map(c => `<option value="${c}">${CLASES[c]}</option>`).join(''); select.value = ''; select.disabled = clases.length === 0;
     });
 
     onAuthStateChanged(auth, async user => {
         if (!user) return;
         try {
             const snap = await getDoc(doc(db, 'usuarios', user.uid));
-            if (snap.exists() && snap.data().personaje) {
+            if (snap.exists()) {
                 const datos = snap.data();
-                guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
-            } else if (!snap.data()?.personaje && !_creandoPersonaje) {
-                await signOut(auth);
+                // prefer personaje.nombreRol, else try verificacion
+                let nombreRol = datos.personaje?.nombreRol || null;
+                if (!nombreRol && (datos.discordId || datos.discord)) {
+                    const verif = await fetchVerificacionByDiscordIdOrTag(datos.discordId || datos.discord);
+                    if (verif) nombreRol = verif.nombreRol;
+                }
+                if (nombreRol) guardarSesion({ uid: user.uid, nombreRol, id: datos.id, rol: datos.rol });
+                else if (!_creandoPersonaje) await signOut(auth);
             }
         } catch (_) {}
     });
 });
 
-function errMsg(code) {
-    return ({
-        'auth/popup-blocked':          'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.',
-        'auth/popup-closed-by-user':   '',
-        'auth/network-request-failed': 'Error de red. Comprueba tu conexión.',
-        'auth/too-many-requests':      'Demasiados intentos. Espera un momento.',
-        'auth/unauthorized-domain':    'Dominio no autorizado en Firebase.'
-    })[code] || 'Error al conectar con Google. Inténtalo de nuevo.';
-}
+function errMsg(code) { return ({ 'auth/popup-blocked': 'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.', 'auth/popup-closed-by-user': '', 'auth/network-request-failed': 'Error de red. Comprueba tu conexión.', 'auth/too-many-requests': 'Demasiados intentos. Espera un momento.', 'auth/unauthorized-domain': 'Dominio no autorizado en Firebase.' })[code] || 'Error al conectar con Google. Inténtalo de nuevo.'; }
