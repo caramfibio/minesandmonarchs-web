@@ -5,7 +5,8 @@
   "scripts": {
     "start": "live-server --port=8000 --host=0.0.0.0",
     "serve-python": "python -m http.server 8000",
-    "start:express": "node server.js"
+    "start:express": "node server.js",
+    "migrate:verifs": "node scripts/migrate_usuarios_to_verificaciones.js"
   },
   "devDependencies": {
     "live-server": "^1.2.1",

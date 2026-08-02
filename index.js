@@ -33,47 +33,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ── Botón de cuenta en el nav ── */
-    const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
     const btnNav = document.getElementById('nav-cuenta-btn');
     const liNav = document.getElementById('nav-cuenta-li');
 
-    if (liNav) {
-        if (sesion) {
-            const esAdmin = sesion.rol === 'admin';
-            liNav.classList.add('dropdown');
-            liNav.innerHTML = `
-                <button class="dropbtn" id="nav-cuenta-btn"
-                    style="display:flex;align-items:center;gap:8px;padding:6px 14px;font-weight:bold;color:#ffd700">
-                    ⚜ ${sesion.nombreRol || sesion.discord}
-                </button>
-                <ul class="dropdown-content" style="right:0;left:auto;min-width:160px;">
-                    <li><a href="/minesandmonarchs-web/Mundo/Personajes/personaje.html?uid=${sesion.uid}">Mi cartilla</a></li>
-                    ${esAdmin ? `<li><a href="/minesandmonarchs-web/Admin/admin.html" style="color:#ffd700">⚙️ Panel Admin</a></li>` : ''}
-                    <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
-                </ul>`;
-
-            initDropdowns();
-
-            const btnCerrarSesion = document.getElementById('btnCerrarSesion');
-            if (btnCerrarSesion) {
-                btnCerrarSesion.addEventListener('click', e => {
-                    e.preventDefault();
-                    sessionStorage.removeItem('mm_usuario');
-                    location.reload();
-                });
+    if (liNav && btnNav) {
+        liNav.classList.remove('dropdown');
+        btnNav.textContent = 'Cuenta';
+        btnNav.addEventListener('click', e => {
+            e.preventDefault();
+            if (typeof window.abrirModalCuenta === 'function') {
+                window.abrirModalCuenta();
+            } else {
+                setTimeout(() => {
+                    if (typeof window.abrirModalCuenta === 'function') window.abrirModalCuenta();
+                }, 300);
             }
-        } else if (btnNav) {
-            btnNav.addEventListener('click', e => {
-                e.preventDefault();
-                if (typeof window.abrirModalCuenta === 'function') {
-                    window.abrirModalCuenta();
-                } else {
-                    setTimeout(() => {
-                        if (typeof window.abrirModalCuenta === 'function') window.abrirModalCuenta();
-                    }, 300);
-                }
-            });
-        }
+        });
     }
 
     /* ── Carga JSON solo si estamos en index.html ── */
