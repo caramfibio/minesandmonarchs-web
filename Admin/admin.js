@@ -4,7 +4,7 @@
    ============================================================ */
 
 import { initializeApp, getApp, getApps }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, onAuthStateChanged, signOut }
+import { getAuth, signOut }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, getDoc }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -68,18 +68,18 @@ let todosLosPersonajes = [];
 /* ════════════════════════
    GUARD – solo admins
    ════════════════════════ */
-onAuthStateChanged(auth, async user => {
-    if (!user) return denegarAcceso();
+async function verificarAcceso() {
+    const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
+    if (!sesion || !sesion.uid || sesion.rol !== 'admin') return denegarAcceso();
     try {
-        const snap = await getDoc(doc(db, 'usuarios', user.uid));
-        if (!snap.exists() || snap.data().rol !== 'admin') return denegarAcceso();
-        /* Es admin — arrancar panel */
-        document.getElementById('nav-admin-nombre').textContent = `⚜ ${snap.data().personaje?.nombreRol || 'Admin'}`;
+        document.getElementById('nav-admin-nombre').textContent = `⚜ ${sesion.nombreRol || 'Admin'}`;
         await cargarPersonajes();
-    } catch {
+    } catch (err) {
+        console.error(err);
         denegarAcceso();
     }
-});
+}
+verificarAcceso();
 
 function denegarAcceso() {
     const main = document.querySelector('.admin-main');

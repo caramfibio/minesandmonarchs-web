@@ -13,10 +13,12 @@ import { getAuth,
          signInWithPopup,
          GoogleAuthProvider,
          onAuthStateChanged,
-         signOut }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+         signOut,
+         signInAnonymously }         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore,
          doc, setDoc, getDoc,
-         runTransaction }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         runTransaction, collection, query, where, getDocs }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import * as bcrypt from 'https://esm.sh/bcryptjs@2.4.3';
 
 const firebaseConfig = {
     apiKey:            "AIzaSyC97DUSkDy8qOHnk5rm3P-263m4W6Okbzo",
@@ -76,6 +78,8 @@ const opts = obj => Object.entries(obj)
 /* ── Estado ── */
 let _googleUser       = null;
 let _creandoPersonaje = false;
+let _currentPassword  = '';
+let _discordIdPendiente = null;
 
 /* ── Redirección según rol ── */
 function redirigirSegunRol(rol, uid) {
@@ -101,7 +105,7 @@ function inyectar() {
         </div>
 
         <!-- VISTA 1: botón Google -->
-        <div class="cm-body" id="vistaGoogle">
+                <div class="cm-body" id="vistaGoogle">
           <div class="cm-opciones">
             <button class="cm-opcion-btn" id="optGoogle">
               <span class="cm-opcion-icono">
@@ -116,6 +120,12 @@ function inyectar() {
                 <span class="cm-opcion-desc">Inicia sesión con Google</span>
               </span>
             </button>
+                        <button class="cm-opcion-btn" id="optDiscord">
+                            <span class="cm-opcion-icono">🔐</span>
+                            <span>Entrar con Discord
+                                <span class="cm-opcion-desc">Usuario + contraseña</span>
+                            </span>
+                        </button>
             <button class="cm-opcion-btn secundario" id="optVolver">
               <span class="cm-opcion-icono">←</span>Volver
             </button>
@@ -132,8 +142,12 @@ function inyectar() {
           </div>
           <div class="cm-field">
             <label class="cm-label">Nombre de Minecraft <span>*</span></label>
-            <input class="cm-input" type="text" id="pNombreMC" placeholder="Tu nick en MC">
+                        <input class="cm-input" type="text" id="pNombreMC" placeholder="Tu nick en MC">
           </div>
+                    <div class="cm-field">
+                        <label class="cm-label">Contraseña <span>*</span></label>
+                        <input class="cm-input" type="password" id="pPassword" placeholder="Contraseña">
+                    </div>
 
           <p class="cm-section">Rol</p>
           <div class="cm-field">
@@ -163,10 +177,10 @@ function inyectar() {
             </div>
           </div>
           <p class="cm-error" id="pError"></p>
-          <div class="cm-form-footer">
-            <button type="button" class="cm-btn-volver" id="pCancelar">Cancelar</button>
-            <button type="button" class="cm-btn-submit" id="pGuardar">⚜ Crear personaje</button>
-          </div>
+                    <div class="cm-form-footer">
+                        <button type="button" class="cm-btn-volver" id="pCancelar">Cancelar</button>
+                        <button type="button" class="cm-btn-submit" id="pGuardar">⚜ Guardar / Entrar</button>
+                    </div>
         </div>
 
         <!-- ÉXITO -->
@@ -217,6 +231,80 @@ async function nextId() {
         tx.set(ref, { total: id });
     });
     return id;
+}
+
+function sanitizeDiscordTag(tag) {
+    return String(tag || '').toLowerCase().replace(/[^a-z0-9]/g, '_');
+}
+
+async function fetchVerificacionByDiscordIdOrTag(idOrTag) {
+    if (!idOrTag) return null;
+    const idAttempt = sanitizeDiscordTag(idOrTag);
+    try {
+        const snap = await getDoc(doc(db, 'verificaciones', idAttempt));
+        if (snap.exists()) return { id: idAttempt, ...snap.data() };
+
+        // fallback: search by discordTag field
+        const q = query(collection(db, 'verificaciones'), where('discordTag', '==', idOrTag));
+        const docs = await getDocs(q);
+        if (!docs.empty) {
+            const d = docs.docs[0];
+            return { id: d.id, ...d.data() };
+        }
+    } catch (err) {
+        console.error('fetchVerificacion error', err);
+    }
+    return null;
+}
+
+async function loginManual(discordTag, password) {
+    setError('pError', '');
+    if (!discordTag) return setError('pError', 'El nombre de Discord es obligatorio.');
+    if (!password) return setError('pError', 'Introduce la contraseña.');
+
+    const ver = await fetchVerificacionByDiscordIdOrTag(discordTag);
+    if (!ver) return setError('pError', 'No existe una verificación para ese Discord. Crea una cuenta primero.');
+
+    try {
+        const match = bcrypt.compareSync(password, ver.passwordHash || '');
+        if (!match) return setError('pError', 'Contraseña incorrecta.');
+
+        // create anonymous auth to satisfy security rules
+        await signInAnonymously(auth);
+
+        // ensure usuarios doc exists
+        const uid = ver.id;
+        const uSnap = await getDoc(doc(db, 'usuarios', uid));
+        let numericId = null;
+        if (!uSnap.exists()) {
+            numericId = await nextId();
+            await setDoc(doc(db, 'usuarios', uid), {
+                id: numericId,
+                discord: ver.discordTag || discordTag,
+                discordId: ver.discordId || null,
+                rol: ROL.ciudadano,
+                creadoEn: new Date(),
+                personaje: {
+                    nombreRol: ver.nombreRol || (ver.nombreMinecraft || ''),
+                    nombreMC: ver.nombreMinecraft || '',
+                    raza: ver.raza || '',
+                    clase: ver.clase || '',
+                    trabajo: ver.trabajo || ''
+                }
+            });
+        } else {
+            numericId = uSnap.data().id || null;
+        }
+
+        guardarSesion({ uid, nombreRol: (uSnap.exists() && uSnap.data().personaje) ? uSnap.data().personaje.nombreRol : (ver.nombreRol || discordTag), id: numericId, rol: (uSnap.exists() ? uSnap.data().rol : ROL.ciudadano) });
+        document.getElementById('exitoTitulo').textContent = '¡Sesión iniciada!';
+        document.getElementById('exitoTexto').textContent  = 'Has iniciado sesión correctamente.';
+        mostrar('cmExito');
+        setTimeout(() => redirigirSegunRol(ROL.ciudadano, uid), 1200);
+    } catch (err) {
+        console.error(err);
+        setError('pError', 'Error al iniciar sesión. Inténtalo de nuevo.');
+    }
 }
 
 function guardarSesion(datos) {
@@ -285,44 +373,58 @@ async function guardarPersonaje() {
     const raza      = document.getElementById('pRaza').value;
     const clase     = document.getElementById('pClase').value;
     const trabajo   = document.getElementById('pTrabajo').value;
+    const password  = document.getElementById('pPassword').value || '';
 
     if (!discord)                    return setError('pError', 'El nombre de Discord es obligatorio.');
     if (!nombreMC)                   return setError('pError', 'El nombre de Minecraft es obligatorio.');
     if (!nombreRol)                  return setError('pError', 'El nombre de rol es obligatorio.');
     if (!raza || !clase || !trabajo) return setError('pError', 'Selecciona raza, clase y trabajo.');
+    if (!password)                   return setError('pError', 'Introduce una contraseña.');
     setError('pError', '');
 
-    const user = auth.currentUser || _googleUser;
-    if (!user) {
-        setError('pError', 'No hay sesión activa. Vuelve a iniciar sesión.');
-        return;
-    }
-    const uid = user.uid;
-
+    const discordId = sanitizeDiscordTag(discord);
     try {
-        const id  = await nextId();
-        const rol = nombreRol.toLowerCase() === 'skyroft' ? ROL.admin : ROL.ciudadano;
+        // check if verification exists
+        const existing = await fetchVerificacionByDiscordIdOrTag(discord);
+        if (existing) {
+            // If exists, attempt login
+            return loginManual(discord, password);
+        }
 
-        await setDoc(doc(db, 'usuarios', uid), {
-            id,
-            email:    user.email,
+        // create new verification and usuarios docs
+        const pwHash = bcrypt.hashSync(password, 10);
+
+        await setDoc(doc(db, 'verificaciones', discordId), {
+            discordTag: discord,
+            discordId: discordId,
+            nombreMinecraft: nombreMC,
+            nombreRol: nombreRol,
+            raza, clase, trabajo,
+            passwordHash: pwHash,
+            verificadoEn: new Date()
+        });
+
+        const numericId = await nextId();
+        await setDoc(doc(db, 'usuarios', discordId), {
+            id: numericId,
             discord,
-            rol,
+            discordId: discordId,
+            rol: ROL.ciudadano,
             creadoEn: new Date(),
             personaje: { nombreRol, nombreMC, raza, clase, trabajo }
         });
 
-        _creandoPersonaje = false;
-        _googleUser = null;
-        sessionStorage.removeItem('mm_uid_pendiente');
-        guardarSesion({ uid, nombreRol, id, rol });
+        // sign in anonymously to satisfy rules
+        await signInAnonymously(auth);
+
+        guardarSesion({ uid: discordId, nombreRol, id: numericId, rol: ROL.ciudadano });
         document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
         document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
         mostrar('cmExito');
-        setTimeout(() => redirigirSegunRol(rol, uid), 2000);
+        setTimeout(() => redirigirSegunRol(ROL.ciudadano, discordId), 2000);
     } catch (err) {
-        setError('pError', 'Error al guardar. Inténtalo de nuevo.');
         console.error(err);
+        setError('pError', 'Error al guardar. Inténtalo de nuevo.');
     }
 }
 
@@ -330,11 +432,7 @@ async function guardarPersonaje() {
    CANCELAR / CERRAR
    ════════════════════════════════════════ */
 async function cancelarPersonaje() {
-    _creandoPersonaje = false;
-    const user = _googleUser || auth.currentUser;
-    if (user) await signOut(auth);
-    _googleUser = null;
-    sessionStorage.removeItem('mm_usuario');
+    _creandoPersonaje = false; _currentPassword = ''; _discordIdPendiente = null;
     cerrar();
 }
 
@@ -381,24 +479,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('optGoogle').addEventListener('click', loginGoogle);
+    document.getElementById('optDiscord').addEventListener('click', () => {
+        resetForm();
+        mostrar('vistaPersonaje', 'Cuenta', 'Introduce tu Discord y contraseña');
+        document.getElementById('cmOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
     document.getElementById('optVolver').addEventListener('click', cerrar);
 
-    onAuthStateChanged(auth, async user => {
-        if (!user) return;
-        try {
-            const snap = await getDoc(doc(db, 'usuarios', user.uid));
-            if (snap.exists() && snap.data().personaje) {
-                const datos = snap.data();
-                guardarSesion({ uid: user.uid, nombreRol: datos.personaje.nombreRol, id: datos.id, rol: datos.rol });
-            } else {
-                sessionStorage.setItem('mm_usuario', JSON.stringify({
-                    uid: user.uid,
-                    nombreRol: user.displayName || user.email || 'Usuario',
-                    rol: 'ciudadano'
-                }));
-            }
-        } catch (_) {}
-    });
+    // restore session from sessionStorage (source of truth)
+    const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
+    if (sesion) guardarSesion(sesion);
+
+    // wire up form buttons
+    document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
+    document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
 });
 
 function errMsg(code) {

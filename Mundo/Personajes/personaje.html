@@ -291,8 +291,7 @@
     <script type="module">
         import { initializeApp, getApp, getApps }
             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-        import { getAuth, onAuthStateChanged }
-            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+        
         import { getFirestore, doc, getDoc, updateDoc }
             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
@@ -306,7 +305,6 @@
         };
 
         const app  = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db   = getFirestore(app);
 
         const RAZAS = {
@@ -356,7 +354,7 @@
         if (!uid) {
             estado.textContent = 'No se especificó ningún personaje.';
         } else {
-            onAuthStateChanged(auth, async currentUser => {
+            (async () => {
                 try {
                     const snap = await getDoc(doc(db, 'usuarios', uid));
                     if (!snap.exists() || !snap.data().personaje) {
@@ -379,14 +377,9 @@
                         }];
                     }
 
-                    const esPropietario = currentUser && currentUser.uid === uid;
-                    let esAdmin = false;
-                    if (currentUser && !esPropietario) {
-                        try {
-                            const mySnap = await getDoc(doc(db, 'usuarios', currentUser.uid));
-                            esAdmin = mySnap.exists() && mySnap.data().rol === 'admin';
-                        } catch (_) {}
-                    }
+                    const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
+                    const esPropietario = sesion && sesion.uid === uid;
+                    const esAdmin = sesion && sesion.rol === 'admin';
 
                     // Avatar: imagen propia > skin MC > placeholder
                     const avatarHtml = pj.imagenUrl
@@ -417,7 +410,7 @@
                         <aside class="pj-sidebar">
                             <div class="pj-ficha">
                                 <div class="pj-avatar-wrap">${avatarHtml}</div>
-                                <div class="pj-ficha-body">
+                                <div class="pj-ficha-body">`;
                                     <div class="pj-ficha-fila">
                                         <span class="pj-ficha-label">Nombre de rol</span>
                                         <span class="pj-ficha-valor pj-ficha-nombre-rol">${pj.nombreRol}</span>
