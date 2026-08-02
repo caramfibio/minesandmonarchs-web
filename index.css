@@ -306,7 +306,21 @@ footer .socials a {
     background-repeat: no-repeat;
 }
 
-footer .socials a.discord { background-image: url('images/discord.png'); }
-footer .socials a.instagram { background-image: url('images/instagram.png'); }
-footer .socials a.tiktok { background-image: url('images/tiktok.png'); }
-footer .socials a.x { background-image: url('images/x.png'); }
+footer .socials a.discord,
+footer .socials a.instagram,
+footer .socials a.tiktok,
+footer .socials a.x {
+    background-image: none;
+    background-color: #fff;
+    color: var(--color-principal);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 24px;
+    text-align: center;
+}
+
+footer .socials a.discord::before { content: 'D'; }
+footer .socials a.instagram::before { content: 'I'; }
+footer .socials a.tiktok::before { content: 'T'; }
+footer .socials a.x::before { content: 'X'; }
