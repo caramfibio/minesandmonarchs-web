@@ -56,6 +56,7 @@ const opts = obj => Object.entries(obj).map(([v,l]) => `<option value="${v}">${l
 let _googleUser = null;
 let _creandoPersonaje = false;
 let _currentPassword = '';
+let _discordIdPendiente = null;
 
 function redirigirSegunRol(rol, uid) {
     if (rol === 'admin') window.location.href = `/minesandmonarchs-web/Admin/admin.html`;
@@ -163,76 +164,6 @@ async function nextId() {
 
 function sanitizeDiscordTag(tag) {
     return String(tag || '').toLowerCase().replace(/[^a-z0-9]/g, '_');
-}
-
-async function fetchVerificacionByDiscordIdOrTag(idOrTag) {
-    if (!idOrTag) return null;
-    const idAttempt = sanitizeDiscordTag(idOrTag);
-    try {
-        const snap = await getDoc(doc(db, 'verificaciones', idAttempt));
-        if (snap.exists()) return { id: idAttempt, ...snap.data() };
-
-        // fallback: search by discordTag field
-        const q = query(collection(db, 'verificaciones'), where('discordTag', '==', idOrTag));
-        const docs = await getDocs(q);
-        if (!docs.empty) {
-            const d = docs.docs[0];
-            return { id: d.id, ...d.data() };
-        }
-    } catch (err) {
-        console.error('fetchVerificacion error', err);
-    }
-    return null;
-}
-
-async function loginManual(discordTag, password) {
-    setError('pError', '');
-    if (!discordTag) return setError('pError', 'El nombre de Discord es obligatorio.');
-    if (!password) return setError('pError', 'Introduce la contraseña.');
-
-    const ver = await fetchVerificacionByDiscordIdOrTag(discordTag);
-    if (!ver) return setError('pError', 'No existe una verificación para ese Discord. Crea una cuenta primero.');
-
-    try {
-        const match = bcrypt.compareSync(password, ver.passwordHash || '');
-        if (!match) return setError('pError', 'Contraseña incorrecta.');
-
-        // create anonymous auth to satisfy security rules
-        await signInAnonymously(auth);
-
-        // ensure usuarios doc exists
-        const uid = ver.id;
-        const uSnap = await getDoc(doc(db, 'usuarios', uid));
-        let numericId = null;
-        if (!uSnap.exists()) {
-            numericId = await nextId();
-            await setDoc(doc(db, 'usuarios', uid), {
-                id: numericId,
-                discord: ver.discordTag || discordTag,
-                discordId: ver.discordId || null,
-                rol: ROL.ciudadano,
-                creadoEn: new Date(),
-                personaje: {
-                    nombreRol: ver.nombreRol || (ver.nombreMinecraft || ''),
-                    nombreMC: ver.nombreMinecraft || '',
-                    raza: ver.raza || '',
-                    clase: ver.clase || '',
-                    trabajo: ver.trabajo || ''
-                }
-            });
-        } else {
-            numericId = uSnap.data().id || null;
-        }
-
-        guardarSesion({ uid, nombreRol: (uSnap.exists() && uSnap.data().personaje) ? uSnap.data().personaje.nombreRol : (ver.nombreRol || discordTag), id: numericId, rol: (uSnap.exists() ? uSnap.data().rol : ROL.ciudadano) });
-        document.getElementById('exitoTitulo').textContent = '¡Sesión iniciada!';
-        document.getElementById('exitoTexto').textContent  = 'Has iniciado sesión correctamente.';
-        mostrar('cmExito');
-        setTimeout(() => redirigirSegunRol(ROL.ciudadano, uid), 1200);
-    } catch (err) {
-        console.error(err);
-        setError('pError', 'Error al iniciar sesión. Inténtalo de nuevo.');
-    }
 }
 
 function guardarSesion(datos) {
@@ -357,52 +288,6 @@ async function guardarPersonaje() {
         }
         setError('pError', 'Error al guardar. Inténtalo de nuevo.'); console.error(err);
     }
-
-
-    const discordId = sanitizeDiscordTag(discord);
-    try {
-        // check if verification exists
-        const existing = await fetchVerificacionByDiscordIdOrTag(discord);
-        if (existing) {
-            // If exists, attempt login
-            return loginManual(discord, password);
-        }
-
-        // create new verification and usuarios docs
-        const pwHash = bcrypt.hashSync(password, 10);
-
-        await setDoc(doc(db, 'verificaciones', discordId), {
-            discordTag: discord,
-            discordId: discordId,
-            nombreMinecraft: nombreMC,
-            nombreRol: nombreRol,
-            raza, clase, trabajo,
-            passwordHash: pwHash,
-            verificadoEn: new Date()
-        });
-
-        const numericId = await nextId();
-        await setDoc(doc(db, 'usuarios', discordId), {
-            id: numericId,
-            discord,
-            discordId: discordId,
-            rol: ROL.ciudadano,
-            creadoEn: new Date(),
-            personaje: { nombreRol, nombreMC, raza, clase, trabajo }
-        });
-
-        // sign in anonymously to satisfy rules
-        await signInAnonymously(auth);
-
-        guardarSesion({ uid: discordId, nombreRol, id: numericId, rol: ROL.ciudadano });
-        document.getElementById('exitoTitulo').textContent = '¡Bienvenido a Belmaria!';
-        document.getElementById('exitoTexto').textContent  = `${nombreRol} ha llegado al mundo.`;
-        mostrar('cmExito');
-        setTimeout(() => redirigirSegunRol(ROL.ciudadano, discordId), 2000);
-    } catch (err) {
-        console.error(err);
-        setError('pError', 'Error al guardar. Inténtalo de nuevo.');
-    }
 }
 
 /* ════════════════════════════════════════
@@ -451,13 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape' && document.getElementById('cmOverlay').classList.contains('active')) cerrar();
     });
 
-    document.getElementById('optGoogle').addEventListener('click', loginGoogle);
-    document.getElementById('optDiscord').addEventListener('click', () => {
-        resetForm();
-        mostrar('vistaPersonaje', 'Cuenta', 'Introduce tu Discord y contraseña');
-        document.getElementById('cmOverlay').classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
+    document.getElementById('optLogin').addEventListener('click', loginManual);
     document.getElementById('optVolver').addEventListener('click', cerrar);
     document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
     document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
@@ -469,10 +348,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // restore session from sessionStorage (source of truth)
     const sesion = JSON.parse(sessionStorage.getItem('mm_usuario') || 'null');
     if (sesion) guardarSesion(sesion);
-
-    // wire up form buttons
-    document.getElementById('pGuardar').addEventListener('click', guardarPersonaje);
-    document.getElementById('pCancelar').addEventListener('click', cancelarPersonaje);
 });
 
 function errMsg(code) { return ({ 'auth/popup-blocked': 'El navegador bloqueó la ventana. Permite popups e inténtalo de nuevo.', 'auth/popup-closed-by-user': '', 'auth/network-request-failed': 'Error de red. Comprueba tu conexión.', 'auth/too-many-requests': 'Demasiados intentos. Espera un momento.', 'auth/unauthorized-domain': 'Dominio no autorizado en Firebase.' })[code] || 'Error al conectar con Google. Inténtalo de nuevo.'; }
