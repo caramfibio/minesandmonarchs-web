@@ -241,6 +241,7 @@
     list-style:none;
     margin:0;
     padding:0;
+    flex-wrap:wrap;
   }
   header .header-right > ul > li > a,
   header .header-right .dropbtn{
@@ -263,9 +264,8 @@
   }
   header #nav-cuenta-btn{
     color:var(--gold) !important;
-    font-family:"Silkscreen", monospace;
-    font-size:0.66rem;
-    letter-spacing:0.04em;
+    font-family:"Cinzel", serif;
+    font-weight:600;
     background:rgba(255,215,0,0.08);
     border:2px solid rgba(255,215,0,0.35) !important;
   }
@@ -304,6 +304,49 @@
   header .dropdown-content li a:hover{
     background:rgba(255,215,0,0.1);
     color:var(--gold);
+  }
+
+  @media (max-width:880px){
+    header{
+      flex-wrap:wrap;
+      gap:12px;
+      padding:14px 18px;
+    }
+    header .header-right{
+      width:100%;
+    }
+    header .header-right ul{
+      display:none;
+      flex-direction:column;
+      align-items:stretch;
+      gap:0;
+      width:100%;
+      margin-top:8px;
+      padding-top:8px;
+      border-top:2px solid rgba(255,215,0,0.15);
+    }
+    header .header-right ul.show{
+      display:flex;
+    }
+    header .header-right > ul > li > a,
+    header .header-right .dropbtn{
+      display:block;
+      width:100%;
+      padding:10px 12px;
+      text-align:left;
+    }
+    header .dropdown-content{
+      position:static;
+      min-width:0;
+      margin:0;
+      border:none;
+      border-top:1px solid rgba(255,215,0,0.15);
+      box-shadow:none;
+      background:rgba(255,215,0,0.06);
+    }
+    header .dropdown-content li a{
+      padding:10px 12px;
+    }
   }
 
   /* ══════════════════════════════════════
@@ -475,37 +518,6 @@ track.addEventListener('mouseenter', ()=> clearInterval(auto));
 track.addEventListener('mouseleave', iniciarAuto);
 iniciarAuto();
 
-/* ══════════════════════════════════════
-   Desplegables del header (Creación de
-   personaje, Lore, Ayuda): clic para abrir
-   y cerrar, igual en móvil y escritorio.
-   ══════════════════════════════════════ */
-(function () {
-    const dropdowns = document.querySelectorAll('header .dropdown');
-
-    function cerrarTodos(exceptoEste) {
-        dropdowns.forEach(dd => {
-            if (dd !== exceptoEste) {
-                dd.querySelector('.dropdown-content')?.classList.remove('show');
-            }
-        });
-    }
-
-    dropdowns.forEach(dd => {
-        const btn = dd.querySelector('.dropbtn');
-        const contenido = dd.querySelector('.dropdown-content');
-        if (!btn || !contenido) return;
-
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const yaAbierto = contenido.classList.contains('show');
-            cerrarTodos(dd);
-            contenido.classList.toggle('show', !yaAbierto);
-        });
-    });
-
-    document.addEventListener('click', () => cerrarTodos(null));
-})();
 </script>
 
 <script type="module" src="cuenta-modal.js"></script>

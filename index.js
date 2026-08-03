@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ── Dropdowns ── */
+    const closeDropdowns = () => {
+        document.querySelectorAll('.dropdown .dropdown-content.show').forEach(content => {
+            content.classList.remove('show');
+        });
+    };
+
     const initDropdowns = () => {
         document.querySelectorAll('.dropdown').forEach(dropdown => {
             const btn = dropdown.querySelector('.dropbtn');
@@ -16,14 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             btn.addEventListener('click', e => {
                 e.preventDefault();
-                content.classList.toggle('show');
-            });
-        });
-    };
+                e.stopPropagation();
 
-    const closeDropdowns = () => {
-        document.querySelectorAll('.dropdown .dropdown-content.show').forEach(content => {
-            content.classList.remove('show');
+                const isOpen = content.classList.contains('show');
+                closeDropdowns();
+                if (!isOpen) {
+                    content.classList.add('show');
+                }
+            });
         });
     };
 

@@ -319,14 +319,22 @@
                 if (!btn || !contenido) return;
 
                 btn.addEventListener('click', (e) => {
+                    e.preventDefault();
                     e.stopPropagation();
+
                     const yaAbierto = contenido.classList.contains('show');
                     cerrarTodos(dd);
-                    contenido.classList.toggle('show', !yaAbierto);
+                    if (!yaAbierto) {
+                        contenido.classList.add('show');
+                    }
                 });
             });
 
-            document.addEventListener('click', () => cerrarTodos(null));
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown')) {
+                    cerrarTodos(null);
+                }
+            });
         }
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', iniciar);

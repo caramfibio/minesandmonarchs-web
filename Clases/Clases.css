@@ -4,6 +4,138 @@
 
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
+/* ---------- Header / Nav estilo Territorios ---------- */
+header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding:16px 28px;
+    background:#2a0313;
+    border-bottom:4px solid #242429;
+    box-shadow:0 4px 0 0 #7a7a86;
+    position:relative;
+    z-index:50;
+}
+header .header-left h2{
+    font-family:"MedievalSharp", cursive;
+    color:#ffd700;
+    font-size:1.35rem;
+    margin:0;
+    letter-spacing:0.02em;
+    text-shadow:0 0 14px rgba(255,215,0,0.25);
+    white-space:nowrap;
+}
+header #menu-toggle{
+    background:#242429;
+    border:2px solid #7a7a86;
+    color:#ffd700;
+    font-size:1.2rem;
+    line-height:1;
+    padding:6px 12px;
+    cursor:pointer;
+    box-shadow:2px 2px 0 0 #14141a;
+}
+header .header-right ul{
+    display:flex;
+    align-items:center;
+    gap:2px;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+}
+header .header-right > ul > li > a,
+header .header-right .dropbtn{
+    display:inline-block;
+    font-family:"Cinzel", serif !important;
+    font-size:0.76rem !important;
+    letter-spacing:0.05em;
+    color:#f2e9d8;
+    text-decoration:none;
+    background:transparent;
+    border:none;
+    padding:9px 13px;
+    cursor:pointer;
+    transition:color 0.15s, background 0.15s;
+}
+header .header-right > ul > li > a:hover,
+header .header-right .dropbtn:hover{
+    color:#ffd700;
+    background:rgba(255,215,0,0.08);
+}
+header #nav-cuenta-btn{
+    color:#ffd700 !important;
+    font-family:"Cinzel", serif;
+    font-weight:600;
+    background:rgba(255,215,0,0.08);
+    border:2px solid rgba(255,215,0,0.35) !important;
+}
+header #nav-cuenta-btn:hover{
+    background:rgba(255,215,0,0.18);
+}
+header .dropdown{position:relative;}
+header .dropdown-content{
+    display:none !important;
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width:190px;
+    background:#2a0313;
+    border:2px solid #7a7a86;
+    box-shadow:3px 3px 0 0 #242429;
+    list-style:none;
+    padding:4px 0;
+    margin:6px 0 0;
+    z-index:60;
+}
+header .dropdown-content.show{display:block !important;}
+header .dropdown-content li a{
+    display:block;
+    font-family:"Cinzel", serif !important;
+    font-size:0.72rem !important;
+    letter-spacing:0.03em;
+    color:#f2e9d8;
+    text-decoration:none;
+    padding:9px 15px;
+}
+header .dropdown-content li a:hover{
+    background:rgba(255,215,0,0.1);
+    color:#ffd700;
+}
+@media (max-width:880px){
+    header{flex-wrap:wrap;gap:12px;padding:14px 18px;}
+    header .header-right{width:100%;}
+    header .header-right ul{
+        display:none;
+        flex-direction:column;
+        align-items:stretch;
+        gap:0;
+        width:100%;
+        margin-top:8px;
+        padding-top:8px;
+        border-top:2px solid rgba(255,215,0,0.15);
+    }
+    header .header-right ul.show{display:flex;}
+    header .header-right > ul > li > a,
+    header .header-right .dropbtn{
+        display:block;
+        width:100%;
+        padding:10px 12px;
+        text-align:left;
+    }
+    header .dropdown-content{
+        position:static;
+        min-width:0;
+        margin:0;
+        border:none;
+        border-top:1px solid rgba(255,215,0,0.15);
+        box-shadow:none;
+        background:rgba(255,215,0,0.06);
+    }
+    header .dropdown-content li a{padding:10px 12px;}
+}
+
 /* ---------- Grid de cards ---------- */
 .razas-container {
     display: grid;
