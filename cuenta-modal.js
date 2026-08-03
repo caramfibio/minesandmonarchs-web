@@ -237,6 +237,58 @@ async function fetchVerificacionByDiscordIdOrTag(identifier) {
     return null;
 }
 
+/* ────────────────────────────────────────────────────────────
+   Crea automáticamente usuarios/{uid} a partir de los datos que
+   el bot de Discord ya guardó en verificaciones/{discordId}.
+   Ya no se le pide al jugador rellenar el formulario otra vez.
+   ──────────────────────────────────────────────────────────── */
+async function crearUsuarioDesdeVerificacion(user, ver) {
+    const uid = user.uid;
+    const nombreRol = ver.nombreRol || '';
+
+    if (!nombreRol || !ver.raza || !ver.clase || !ver.trabajo) {
+        console.error('[cuenta-modal] Datos incompletos en la verificación para crear el personaje automáticamente:', ver);
+        setError('loginError', 'Tu verificación de Discord no tiene todos los datos del personaje. Contacta con un administrador.');
+        return;
+    }
+
+    const rol = nombreRol.toLowerCase() === 'skyroft' ? ROL.admin : ROL.ciudadano;
+    const personaje = {
+        nombreRol,
+        nombreMC: ver.nombreMinecraft || '',
+        raza: ver.raza,
+        clase: ver.clase,
+        trabajo: ver.trabajo
+    };
+
+    try {
+        const id = await nextId();
+        await setDoc(doc(db, 'usuarios', uid), {
+            id,
+            email: user.email,
+            discord: ver.discordTag || ver.discordId || '',
+            discordId: ver.discordId || '',
+            rol,
+            creadoEn: new Date(),
+            personaje
+        }, { merge: true });
+
+        guardarSesion({ uid, nombreRol, id, rol });
+        document.getElementById('exitoTitulo').textContent = `¡Bienvenido, ${nombreRol}!`;
+        document.getElementById('exitoTexto').textContent  = rol === 'admin' ? 'Redirigiendo al panel de administración…' : 'Sesión iniciada correctamente.';
+        mostrar('cmExito');
+        setTimeout(() => redirigirSegunRol(rol, uid), 1800);
+    } catch (err) {
+        console.error('[cuenta-modal] Error creando usuario desde verificación:', err.code, err.message);
+        if (esErrorPermisosFirestore(err)) {
+            guardarPersonajeLocalmente({ uid, email: user.email, discord: ver.discordTag, rol, creadoEn: new Date().toISOString(), personaje, guardadoLocal: true, error: err?.message || '' });
+            setError('loginError', 'No se pudo guardar en Firestore por permisos. El personaje quedó guardado localmente.');
+            return;
+        }
+        setError('loginError', 'Error al crear tu personaje. Inténtalo de nuevo.');
+    }
+}
+
 async function loginManual() {
     console.log('[cuenta-modal] loginManual() disparado');
     setError('loginError', '');
@@ -276,14 +328,13 @@ async function loginManual() {
                 document.getElementById('exitoTexto').textContent  = datos.rol === 'admin' ? 'Redirigiendo al panel de administración…' : 'Sesión iniciada correctamente.';
                 mostrar('cmExito'); setTimeout(() => redirigirSegunRol(datos.rol, user.uid), 1800);
             } else {
-                _creandoPersonaje = true;
-                _currentPassword = password;
-                mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
+                // No tiene personaje guardado en 'usuarios' todavía: lo creamos
+                // automáticamente con los datos que ya existen en 'verificaciones'.
+                await crearUsuarioDesdeVerificacion(user, ver);
             }
         } else {
-            _creandoPersonaje = true;
-            _currentPassword = password;
-            mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
+            // Primer login con Firebase Auth ya existente pero sin documento en 'usuarios'.
+            await crearUsuarioDesdeVerificacion(user, ver);
         }
     } catch (err) {
         console.error('[cuenta-modal] Error en signInWithEmailAndPassword:', err.code, err.message);
@@ -321,8 +372,10 @@ async function loginManual() {
             try {
                 const reg = await createUserWithEmailAndPassword(auth, email, password);
                 console.log('[cuenta-modal] Cuenta creada correctamente, uid:', reg.user.uid);
-                const user = reg.user; _googleUser = user; _creandoPersonaje = true; _currentPassword = password;
-                mostrar('vistaPersonaje', 'Crea tu personaje', 'Completa tu ficha');
+                const user = reg.user; _googleUser = user;
+                // Ya tenemos todos los datos del personaje desde la verificación
+                // de Discord: creamos la cuenta completa sin pedir el formulario.
+                await crearUsuarioDesdeVerificacion(user, ver);
                 return;
             } catch (regErr) {
                 console.error('[cuenta-modal] Error en createUserWithEmailAndPassword:', regErr.code, regErr.message);
