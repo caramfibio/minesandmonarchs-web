@@ -311,37 +311,6 @@
 
     <script src="index.js"></script>
     <script src="Razas/raza.js"></script>
-  
-
-            function cerrarTodos(exceptoEste) {
-                dropdowns.forEach(dd => {
-                    if (dd !== exceptoEste) {
-                        dd.querySelector('.dropdown-content')?.classList.remove('show');
-                    }
-                });
-            }
-
-            dropdowns.forEach(dd => {
-                const btn = dd.querySelector('.dropbtn');
-                const contenido = dd.querySelector('.dropdown-content');
-                if (!btn || !contenido) return;
-
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const yaAbierto = contenido.classList.contains('show');
-                    cerrarTodos(dd);
-                    contenido.classList.toggle('show', !yaAbierto);
-                });
-            });
-
-            document.addEventListener('click', () => cerrarTodos(null));
-        }
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', iniciar);
-        } else {
-            iniciar();
-        }
-    })();
     </script>
 </body>
 </html>
