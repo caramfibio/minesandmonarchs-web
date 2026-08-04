@@ -2,45 +2,42 @@
   "entradas": [
     {
       "id": "Cartilla",
-      "titulo": "☣Importancia de la cartilla☣",
-      "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=200&h=160&fit=crop",
+      "titulo": "Importancia de la cartilla",
+      "img": "https://media.discordapp.net/attachments/1392881736773533787/1534323613581316307/image.png?ex=6a73b5b7&is=6a726437&hm=3584d75bd6bf45fde89be7196a18a6aada0a6678a3f56f973d1a40ed34964a5f&=&format=webp&quality=lossless&width=384&height=325",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=720&h=360&fit=crop",
-        "titulo": "☣Importancia de la cartilla☣",
+        "img": "https://media.discordapp.net/attachments/1392881736773533787/1534324127421173900/image.png?ex=6a73b632&is=6a7264b2&hm=ba6b73c3efc85fe556f9f2f98f491d34be595e7db4eb7a86b8db37d3f2d75d02&=&format=webp&quality=lossless",
+        "titulo": "Importancia de la cartilla",
         "secciones": [
           { "titulo": "¿Que son las cartillas?", "texto": "", "lista": [
-        "Cuando un usuario envia un formulario de personaje para verificarse, se crea una cartilla de personaje que contiene toda la información básica del jugador in rol.",
-        "Importante saber que los datos que hay se pueden modificar, es decir, si tu historia en formularios esta incompleta o la has cambiado, puedes pedir un cambio. ,",
-        "La cartilla de personaje es tu guía narrativa dentro del servidor, es lo que define como será y como se comportará tu personaje durante el resto de la partida. Para mantener un roleo consistente y de calidad es muy importante ponerte en personaje.",
-        "Si en tu cartilla se especifica que tu personaje es pacífico y amable, ¿Tendría sentido que destruya una aldea sin razón aparente? Seguramente no.  Esto no significa que no puedas variar el comportamiento de tu personaje, pero que tenga un motivo y no se salga de personaje."
+        "Las cartillas son el registro de jugadores. Es donde se almacenan las historias de cada personaje y donde su información permanece visible para todos."
           ] }
           ]
       }
     },
     {
       "id": "Rol",
-      "titulo": "✆En Rol y Fuera de Rol🗣",
-      "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=200&h=160&fit=crop",
+      "titulo": "En Rol y Fuera de Rol",
+      "img": "https://media.forgecdn.net/avatars/thumbnails/1568/941/256/256/639017072761337404.png",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=720&h=360&fit=crop",
+        "img": "https://cdn.discordapp.com/attachments/1392881736773533787/1534325303923707924/image.png?ex=6a73b74a&is=6a7265ca&hm=9c27dc5e8952626cb4407e3e6eae71945067fcb110738a29db983256d678b1b2&",
         "titulo": "Crea tu trasfondo",
         "secciones": [
-          { "titulo": "", "texto": "El concepto de En Rol y Fuera de Rol es una etiqueta que usa Mines and Monarchs para expresar la forma en la que los jugadores se tienen que comunicar en cada canal especifico. En términos simples, los canales Fuera de Rol son en los que os podéis comportar como vosotros mismos como jugadores, en estos casos las normas de esta guía no se aplican y solo tenéis que seguir las normas generales del servidor. En contraste, los canales En Rol son en los que representáis a vuestro personaje, no a vosotros y todas las normas de esta guía se aplican y puedes ser sancionado en caso de incumplirlas. A continuación os explicaremos que canales tienen cada etiqueta.", 
+          { "titulo": "", "texto": "El sistema de chat en rol o fuera de rol es fácil:", 
           "lista": [] },
-          { "titulo": "En Rol", "texto": "Canal de texto y voz de Minecraft, todos los documentos oficiales escritos en Minecraft, todos los canales en la categoría \"Rol\" de Discord y el canal de \"En Rol\" de Discord..", 
+          { "titulo": "En Rol", "texto": "Dentro de Minecraft el chat es local, concretamente tiene una distancia de 64 bloques, por lo que nadie te podrá leer a menos que esté cerca. Ese siempre será el chat de rol, pase lo que pase.", 
           "lista": [] },
-          { "titulo": "Fuera de Rol", "texto": "El resto de canales de Discord no mencionados anteriormente, todas las conversaciones privadas de Discord, todos los susurros dentro de Minecraft y los mensajes escritos entre paréntesis dentro de Minecraft. (Más información más adelante en la guía).", 
+          { "titulo": "Fuera de Rol", "texto": "Los canales de fuera de rol son: o bien el chat de fuera de rol de discord, o cualquier chat que se haga en ftb teams.", 
           "lista": [] }
         ]
       }
     },
     {
       "id": "actuacion",
-      "titulo": "☝¿Como actuar En Rol?☝ ",
-      "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=160&fit=crop",
+      "titulo": "¿Como actuar En Rol?",
+      "img": "https://i.pinimg.com/736x/eb/0a/90/eb0a90afeeaf6153c94128a38e9f21a4.jpg",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=720&h=360&fit=crop",
-        "titulo": "☝¿Como actuar En Rol?☝ ",
+        "img": "https://i.pinimg.com/736x/eb/0a/90/eb0a90afeeaf6153c94128a38e9f21a4.jpg",
+        "titulo": "¿Como actuar En Rol?",
         "secciones": [
           { "titulo": "¿Que tengo que hacer?", "texto": "Como se ha dicho en el anterior punto, cuando estás en una conversación \"En Rol\" no estás hablando como tú, un jugador de Mines and Monarchs, estás hablando como tu personaje, un habitante de Belmaria. Aquí dejo unas pocas instrucciones de como hacer esto:", 
           "lista": [
@@ -54,11 +51,11 @@
     },
     {
       "id": "COMO-ROLEAR",
-      "titulo": "⛏¿Cómo roleo una acción?⛏",
-      "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=200&h=160&fit=crop",
+      "titulo": "¿Cómo roleo una acción?",
+      "img": "https://i.pinimg.com/736x/59/34/07/5934073c59577a6e0b929042b196d588.jpg",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=720&h=360&fit=crop",
-        "titulo": "⛏¿Cómo roleo una acción?⛏",
+        "img": "https://i.pinimg.com/736x/59/34/07/5934073c59577a6e0b929042b196d588.jpg",
+        "titulo": "¿Cómo roleo una acción?",
         "secciones": [
           { "titulo": "", "texto": "", 
           "lista": [
@@ -68,19 +65,6 @@
           ] }
         ]
       }
-    },
-    {
-      "id": "si",
-      "titulo": "¿Como hablar por chat de minecraft en rol o fuera de rol?",
-      "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=200&h=160&fit=crop",
-      "modal": {
-        "img": "https://images.unsplash.com/photo-1520209268518-aec60b8bb5ca?w=720&h=360&fit=crop",
-        "titulo": "¿Como hablar por chat de minecraft en rol o fuera de rol?",
-        "secciones": [
-          { "titulo": "", "texto": "Dentro de Minecraft es muy fácil diferenciar si alguien está roleando o no.","lista": [] },
-          { "titulo": "EN ROL", "texto": "Aparte de comportarte como tu personaje y tener un vocabulario de rol (no mencionar discord por ejemplo y decir \"Salón\" en vez de eso) se habla sin paréntesis.","lista": [] },
-          { "titulo": "FUERA DE ROL", "texto": "En fuera de rol, ya que te sales del personaje, tendrás que escribir entre paréntesis. Cuando hablas entre paréntesis, quiere decir que no estás roleando, por lo cual puedes decir cualquier palabra que no esté permitida dentro de rol.","lista": [] }
-      ]}
     }
   ]
 }

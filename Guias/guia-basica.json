@@ -3,9 +3,9 @@
     {
       "id": "carne",
       "titulo": "¿Como consigo carne/cuero?",
-      "img": "https://images.unsplash.com/photo-1548438294-1ad5d5f4f063?w=200&h=160&fit=crop",
+      "img": "https://media.discordapp.net/attachments/1392881736773533787/1534319001553997914/image.png?ex=6a73b16c&is=6a725fec&hm=315e6b78c5ec398aa96f953a7f9c80f845a9eeb3ae8addbabc47173a5677a97a&=&format=webp&quality=lossless",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1548438294-1ad5d5f4f063?w=720&h=360&fit=crop",
+        "img": "https://media.discordapp.net/attachments/1392881736773533787/1534319294689841244/image.png?ex=6a73b1b2&is=6a726032&hm=6229efc5497ffb3cc0888ee252f157bf947d5aa2267dce019ff6515ed6a7a7a8&=&format=webp&quality=lossless",
         "titulo": "¿Como consigo carne/cuero?",
         "secciones": [
           { "titulo": "Si soy Grajero", "texto": "Tendrás que seguir la guía del Butchery para poder obtener carne y cuero.", "lista": [] },
@@ -17,9 +17,9 @@
     {
       "id": "territorio",
       "titulo": "¿Como me uno a un territorio?",
-      "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=160&fit=crop",
+      "img": "https://media.discordapp.net/attachments/1392881736773533787/1534319936665813052/image.png?ex=6a73b24b&is=6a7260cb&hm=01c9db1fcbb0dea66ab55b4e45576e070ba71b62b99e658f7d65c2d36f5d6d11&=&format=webp&quality=lossless",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=720&h=360&fit=crop",
+        "img": "https://media.discordapp.net/attachments/1392881736773533787/1534320128529793074/image.png?ex=6a73b278&is=6a7260f8&hm=f558c69d2b25d97d8e18f2568118dba43188bea53e91a2dda913fe11101779f9&=&format=webp&quality=lossless",
         "titulo": "¿Como me uno a un territorio?",
         "secciones": [
           { "titulo": "¿Que es lo primero que debo hacer?", "texto": "Mira primero todos y cada uno de los territorios en el canal de Territorios y observa sus normas, sus estructuras y sus preferencias, ya que en varios reinos, no pueden acceder todas las razas o las formas de gobierno son incompatibles con el pensamiento de algunos personajes.", "lista": [] },
@@ -31,9 +31,9 @@
     {
       "id": "Cartas",
       "titulo": "¿Como puedo enviar/recibir cartas? y...  ¿Dónde las envio?",
-      "img": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=160&fit=crop",
+      "img": "https://media.discordapp.net/attachments/1392881736773533787/1534321470220796124/image.png?ex=6a73b3b8&is=6a726238&hm=81d6b2dfecfc4deaed13b178c20ea99700ea921918e0d0363ce3f8fd8b5f5550&=&format=webp&quality=lossless",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=720&h=360&fit=crop",
+        "img": "https://media.discordapp.net/attachments/1392881736773533787/1534321520351117523/image.png?ex=6a73b3c4&is=6a726244&hm=c5162b7962fa57ab8bbe5aaaebda888d3f5b25c060b329710a698d01ed325b9e&=&format=webp&quality=lossless",
         "titulo": "¿Como puedo enviar/recibir cartas? y...  ¿Dónde las envio?",
         "secciones": [
           { "titulo": "Snail Mail", "texto": "Con el mod de Snail Mail se pueden enviar tanto cartas como paquetes de grandes cantidades.", "lista": [] },
@@ -46,9 +46,9 @@
     {
       "id": "cambio",
       "titulo": "¿Que hago si quiero cambiar de raza/trabajo/clase?",
-      "img": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=160&fit=crop",
+      "img": "https://media.discordapp.net/attachments/1392881736773533787/1534319508603277402/image.png?ex=6a73b1e5&is=6a726065&hm=9756870d8fbb87dbee392f94be97f5a9df1482ee30fb6b353a4221ef29bda971&=&format=webp&quality=lossless",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=720&h=360&fit=crop",
+        "img": "https://media.discordapp.net/attachments/1392881736773533787/1534319701839052880/image.png?ex=6a73b213&is=6a726093&hm=4e324e89108d6ffb0109bd52237141ca63c79501f9628571ed6ddec22b06a593&=&format=webp&quality=lossless",
         "titulo": "¿Que hago si quiero cambiar de raza/trabajo/clase?",
         "secciones": [
           { "titulo": "¿Si quiero hacer cambios?", 
@@ -67,9 +67,9 @@
     {
       "id": "Temperatura",
       "titulo": "¿Como evito el frio/calor?  ",
-      "img": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200&h=160&fit=crop",
+      "img": "https://media.discordapp.net/attachments/1392881736773533787/1534320362005856496/image.png?ex=6a73b2b0&is=6a726130&hm=326aa3a4a3be0e7564431016a4a7e15fe1e1eefb6b8654a77d212c0982d03041&=&format=webp&quality=lossless",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=720&h=360&fit=crop",
+        "img": "https://media.discordapp.net/attachments/1392881736773533787/1534320749756678224/image.png?ex=6a73b30d&is=6a72618d&hm=28a6ac077cb0a88b4330ba12c81c7f552d351715933c415c98cd46183f8fb6e9&=&format=webp&quality=lossless",
         "titulo": "¿Como evito el frio/calor?  ",
         "secciones": [
           { "titulo": "Evitar el Frio", "texto": "Escóndete en lugares cerrados, preferiblemente rodeados de madera y cerca de un horno. También puedes hacerte abrigos y estufas específicamente para poder mantener el calor. ",
@@ -81,9 +81,9 @@
     {
       "id": "awa",
       "titulo": "¿Como consigo agua potable?  ",
-      "img": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=200&h=160&fit=crop",
+      "img": "https://media.discordapp.net/attachments/1392881736773533787/1534320938013950212/image.png?ex=6a73b339&is=6a7261b9&hm=1ae999c0b263906533096c933796b2dfc078f75a5d7733e89af4ad8250840f04&=&format=webp&quality=lossless",
       "modal": {
-        "img": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=720&h=360&fit=crop",
+        "img": "https://media.discordapp.net/attachments/1392881736773533787/1534321006942879815/image.png?ex=6a73b34a&is=6a7261ca&hm=b7ba6fa3a4d8ebd12aabcb76a236759ab68a6ae5af4c5f03725ed77f72e88fb3&=&format=webp&quality=lossless",
         "titulo": "¿Como consigo agua potable?  ",
         "secciones": [
           { "titulo": "", "texto": "Conseguir agua potable no es mucho trabajo, es rellenar potes de cristal con agua y calentarlos en hornos. O una manera más fácil de llevar gran cantidad de agua potable encima, es haciéndote una cantimplora, llenarla de agua y calentarla en el horno.", "lista": []}
