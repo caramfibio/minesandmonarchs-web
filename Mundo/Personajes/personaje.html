@@ -21,7 +21,7 @@
     <title>Personaje – Mines & Monarchss</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&family=Silkscreen&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <style>
         /* ── LAYOUT GRID ── */
@@ -224,6 +224,179 @@
             .pj-nombre { font-size: 2em; }
         }
     </style>
+    <style>
+      /* ══════════════════════════════════════
+         HEADER Y FOOTER — estilo consistente
+         wine/gold/pixel (Mines & Monarchs)
+         Colores fijos (no variables) para no
+         interferir con el CSS propio de esta página.
+         ══════════════════════════════════════ */
+      header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:20px;
+        padding:16px 28px;
+        background:#2a0313;
+        border-bottom:4px solid #242429;
+        box-shadow:0 4px 0 0 #7a7a86;
+        position:relative;
+        z-index:50;
+      }
+      header .header-left h2{
+        font-family:"MedievalSharp", cursive;
+        color:#ffd700;
+        font-size:1.35rem;
+        margin:0;
+        letter-spacing:0.02em;
+        text-shadow:0 0 14px rgba(255,215,0,0.25);
+        white-space:nowrap;
+      }
+      header #menu-toggle{
+        background:#242429;
+        border:2px solid #7a7a86;
+        color:#ffd700;
+        font-size:1.2rem;
+        line-height:1;
+        padding:6px 12px;
+        cursor:pointer;
+        box-shadow:2px 2px 0 0 #14141a;
+      }
+      header .header-right ul{
+        display:flex;
+        align-items:center;
+        gap:2px;
+        list-style:none;
+        margin:0;
+        padding:0;
+        flex-wrap:wrap;
+      }
+      header .header-right > ul > li > a,
+      header .header-right .dropbtn{
+        display:inline-block;
+        font-family:"Cinzel", serif;
+        font-size:0.76rem;
+        letter-spacing:0.05em;
+        color:#f2e9d8;
+        text-decoration:none;
+        background:transparent;
+        border:none;
+        padding:9px 13px;
+        cursor:pointer;
+        transition:color 0.15s, background 0.15s;
+      }
+      header .header-right > ul > li > a:hover,
+      header .header-right .dropbtn:hover{
+        color:#ffd700;
+        background:rgba(255,215,0,0.08);
+      }
+      header #nav-cuenta-btn{
+        color:#ffd700 !important;
+        font-family:"Cinzel", serif;
+        font-weight:600;
+        background:rgba(255,215,0,0.08);
+        border:2px solid rgba(255,215,0,0.35) !important;
+      }
+      header #nav-cuenta-btn:hover{
+        background:rgba(255,215,0,0.18);
+      }
+      header .dropdown{
+        position:relative;
+      }
+      header .dropdown-content{
+        display:none !important;
+        position:absolute;
+        top:100%;
+        left:0;
+        min-width:190px;
+        background:#2a0313;
+        border:2px solid #7a7a86;
+        box-shadow:3px 3px 0 0 #242429;
+        list-style:none;
+        padding:4px 0;
+        margin:6px 0 0;
+        z-index:60;
+      }
+      header .dropdown-content.show{
+        display:block !important;
+      }
+      header .dropdown-content li a{
+        display:block;
+        font-family:"Cinzel", serif;
+        font-size:0.72rem;
+        letter-spacing:0.03em;
+        color:#f2e9d8;
+        text-decoration:none;
+        padding:9px 15px;
+      }
+      header .dropdown-content li a:hover{
+        background:rgba(255,215,0,0.1);
+        color:#ffd700;
+      }
+
+      footer{
+        background:#2a0313;
+        border-top:4px solid #242429;
+        box-shadow:0 -4px 0 0 #7a7a86;
+        padding:36px 24px 28px;
+        text-align:center;
+      }
+      footer .socials{
+        display:flex;
+        justify-content:center;
+        gap:14px;
+        margin-bottom:18px;
+      }
+      footer .socials a{
+        display:inline-block;
+        width:34px;height:34px;
+        background-color:#242429;
+        background-repeat:no-repeat;
+        background-position:center;
+        background-size:17px 17px;
+        border:2px solid #7a7a86;
+        box-shadow:2px 2px 0 0 #14141a;
+        transition:background-color 0.15s;
+      }
+      footer .socials a:hover{
+        background-color:#34343c;
+      }
+      footer .socials a.discord{
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffd700' d='M20.3 4.4A18 18 0 0 0 15.7 3c-.2.4-.5.9-.6 1.3a16.9 16.9 0 0 0-6.2 0A8 8 0 0 0 8.3 3a18 18 0 0 0-4.6 1.4C1 9.1.3 13.7.6 18.2a18 18 0 0 0 5.5 2.8c.4-.6.8-1.3 1.1-2a11 11 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.1 0l.4.3c-.6.3-1.2.6-1.8.9.3.7.7 1.4 1.1 2a18 18 0 0 0 5.5-2.8c.4-5.2-.7-9.7-2.8-13.8ZM8.9 15.4c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2Zm6.2 0c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.9 2.2-1.9 2.2Z'/%3E%3C/svg%3E");
+      }
+      footer .socials a.instagram{
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffd700' d='M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm5.2-3.2a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2z'/%3E%3C/svg%3E");
+      }
+      footer .socials a.tiktok{
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffd700' d='M16.5 2h-3v13.6a3.4 3.4 0 1 1-2.4-3.3v-3a6.4 6.4 0 1 0 5.4 6.3V9.1a7.4 7.4 0 0 0 4 1.2V7.3a4.4 4.4 0 0 1-4-4.1V2z'/%3E%3C/svg%3E");
+      }
+      footer .socials a.x{
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffd700' d='M3.5 3h4.2l4 5.6L16.3 3h3.9l-6.3 8.1L20.6 21h-4.2l-4.4-6.1L6.9 21H3l6.8-8.7L3.5 3z'/%3E%3C/svg%3E");
+      }
+      footer .apoyar{
+        font-family:"Silkscreen", monospace;
+        font-size:0.75rem;
+        letter-spacing:0.03em;
+        color:#2a0313;
+        background:#ffd700;
+        border:none;
+        padding:10px 22px;
+        cursor:pointer;
+        box-shadow:3px 3px 0 0 #7a6207;
+        margin-bottom:18px;
+      }
+      footer .footer-text small{
+        font-family:"Cinzel", serif;
+        color:rgba(242,233,216,0.5);
+        font-size:0.72rem;
+        letter-spacing:0.03em;
+      }
+
+      @media (max-width:880px){
+        header{flex-wrap:wrap;}
+        header .header-right ul{gap:0;}
+      }
+    </style>
 </head>
 <body>
 
@@ -361,12 +534,6 @@
             console.warn('[personaje] No hay parámetro ?uid= en la URL');
             estado.textContent = 'No se especificó ningún personaje.';
         } else {
-            // Aviso de seguridad: si tus reglas de Firestore exigen estar
-            // autenticado para leer 'usuarios', y Firebase Auth aún no ha
-            // restaurado la sesión guardada, la lectura puede fallar con
-            // permission-denied justo después de recargar la página o
-            // entrar aquí directamente por URL. Por eso esperamos a que
-            // onAuthStateChanged confirme el estado antes de leer.
             onAuthStateChanged(auth, (user) => {
                 console.log('[personaje] onAuthStateChanged, usuario:', user ? user.uid : null);
                 cargarPersonaje();
@@ -378,7 +545,7 @@
             let yaCargado = false;
 
             async function cargarPersonaje() {
-                if (yaCargado) return; // evita doble carga si onAuthStateChanged dispara más de una vez
+                if (yaCargado) return;
                 yaCargado = true;
                 console.log('[personaje] Iniciando carga de usuarios/' + uid);
                 try {
@@ -395,7 +562,6 @@
                     const d  = snap.data();
                     const pj = d.personaje;
 
-                    // Capítulos — retrocompatible con bio antigua
                     let capitulos = d.capitulos || [];
                     if (capitulos.length === 0 && d.bio && d.bio.texto) {
                         capitulos = [{
@@ -411,7 +577,6 @@
                     const esPropietario = sesion && sesion.uid === uid;
                     const esAdmin = sesion && sesion.rol === 'admin';
 
-                    // Avatar: imagen propia > skin MC > placeholder
                     const avatarHtml = pj.imagenUrl
                         ? `<img class="pj-avatar-custom" src="${pj.imagenUrl}" alt="${pj.nombreRol}">`
                         : pj.nombreMC
@@ -421,7 +586,6 @@
                                 onerror="this.style.display='none'">`
                             : `<span class="pj-avatar-placeholder">⚜</span>`;
 
-                    // Render página
                     page.innerHTML = `
                         <div class="pj-main">
                             <div class="pj-header">
@@ -466,7 +630,6 @@
                         </aside>
                     `;
 
-                    // ── Render capítulos ──
                     const lista = document.getElementById('capsLista');
 
                     function renderCapitulos() {
@@ -540,7 +703,6 @@
                             `;
                             lista.appendChild(div);
 
-                            // Lógica propietario
                             if (editable) {
                                 const be = document.getElementById('be_' + cap.id);
                                 const bg = document.getElementById('bg_' + cap.id);
@@ -577,7 +739,6 @@
                                 });
                             }
 
-                            // Lógica admin
                             if (esAdmin && cap.estado === 'pendiente') {
                                 const adAp   = document.getElementById('adAp_'   + cap.id);
                                 const adRt   = document.getElementById('adRt_'   + cap.id);
@@ -615,7 +776,6 @@
 
                     renderCapitulos();
 
-                    // Añadir nuevo capítulo
                     document.getElementById('btnNuevoCap')?.addEventListener('click', () => {
                         const nuevo = {
                             id: 'cap_' + Date.now(),
@@ -635,5 +795,45 @@
         }
     </script>
     <script type="module" src="cuenta-modal.js"></script>
+    <script>
+    /* ══════════════════════════════════════
+       Desplegables del header (Creación de
+       personaje, Lore, Ayuda): clic para abrir
+       y cerrar, igual en móvil y escritorio.
+       ══════════════════════════════════════ */
+    (function () {
+        function iniciar() {
+            const dropdowns = document.querySelectorAll('header .dropdown');
+
+            function cerrarTodos(exceptoEste) {
+                dropdowns.forEach(dd => {
+                    if (dd !== exceptoEste) {
+                        dd.querySelector('.dropdown-content')?.classList.remove('show');
+                    }
+                });
+            }
+
+            dropdowns.forEach(dd => {
+                const btn = dd.querySelector('.dropbtn');
+                const contenido = dd.querySelector('.dropdown-content');
+                if (!btn || !contenido) return;
+
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const yaAbierto = contenido.classList.contains('show');
+                    cerrarTodos(dd);
+                    contenido.classList.toggle('show', !yaAbierto);
+                });
+            });
+
+            document.addEventListener('click', () => cerrarTodos(null));
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', iniciar);
+        } else {
+            iniciar();
+        }
+    })();
+    </script>
 </body>
 </html>
