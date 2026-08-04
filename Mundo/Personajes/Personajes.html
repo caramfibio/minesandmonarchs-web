@@ -841,41 +841,42 @@
     /* ══════════════════════════════════════
        Desplegables del header (Creación de
        personaje, Lore, Ayuda): clic para abrir
-       y cerrar, igual en móvil y escritorio.
+       y cerrar. Controla el display directamente
+       por JS con prioridad máxima (setProperty
+       ...,'important'), así ninguna regla CSS
+       externa puede pisarlo.
        ══════════════════════════════════════ */
-    (function () {
-        function iniciar() {
-            const dropdowns = document.querySelectorAll('header .dropdown');
+    document.addEventListener('click', function (e) {
+        const header = document.querySelector('header');
+        if (!header) return;
 
-            function cerrarTodos(exceptoEste) {
-                dropdowns.forEach(dd => {
-                    if (dd !== exceptoEste) {
-                        dd.querySelector('.dropdown-content')?.classList.remove('show');
-                    }
-                });
-            }
-
-            dropdowns.forEach(dd => {
-                const btn = dd.querySelector('.dropbtn');
-                const contenido = dd.querySelector('.dropdown-content');
-                if (!btn || !contenido) return;
-
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const yaAbierto = contenido.classList.contains('show');
-                    cerrarTodos(dd);
-                    contenido.classList.toggle('show', !yaAbierto);
-                });
+        function cerrarTodos() {
+            header.querySelectorAll('.dropdown-content').forEach(dc => {
+                dc.style.setProperty('display', 'none', 'important');
+                dc.classList.remove('show');
             });
+        }
 
-            document.addEventListener('click', () => cerrarTodos(null));
+        const btn = e.target.closest('header .dropbtn');
+        if (btn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const contenido = btn.nextElementSibling;
+            if (!contenido || !contenido.classList.contains('dropdown-content')) return;
+
+            const abierto = contenido.style.display === 'block';
+            cerrarTodos();
+            if (!abierto) {
+                contenido.style.setProperty('display', 'block', 'important');
+                contenido.classList.add('show');
+            }
+            return;
         }
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', iniciar);
-        } else {
-            iniciar();
+
+        if (!e.target.closest('header .dropdown-content')) {
+            cerrarTodos();
         }
-    })();
+    }, true);
     </script>
 </body>
 </html>
