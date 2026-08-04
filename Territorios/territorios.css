@@ -241,3 +241,24 @@
     .carousel-btn { display: none; }
     .territorios-grid { grid-template-columns: 1fr; }
 }
+/* ============================================================
+   VARIANTE DE COLOR 3 — "Vino atenuado"
+   Sustituye el rojo vino saturado de fondo (--color-principal,
+   heredado de index.css) por un vino mucho más oscuro y
+   desaturado, solo en esta página. No toca index.css ni afecta
+   a ninguna otra página del sitio.
+   Requiere que <body> en raza.html tenga class="pagina-razas".
+   ============================================================ */
+body.pagina-razas {
+    background: #2a0f18;
+}
+body.pagina-razas .hero {
+    background: #3a1220;
+    border-bottom: 3px solid #6b1f35;
+}
+body.pagina-razas .razas-title {
+    background: #2a0f18;
+}
+body.pagina-razas .raza-card {
+    border: 1px solid rgba(255, 215, 0, 0.1);
+}
