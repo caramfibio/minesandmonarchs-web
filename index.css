@@ -24,6 +24,8 @@ body{
     radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.12), transparent 55%),
     radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.55), transparent 70%);
   background-size:8px 8px, 10px 10px, 100% 500px, 100% 400px;
+  background-repeat: repeat, repeat, no-repeat, no-repeat;
+  background-position: 0 0, 0 0, top center, bottom center;
 }
 
 .hero{
