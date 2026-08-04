@@ -230,6 +230,13 @@ body{
   font-family:"Silkscreen", monospace;
   font-size:0.62rem;color:var(--gold);
   border-bottom:3px solid var(--stone-lit);
+  overflow:hidden;
+}
+.carta-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 .carta-body{padding:14px;}
 .carta-body h4{

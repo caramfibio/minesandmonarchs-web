@@ -180,6 +180,13 @@
     font-family:"Silkscreen", monospace;
     font-size:0.65rem;color:var(--gold);
     border-bottom:3px solid var(--stone-lit);
+    overflow:hidden;
+  }
+  .carta-img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
   }
   .carta-body{padding:14px;}
   .carta-body h4{
@@ -466,10 +473,10 @@
     <div class="carrusel-wrap">
       <button class="flecha izq" onclick="mover(-1)">‹</button>
       <div class="carrusel" id="carrusel">
-        <div class="carta"><div class="carta-img">IMG 1</div><div class="carta-body"><h4>Armas y armaduras</h4><p>Nuevas armas y armaduras para todos los jugadores.</p></div></div>
-        <div class="carta"><div class="carta-img">IMG 2</div><div class="carta-body"><h4>Continente desbloqueado</h4><p>El continente principal, Vastera, se ha desbloqueado.</p></div></div>
-        <div class="carta"><div class="carta-img">IMG 3</div><div class="carta-body"><h4>¡Cofres en tus mascotas!</h4><p>Ahora podrás llevarte a tus compañeros de equipo para que te ayuden con el equipaje.</p></div></div>
-        <div class="carta"><div class="carta-img">IMG 4</div><div class="carta-body"><h4>Actualización de clases</h4><p>Nuevas clases y habilidades disponibles.</p></div></div>
+        <div class="carta"><div class="carta-img"><img src="fotos/Nov1.png"></div><div class="carta-body"><h4>Armas y armaduras</h4><p>Nuevas armas y armaduras para todos los jugadores.</p></div></div>
+        <div class="carta"><div class="carta-img"><img src="fotos/Nov4.png"></div><div class="carta-body"><h4>Continente desbloqueado</h4><p>El continente principal, Vastera, se ha desbloqueado.</p></div></div>
+        <div class="carta"><div class="carta-img"><img src="fotos/Nov2.png"></div><div class="carta-body"><h4>¡Cofres en tus mascotas!</h4><p>Ahora podrás llevarte a tus compañeros de equipo para que te ayuden con el equipaje.</p></div></div>
+        <div class="carta"><div class="carta-img"><img src="fotos/Nov3.png"></div><div class="carta-body"><h4>Actualización de clases</h4><p>Nuevas clases y habilidades disponibles.</p></div></div>
       </div>
       <button class="flecha der" onclick="mover(1)">›</button>
     </div>
