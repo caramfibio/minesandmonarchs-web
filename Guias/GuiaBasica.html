@@ -276,16 +276,101 @@
     </div>
 
     <!-- ══════════════ FOOTER ══════════════ -->
-    <footer>
-      <div class="socials">
-          <a href="https://discord.gg/GXA2RsjkQu" class="discord" title="Discord" target="_blank" rel="noopener"></a>
-          <a href="https://www.reddit.com/r/MinesAndMonarchs/" class="reddit" title="Reddit" target="_blank" rel="noopener"></a>
-      </div>
-      <button class="apoyar">Apoyar servidor</button>
-      <div class="footer-text">
-          <small>© 2026 Mines & Monarchs. Todos los derechos reservados.</small>
-      </div>
-  </footer>
+ <footer>
+  <div class="socials">
+
+    <!-- ICONOS ARRIBA -->
+    <div class="social-icons">
+      <a href="https://discord.gg/GXA2RsjkQu"
+         class="discord"
+         title="Discord"
+         target="_blank"
+         rel="noopener"></a>
+
+      <a href="https://www.reddit.com/r/MinesAndMonarchs/"
+         class="reddit"
+         title="Reddit"
+         target="_blank"
+         rel="noopener"></a>
+    </div>
+
+    <!-- BOTÓN AMARILLO DEBAJO -->
+    <a href="https://www.planetminecraft.com/server/mines-and-monarchs/"
+       class="votar apoyar"
+       title="Votar por servidor"
+       target="_blank"
+       rel="noopener">
+      VOTAR SERVIDOR
+    </a>
+
+  </div>
+
+  <div class="footer-text">
+    <small>Mines & Monarchs © 2026</small>
+  </div>
+</footer>
+
+<style>
+  /* TODO CENTRADO */
+  footer .socials{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+  }
+
+  footer .social-icons{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    width:100%;
+  }
+
+  /* RESET TOTAL DEL BOTÓN (ESTO ES LO QUE LO ARREGLA) */
+  footer .votar{
+    all:unset;                 /* 🔥 borra TODO lo heredado de los iconos */
+    display:inline-block;      /* vuelve a ser un botón normal */
+    cursor:pointer;
+  }
+
+  /* BOTÓN AMARILLO ORIGINAL */
+  footer .apoyar{
+    font-family:"Silkscreen", monospace;
+    font-size:0.75rem;
+    letter-spacing:0.03em;
+    color:var(--wine-deep);
+    background:var(--gold);    /* 🔥 AMARILLO */
+    padding:10px 22px;
+    box-shadow:3px 3px 0 0 #7a6207;
+    text-decoration:none;
+    border:none;
+    display:inline-block;
+    margin-top:6px;
+  }
+
+  footer .footer-text small{
+    font-family:"Cinzel", serif;
+    color:rgba(242,233,216,0.5);
+    font-size:0.72rem;
+    letter-spacing:0.03em;
+  }
+  footer .votar{
+  background: var(--gold) !important;      /* amarillo */
+  color: var(--wine-deep) !important;      /* texto legible */
+  background-image: none !important;       /* quita icono de fondo */
+  text-indent: 0 !important;               /* que se vea el texto */
+}
+footer .votar{
+  width: auto !important;
+  height: auto !important;
+  padding: 10px 22px !important;   /* el padding que hace el rectángulo */
+  display: inline-block !important;
+  text-indent: 0 !important;       /* para que se lea el texto */
+  background-image: none !important;
+}
+
+</style>
 
     <script src="index.js"></script>
     <script src="Guias/guias.js"></script>
